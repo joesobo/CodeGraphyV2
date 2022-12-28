@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:vue/vue3-recommended"
+  ],
+  "rules": {
+    "vue/multi-word-component-names": "off",
+    "vue/v-on-event-hyphenation": "off",
+    "@typescript-eslint/quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
+    "object-curly-spacing": ["error", "always"],
+    "semi": ["error", "never"],
+    "indent": ["error", "tab"]
+  },
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "parser": {
+      "ts": "@typescript-eslint/parser"
+    }
+  },
+  "ignorePatterns": ["dist", "**/*.d.ts"],
+  "globals": {
+    "vscode": "writable"
+  }
+}

@@ -1,0 +1,109 @@
+version: 2.1
+
+jobs:
+  setup:
+    docker:
+      - image: cimg/node:16.16.0
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: yarn-cache-v1-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: 'Install dependencies'
+          command: yarn install --frozen-lockfile
+
+      - save_cache:
+          key: yarn-cache-v1-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./*
+
+  build:
+    docker:
+      - image: cimg/node:16.16.0
+
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: 'Build packages'
+          command: yarn compile
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./src
+
+  lint:
+    docker:
+      - image: cimg/node:16.16.0
+
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: 'Verify code quality and formatting'
+          command: yarn lint
+
+  test:
+    docker:
+      - image: cimg/node:16.16.0
+
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: 'Run unit tests'
+          command: yarn test
+
+  typecheck:
+    docker:
+      - image: cimg/node:16.16.0
+
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: 'Run typechecks'
+          command: yarn typecheck
+
+workflows:
+  version: 2
+  test-and-build:
+    jobs:
+      - setup:
+          context: readonly-github-packages
+
+      - build:
+          requires:
+            - setup
+
+      - lint:
+          requires:
+            - build
+
+      - test:
+          requires:
+            - build
+
+      - typecheck:
+          requires:
+            - build
