@@ -10,40 +10,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import * as d3 from 'd3'
-import { onMounted } from 'vue'
 
-const getRandomInt = (max) => {
-	max = Math.floor(max)
-	return Math.floor(Math.random() * max)
-}
+let connections = ref()
+let nodes = ref()
 
 const colorScale = ['orange', 'lightblue', '#B19CD9']
-// Node Dataset
-let nodes = [
-	{ name: '1', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '2', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '3', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '4', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '5', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '6', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '7', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '8', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
-	{ name: '9', radius: Math.random() * 15 + 10, category: getRandomInt(3) }
-]
-// Side Dataset
-let edges = [
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
-	{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) }
-]
 
 // Create a new force guide diagram
 let forceSimulation = d3.forceSimulation()
@@ -77,7 +50,26 @@ const drag = (simulation) => {
 		.on('end', dragended)
 }
 
-onMounted(() => {
+window.addEventListener('message', (event) => {
+	const message = event.data // The JSON data our extension sent
+	switch (message.command) {
+	case 'setGraphData':
+		connections.value = message.text.connections
+		nodes.value = message.text.nodes
+		drawGraph()
+		return
+	}
+})
+
+const getGraphData = () => {
+	vscode.postMessage({
+		command: 'getGraphData',
+	})
+}
+
+getGraphData()
+
+const drawGraph = () => {
 	let svg = d3.select('svg')
 	let width = svg.attr('width')
 	let height = svg.attr('height')
@@ -98,7 +90,7 @@ onMounted(() => {
 	// Draw side
 	let links = g.append('g')
 		.selectAll('line')
-		.data(edges)
+		.data(connections.value)
 		.enter()
 		.append('line')
 		.attr('stroke', '#666')
@@ -116,12 +108,12 @@ onMounted(() => {
 	}
 
 	// Generate node data
-	forceSimulation.nodes(nodes)
+	forceSimulation.nodes(nodes.value)
 		.on('tick', ticked)
 
 	// Generate side data
 	forceSimulation.force('link')
-		.links(edges)
+		.links(connections.value)
 		.id((d) => { return d.id })
 
 	// Set drawing center location
@@ -131,7 +123,7 @@ onMounted(() => {
 
 	// Create group
 	let gs = g.selectAll('.circleText')
-		.data(nodes)
+		.data(nodes.value)
 		.enter()
 		.append('g')
 		.attr('class', 'fill-white')
@@ -152,5 +144,5 @@ onMounted(() => {
 		.text((d) => {
 			return d.name
 		})
-})
+}
 </script>
