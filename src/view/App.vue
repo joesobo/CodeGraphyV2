@@ -13,6 +13,11 @@
 import * as d3 from 'd3'
 import { onMounted } from 'vue'
 
+const getRandomInt = (max) => {
+	max = Math.floor(max)
+	return Math.floor(Math.random() * max)
+}
+
 onMounted(() => {
 	let svg = d3.select('svg')
 	let width = svg.attr('width')
@@ -22,28 +27,28 @@ onMounted(() => {
 	const colorScale = ['orange', 'lightblue', '#B19CD9']
 	// Node Dataset
 	let nodes = [
-		{ name: '1', radius: Math.random() * 15 + 10, category: 0 },
-		{ name: '2', radius: Math.random() * 15 + 10, category: 0 },
-		{ name: '3', radius: Math.random() * 15 + 10, category: 0 },
-		{ name: '4', radius: Math.random() * 15 + 10, category: 1 },
-		{ name: '5', radius: Math.random() * 15 + 10, category: 2 },
-		{ name: '6', radius: Math.random() * 15 + 10, category: 1 },
-		{ name: '7', radius: Math.random() * 15 + 10, category: 1 },
-		{ name: '8', radius: Math.random() * 15 + 10, category: 2 },
-		{ name: '9', radius: Math.random() * 15 + 10, category: 2 }
+		{ name: '1', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '2', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '3', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '4', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '5', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '6', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '7', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '8', radius: Math.random() * 15 + 10, category: getRandomInt(3) },
+		{ name: '9', radius: Math.random() * 15 + 10, category: getRandomInt(3) }
 	]
 	// Side Dataset
 	let edges = [
-		{ source: 0, target: 4 },
-		{ source: 4, target: 5 },
-		{ source: 4, target: 6 },
-		{ source: 4, target: 7 },
-		{ source: 1, target: 6 },
-		{ source: 2, target: 5 },
-		{ source: 3, target: 7 },
-		{ source: 5, target: 6 },
-		{ source: 6, target: 7 },
-		{ source: 6, target: 8 }
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) },
+		{ source: getRandomInt(nodes.length), target: getRandomInt(nodes.length) }
 	]
 
 	// Draw side
