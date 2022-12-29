@@ -90,6 +90,7 @@ onMounted(() => {
 
 	let zoom = d3.zoom()
 		.scaleExtent([0.1, 10])
+		.translateExtent([[-width * 15, -height * 15], [width * 15, height * 15]])
 		.on('zoom', handleZoom)
 
 	svg.call(zoom)
