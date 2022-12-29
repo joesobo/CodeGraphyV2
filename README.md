@@ -1,9 +1,5 @@
 # Base Vue 3 Sidebar View Extension
 
-<p align="center">
-  <img src="./Screenshot.png" width="350" alt="Screenshot of the template">
-</p>
-
 A Vue 3, Vite built template can be used to create a VSCode sidebar extension by providing a structure code and utilizing the vite build tool to compile and bundle the extension for deployment to VSCode. This template contains everything you need to get started building your extension right away. With this template, you can leverage the features and capabilities of Vue 3 to build powerful and interactive extensions for VSCode.
 
 ## Includes:

@@ -1,6 +1,6 @@
 {
-  "name": "vue3baseextension",
-  "displayName": "vue3BaseExtension",
+  "name": "CodeGraphyV2",
+  "displayName": "CodeGraphyV2",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -23,20 +23,20 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "vue-3-base-view",
-          "title": "Vue 3 Base Extension",
+          "id": "base-view",
+          "title": "Code Graphy V2",
           "icon": "src/assets/img/default.png"
         }
       ]
     },
     "views": {
-      "vue-3-base-view": [
+      "base-view": [
         {
           "type": "webview",
           "id": "base-view-sidebar",
-          "name": "Vue 3 Base Extension",
+          "name": "Code Graphy V2",
           "icon": "src/assets/img/default.png",
-          "contextualTitle": "Vue 3 Base Extension"
+          "contextualTitle": "Code Graphy V2"
         }
       ]
     }
@@ -44,6 +44,7 @@
   "dependencies": {
     "@intlify/unplugin-vue-i18n": "^0.8.1",
     "@vitest/ui": "^0.26.2",
+    "d3": "^5.16.0",
     "vue": "^3.2.45",
     "vue-i18n": "9"
   },
