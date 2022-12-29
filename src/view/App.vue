@@ -88,23 +88,28 @@ onMounted(() => {
 		.y(height / 2)
 
 	// drag
-	const started = (d) => {
-		if (!d3.event.active) {
-			forceSimulation.alphaTarget(0.8).restart() // Set the attenuation coefficient to simulate the node position movement process. The higher the value, the faster the movement. The value range is [0, 1]
+	const drag = (simulation) => {
+		const dragstarted = (event) => {
+			if (!event.active) simulation.alphaTarget(0.3).restart()
+			event.subject.fx = event.subject.x
+			event.subject.fy = event.subject.y
 		}
-		d.fx = d.x
-		d.fy = d.y
-	}
-	const dragged = (d) => {
-		d.fx = d3.event.x
-		d.fy = d3.event.y
-	}
-	const ended = (d) => {
-		if (!d3.event.active) {
-			forceSimulation.alphaTarget(0)
+
+		const dragged = (event) => {
+			event.subject.fx = event.x
+			event.subject.fy = event.y
 		}
-		d.fx = null
-		d.fy = null
+
+		const dragended = (event) => {
+			if (!event.active) simulation.alphaTarget(0)
+			event.subject.fx = null
+			event.subject.fy = null
+		}
+
+		return d3.drag()
+			.on('start', dragstarted)
+			.on('drag', dragged)
+			.on('end', dragended)
 	}
 
 	// Create group
@@ -116,11 +121,7 @@ onMounted(() => {
 			return `translate(${d.x}, ${d.y})`
 		})
 		.attr('class', 'fill-white')
-		.call(d3.drag()
-			.on('start', started)
-			.on('drag', dragged)
-			.on('end', ended)
-		)
+		.call(drag(forceSimulation))
 
 	// Draw node
 	gs.append('circle')
