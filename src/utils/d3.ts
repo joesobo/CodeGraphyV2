@@ -7,7 +7,7 @@ const colorScale = ['orange', 'lightblue', '#B19CD9']
 // Create a new force guide diagram
 const forceSimulation = d3.forceSimulation()
 	.force('link', d3.forceLink())
-	.force('charge', d3.forceManyBody().strength(-1000))
+	.force('charge', d3.forceManyBody().strength(-100))
 	.force('center', d3.forceCenter())
 	.force('collision', d3.forceCollide().radius((d: any) => { return d.radius }))
 

@@ -9,13 +9,16 @@ export const handleMessages = (webview: vscode.Webview) => {
 }
 
 const receiveMessages = async (webview: vscode.Webview) => {
+	const codeGraphyConfiguration = vscode.workspace.getConfiguration().codegraphy
+	const blacklist = codeGraphyConfiguration.blacklist
+
 	let currentPath = vscode.workspace.workspaceFolders
 		? vscode.workspace.workspaceFolders[0].uri.path
 		: ''
 	currentPath = currentPath.startsWith('/') ? currentPath.substring(1) : currentPath
 	currentPath = replaceAll(currentPath, '/', '\\')
 
-	const files = fetchFiles(currentPath)
+	const files = fetchFiles(currentPath, blacklist)
 
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {

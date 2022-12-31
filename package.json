@@ -39,6 +39,21 @@
           "contextualTitle": "Code Graphy V2"
         }
       ]
+    },
+    "configuration": {
+      "title": "CodeGraphy V2 Settings",
+      "properties": {
+        "codegraphy.blacklist": {
+          "type": "array",
+          "default": [
+            ".vscode",
+            ".git",
+            ".github",
+            "node_modules"
+          ],
+          "description": "Blacklist folders and files"
+        }
+      }
     }
   },
   "dependencies": {
