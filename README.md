@@ -1,48 +1,65 @@
-# Base Vue 3 Sidebar View Extension
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/26047842/177056994-e6be0cd0-6e18-40c1-a254-ae847c62ffaf.png" />
+ </p>
 
-A Vue 3, Vite built template can be used to create a VSCode sidebar extension by providing a structure code and utilizing the vite build tool to compile and bundle the extension for deployment to VSCode. This template contains everything you need to get started building your extension right away. With this template, you can leverage the features and capabilities of Vue 3 to build powerful and interactive extensions for VSCode.
+ <p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://vsmarketplacebadge.apphb.com/version-short/codegraphy.codegraphy.svg" alt="Marketplace"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://vsmarketplacebadge.apphb.com/downloads-short/codegraphy.codegraphy.svg" alt="Marketplace"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://vsmarketplacebadge.apphb.com/rating-short/codegraphy.codegraphy.svg" alt="Marketplace"></a>
+</p>
 
-## Includes:
-- [x] Typescript
-- [x] Vue 3
-- [x] Vite
-- [x] Tailwindcss
-	- [x] Vscode Default style Tailwind config
-- [x] Iconify via unplugin
-- [x] I18n via unplugin
-- [x] Vitest
-	- [x] Vitest UI
-- [x] Testing Library
-- [x] Decent Linting
-- [x] CircleCI
-- [x] Basic VSCode API Message Examples
+# CodeGraphy
 
-## Get Started:
+> CodeGraphy **enhances** files connections inside VSCode and allows for **birds eye views** of each repository. It helps you to **visualize code hierarchy** at a glance, **seamlessly navigate and explore** your file hierarchy, **gain valuable insights** via a force based node graph UI, and more.
 
-Install dependencies:
-- `yarn install`
+CodeGraphy is an [open-source](https://github.com/joesobo/CodeGraphy "Open CodeGraphy on GitHub") extension for [Visual Studio Code](https://code.visualstudio.com).
 
-Modify the following files:
-- `package.json`
-	- Replace all instances of `vue3baseextension` with your extension id
-	- Replace all instances of `vue-3-base-view` with a view ID
-	- Replace all instances of `Vue 3 Base Extension` with an extension name
-	- Replace `default.png` with your own extension icon
+Simply CodeGraphy helps you **better understand file connections**. With its force-based graph you can get a completely different view of the architecture of your codebase and make quick informed decisions about where your code is "knotted" in the graph.
 
-Run the extension:
-- Enter `yarn watch` in the console
-- Press `f5` on the `extension.ts` to open a debug window (or select in menu "Debug" -> "Run Extension")
-- Navigate to the extension icon seen on the left sidebar (or open command palette (`Ctrl/Cmd + Shift + P`) and select `View: Vue 3 Base Extension` to open webview view.)
+## Install CodeGraphy
 
-## Recommended VSCode Extensions
+Install CodeGraphy for [VSCode](https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy)
 
-- [Vitest](https://marketplace.visualstudio.com/items?itemName=ZixuanChen.vitest-explorer)
-- [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-- [I18n A11y](https://marketplace.visualstudio.com/items?itemName=Lokalise.i18n-ally)
-- [Iconify Intellisense](https://marketplace.visualstudio.com/items?itemName=antfu.iconify)
+## Features
 
-## References
-- [Webviews](https://code.visualstudio.com/api/extension-guides/webview)
-- [UX Guidelines](https://code.visualstudio.com/api/ux-guidelines/overview)
-- [Webview view API](https://code.visualstudio.com/api/references/vscode-api#WebviewView)
-- [Theme Guidelines](https://code.visualstudio.com/api/references/theme-color)
+![]()
+
+### Node Graph
+
+CodeGraphy's main feature is its ability to display the file hierarchy within the current directory and the connections within the files of the directory.
+
+- Ability to open files directly from CodeGraphy
+- Can change the style of the force-based graph
+- Displays connections between files
+
+![]()
+
+### Settings
+
+To color of nodes and selected node of the graph add these configurations to your `settings.json`. You can also `blacklist` any files or folders you want ignored. These can be manually editted from the `Config` section of the extension.
+
+```json
+"codegraphy.blacklist": [
+    ".spec.",
+    ".vscode",
+    ".git",
+    ".github",
+    "node_modules",
+    "dist",
+],
+```
+
+![]()
+
+## Known Issues
+
+
+## Contributing
+
+Contributions are always welcome for CodeGraphy! Please make sure to read the [Contributing Guide](https://github.com/joesobo/CodeGraphy/blob/main/.github/CONTRIBUTING.md) before making a pull request.
+
+## License
+
+[MIT](https://opensource.org/licenses/MIT)
+
+Copyright (c) 2022-present, Joe Soboleski
