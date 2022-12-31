@@ -37,8 +37,8 @@ import SliderRow from './components/SliderRow.vue'
 import type { Ref } from 'vue'
 import type { NodeDatum, ConnectionDatum } from '../utils/types'
 
-let nodes: Ref<NodeDatum> = ref()
-let connections: Ref<ConnectionDatum> = ref()
+let nodes: Ref<NodeDatum[] | undefined> = ref()
+let connections: Ref<ConnectionDatum[] | undefined> = ref()
 let centerForce: Ref<number> = ref(25)
 let repelForce: Ref<number> = ref(25)
 let linkForce: Ref<number> = ref(25)
@@ -54,7 +54,10 @@ window.addEventListener('message', (event) => {
 	case 'setGraphData':
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
-		drawGraph(nodes.value, connections.value)
+
+		if (nodes.value && connections.value) {
+			drawGraph(nodes.value, connections.value)
+		}
 		return
 	}
 })
