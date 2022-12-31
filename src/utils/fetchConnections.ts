@@ -1,12 +1,7 @@
 import readline from 'readline'
 import fs from 'fs'
 import { replaceAll } from './basic'
-
-export type Connection = {
-	id: string
-	source: number
-	target: number
-}
+import { ConnectionDatum } from './types'
 
 let connectionCurrentPath: string
 let sanitizedFiles: string[]
@@ -16,7 +11,7 @@ export const fetchConnections = async (
 	files: string[],
 	currentPath: string
 ) => {
-	let connections: Connection[] = []
+	let connections: ConnectionDatum[] = []
 	sanitizedFiles = sanitize(files)
 	connectionCurrentPath = currentPath
 
@@ -45,7 +40,7 @@ const findFileConnections = async (
 	lineReader: readline.Interface,
 	fileIndex: number
 ) => {
-	const currentFileConnections: Connection[] = []
+	const currentFileConnections: ConnectionDatum[] = []
 
 	for await (let line of lineReader) {
 		if (!containsConnection(line)) continue
