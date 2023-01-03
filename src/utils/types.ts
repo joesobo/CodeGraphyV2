@@ -1,6 +1,6 @@
 import type { SimulationNodeDatum } from 'd3'
 
-export interface NodeDatum extends SimulationNodeDatum {
+export interface Node extends SimulationNodeDatum {
 	id: number;
 	name: string;
 	fullPath: string;
@@ -8,7 +8,7 @@ export interface NodeDatum extends SimulationNodeDatum {
 	category: number;
 }
 
-export type ConnectionDatum = {
+export type Connection = {
 	id: string
 	source: number
 	target: number

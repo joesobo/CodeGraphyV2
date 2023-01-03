@@ -35,10 +35,10 @@ import { ref } from 'vue'
 import { drawGraph } from '../utils/d3'
 import SliderRow from './components/SliderRow.vue'
 import type { Ref } from 'vue'
-import type { NodeDatum, ConnectionDatum } from '../utils/types'
+import type { Node, Connection } from '../utils/types'
 
-let nodes: Ref<NodeDatum[] | undefined> = ref()
-let connections: Ref<ConnectionDatum[] | undefined> = ref()
+let nodes: Ref<Node[] | undefined> = ref()
+let connections: Ref<Connection[] | undefined> = ref()
 let centerForce: Ref<number> = ref(25)
 let repelForce: Ref<number> = ref(25)
 let linkForce: Ref<number> = ref(25)

@@ -1,29 +1,24 @@
 import readline from 'readline'
 import fs from 'fs'
+import type { Connection } from './types'
 import { replaceAll } from './basic'
-import { ConnectionDatum } from './types'
 
-let connectionCurrentPath: string
-let sanitizedFiles: string[]
+let globalFiles: string[] = []
+let globalPath = ''
 
 // Finds all connections for each file
 export const fetchConnections = async (
 	files: string[],
-	currentPath: string
+	path: string
 ) => {
-	let connections: ConnectionDatum[] = []
-	sanitizedFiles = sanitize(files)
-	connectionCurrentPath = currentPath
+	let connections: Connection[] = []
+	globalFiles = files
+	globalPath = path
 
+	// find connections for each file
 	for (let index = 0; index < files.length; index++) {
-		const filePath = files[index]
-		const lineReader = readline.createInterface({
-			input: fs.createReadStream(filePath)
-		})
-
+		// finds the connections for the current file
 		const fileConnections = await findFileConnections(
-			filePath,
-			lineReader,
 			index
 		)
 
@@ -35,27 +30,39 @@ export const fetchConnections = async (
 	return connections
 }
 
+// finds the connections for a single file
 const findFileConnections = async (
-	filePath: string,
-	lineReader: readline.Interface,
-	fileIndex: number
+	startIndex: number
 ) => {
-	const currentFileConnections: ConnectionDatum[] = []
+	const file = globalFiles[startIndex]
+	const lineReader = readline.createInterface({
+		input: fs.createReadStream(file)
+	})
+
+	console.log(file)
+
+	const currentFileConnections: Connection[] = []
 
 	for await (let line of lineReader) {
-		if (!containsConnection(line)) continue
+		if (file.includes('App.vue')) {
+			console.log(file)
+			const test = 5
+		}
+
+		if (findConnection(line) === -1) continue
 
 		// cleans up connection line
 		line = line.replace('(', ' ').replace(')', '').replace(';', '')
 
+		// find the path of the file connected to
 		const importPath = findImportPath(line)
-
-		const connectionIndex = findConnectionIndex(importPath, filePath)
+		// find the index of that file in the files array
+		const connectionIndex = findConnectionIndex(file, importPath)
 
 		if (connectionIndex !== -1) {
 			currentFileConnections.push({
-				id: fileIndex + '-' + connectionIndex,
-				source: fileIndex,
+				id: startIndex + '-' + connectionIndex,
+				source: startIndex,
 				target: connectionIndex
 			})
 		}
@@ -64,55 +71,41 @@ const findFileConnections = async (
 	return currentFileConnections
 }
 
-const containsConnection = (line: string) => {
-	return (
-		/^import.*(from.*("|').*("|')|"|')/.test(line) ||
-		/.*require\(('|").*('|")\)/.test(line) ||
-		/^export.*(from.*("|').*("|')|"|')/.test(line) ||
-		/^export.*(from.*("|').*("|')|"|')/.test(line) ||
-		/.*CodeGraphy connect: ('|").*.('|").*/.test(line)
-	)
+const findConnection = (line: string) => {
+	let result = -1
+
+	result = line.search(/^import.*from.*("|').*("|')/)
+	result = result === -1 ? line.search(/.*require(('|").*('|"))/) : result
+	result = result === -1 ? line.search(/^export.*from.*("|').*("|')/) : result
+	result = result === -1 ? line.search(/.*CodeGraphy connect: ('|").*.('|").*/) : result
+	return result
 }
 
-function findImportPath(line: string) {
+const findImportPath = (line: string) => {
 	const lineArr = line.split(' ')
-	const pathIndex = lineArr.findIndex(
+
+	const index = lineArr.findIndex(
 		(el) => el.startsWith('"') || el.startsWith('\'')
 	)
 
-	return lineArr[pathIndex]
-}
-
-const sanitize = (files: string[]): string[] => {
-	const santizedFiles: string[] = []
-
-	files.forEach((file) => {
-		let tempFile = replaceAll(file, ';', '')
-		tempFile = replaceAll(tempFile, '"', '')
-
-		santizedFiles.push(
-			tempFile
-		)
-	})
-
-	return santizedFiles
+	return lineArr[index]
 }
 
 // cleans up the import path and returns its file index
-function findConnectionIndex(importPath: string, filePath: string) {
+const findConnectionIndex = (file: string, importPath: string) => {
 	let foundIndex = -1
 	let path = ''
 
-	importPath = importPath.replace(/["']/g, '')
-
 	// clean up path to search index
+	importPath = importPath.replace(/["']/g, '')
 	if (importPath.startsWith('.')) {
-		path = handleRelativePath(importPath, filePath)
+		path = handleRelativePath(importPath, file)
 	} else {
 		path = handleDirectPath(importPath)
 	}
+	path = replaceAll(path, '/', '\\')
 
-	foundIndex = indexOfPath(sanitizedFiles, path)
+	foundIndex = indexOfPath(path)
 
 	return foundIndex
 }
@@ -120,7 +113,7 @@ function findConnectionIndex(importPath: string, filePath: string) {
 // if a relative path, walk back from current file path
 const handleRelativePath = (importPath: string, filePath: string) => {
 	const relativePathArr = importPath.split('/')
-	const tempPath = filePath.split('/')
+	const tempPath = filePath.split('\\')
 
 	if (importPath.startsWith('..')) {
 		tempPath.pop()
@@ -137,24 +130,27 @@ const handleRelativePath = (importPath: string, filePath: string) => {
 	return tempPath.join('/')
 }
 
+// if a direct path, add the global path to the beginning
 const handleDirectPath = (importPath: string) => {
-	return `${connectionCurrentPath}\\${importPath}`
+	return `${globalPath}\\${importPath}`
 }
 
-const indexOfPath = (files: string[], testPath: string) => {
-	const potentionIndices = []
+// finds the index of the path in the global files array
+const indexOfPath = (testPath: string) => {
+	const potentialIndices = []
 
-	for (let index = 0; index < files.length; index++) {
-		if (files[index].includes(testPath)) {
-			potentionIndices.push(index)
+	for (let index = 0; index < globalFiles.length; index++) {
+		if (globalFiles[index].includes(testPath)) {
+			potentialIndices.push(index)
 		}
 	}
 
+	// TEMP solution for multiple files with the same or similar names (currently returns the shortest path)
 	let bestIndex = -1
 	let maxLength = 100
-	potentionIndices.forEach((index) => {
-		if (files[index].split('.').length < maxLength) {
-			maxLength = files[index].split('.').length
+	potentialIndices.forEach((index) => {
+		if (globalFiles[index].split('.').length < maxLength) {
+			maxLength = globalFiles[index].split('.').length
 			bestIndex = index
 		}
 	})

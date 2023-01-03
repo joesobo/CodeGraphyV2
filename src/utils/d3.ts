@@ -1,30 +1,30 @@
 import * as d3 from 'd3'
 import type { Simulation, D3DragEvent } from 'd3'
-import type { NodeDatum, ConnectionDatum, CustomSubject } from './types'
+import type { Node, Connection, CustomSubject } from './types'
 
 const colorScale = ['orange', 'lightblue', '#B19CD9']
 
 // Create a new force guide diagram
 const forceSimulation = d3.forceSimulation()
 	.force('link', d3.forceLink())
-	.force('charge', d3.forceManyBody().strength(-100))
+	.force('charge', d3.forceManyBody().strength(-1000))
 	.force('center', d3.forceCenter())
 	.force('collision', d3.forceCollide().radius((d: any) => { return d.radius }))
 
 // drag
-const drag = (simulation: Simulation<NodeDatum, undefined>) => {
-	const dragstarted = (event: D3DragEvent<SVGCircleElement, NodeDatum, CustomSubject>) => {
+const drag = (simulation: Simulation<Node, undefined>) => {
+	const dragstarted = (event: D3DragEvent<SVGCircleElement, Node, CustomSubject>) => {
 		if (!event.active) simulation.alphaTarget(0.3).restart()
 		event.subject.fx = event.subject.x
 		event.subject.fy = event.subject.y
 	}
 
-	const dragged = (event: D3DragEvent<SVGCircleElement, NodeDatum, CustomSubject>) => {
+	const dragged = (event: D3DragEvent<SVGCircleElement, Node, CustomSubject>) => {
 		event.subject.fx = event.x
 		event.subject.fy = event.y
 	}
 
-	const dragended = (event: D3DragEvent<SVGCircleElement, NodeDatum, CustomSubject>) => {
+	const dragended = (event: D3DragEvent<SVGCircleElement, Node, CustomSubject>) => {
 		if (!event.active) simulation.alphaTarget(0)
 		event.subject.fx = null
 		event.subject.fy = null
@@ -36,7 +36,7 @@ const drag = (simulation: Simulation<NodeDatum, undefined>) => {
 		.on('end', dragended)
 }
 
-export const drawGraph = (nodes: NodeDatum[], connections: ConnectionDatum[]) => {
+export const drawGraph = (nodes: Node[], connections: Connection[]) => {
 	const svg = d3.select('svg')
 	const width: number = Number.parseInt(svg.attr('width'))
 	const height: number = Number.parseInt(svg.attr('height'))
@@ -80,7 +80,7 @@ export const drawGraph = (nodes: NodeDatum[], connections: ConnectionDatum[]) =>
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
 	// @ts-ignore
 	forceSimulation.force('link').links(connections)
-		.id((d: ConnectionDatum) => { return d.id })
+		.id((d: Connection) => { return d.id })
 
 	// Set drawing center location
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceCenter is not typed
@@ -100,17 +100,17 @@ export const drawGraph = (nodes: NodeDatum[], connections: ConnectionDatum[]) =>
 
 	// Draw node
 	gs.append('circle')
-		.attr('r', (d: NodeDatum) => { return d.radius })
-		.attr('fill', (d: NodeDatum) => {
+		.attr('r', (d: Node) => { return d.radius })
+		.attr('fill', (d: Node) => {
 			return colorScale[(d).category]
 		})
 
 	// Draw text
 	gs.append('text')
-		.attr('y', (d: NodeDatum) => -d.radius - 12)
+		.attr('y', (d: Node) => -d.radius - 12)
 		.attr('x', -5)
 		.attr('dy', 10)
-		.text((d: NodeDatum) => {
+		.text((d: Node) => {
 			return d.name
 		})
 }
