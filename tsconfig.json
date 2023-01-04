@@ -23,7 +23,6 @@
       "vitest",
       "vite/client",
       "unplugin-icons/types/vue",
-      "@intlify/unplugin-vue-i18n/messages",
       "@types/d3"
     ]
   },

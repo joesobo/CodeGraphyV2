@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between mt-4">
+  <div class="flex justify-between mt-2">
     <label class="w-1/3">{{ props.label }}</label>
 
     <div class="flex w-2/3 items-center">
