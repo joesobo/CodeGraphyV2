@@ -7,10 +7,12 @@
         {{ value }}
       </p>
       <input
+        :id="props.id"
         v-model="value"
         type="range"
-        min="0"
-        max="100"
+        :min="props.min ?? 0"
+        :max="props.max ?? 100"
+        :step="props.step ?? 1"
       >
     </div>
   </div>
@@ -20,8 +22,12 @@
 import { ref } from 'vue'
 
 const props = defineProps<{
+	id?: string
 	value: string | number | boolean
 	label: string
+	min?: number
+	max?: number
+	step?: number
 }>()
 
 const value = ref(props.value)

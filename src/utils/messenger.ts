@@ -22,7 +22,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
-		case 'getGraphData':
+		case 'getGraphData': {
 			await webview.postMessage({
 				command: 'setGraphData',
 				text: {
@@ -31,6 +31,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				}
 			})
 			return
+		}
 		}
 	})
 }

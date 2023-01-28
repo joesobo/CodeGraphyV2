@@ -4,13 +4,6 @@ import type { Node, Connection, CustomSubject } from './types'
 
 const colorScale = ['orange', 'lightblue', '#B19CD9']
 
-// Create a new force guide diagram
-const forceSimulation = d3.forceSimulation()
-	.force('link', d3.forceLink())
-	.force('charge', d3.forceManyBody().strength(-1000))
-	.force('center', d3.forceCenter())
-	.force('collision', d3.forceCollide().radius((d: any) => { return d.radius }))
-
 // drag
 const drag = (simulation: Simulation<Node, undefined>) => {
 	const dragstarted = (event: D3DragEvent<SVGCircleElement, Node, CustomSubject>) => {
@@ -37,10 +30,49 @@ const drag = (simulation: Simulation<Node, undefined>) => {
 }
 
 export const drawGraph = (nodes: Node[], connections: Connection[]) => {
+	// Select svg
 	const svg = d3.select('svg')
 	const width: number = Number.parseInt(svg.attr('width'))
 	const height: number = Number.parseInt(svg.attr('height'))
 	const g = svg.append('g')
+
+	// Force simulation
+	const forceSimulation = d3.forceSimulation()
+		.force('link', d3.forceLink())
+		.force('charge', d3.forceManyBody().strength(-100))
+		.force('center', d3.forceCenter())
+		.force('collision', d3.forceCollide().radius((d: any) => { return d.radius }))
+
+	document.querySelector('#linkForce')?.addEventListener('change', (event) => {
+		const inputElement = event.target as HTMLInputElement
+		const value = Number.parseInt(inputElement.value)
+		forceSimulation.force('link', null)
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
+		// @ts-ignore
+		forceSimulation.force('link').links(connections).strength(value)
+	})
+
+	document.querySelector('#linkDistance')?.addEventListener('change', (event) => {
+		const inputElement = event.target as HTMLInputElement
+		const value = Number.parseInt(inputElement.value)
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
+		// @ts-ignore
+		forceSimulation.force('link').links(connections).distance(value)
+	})
+
+	document.querySelector('#chargeForce')?.addEventListener('change', (event) => {
+		const inputElement = event.target as HTMLInputElement
+		const value = Number.parseInt(inputElement.value)
+		forceSimulation.force('charge', null)
+		forceSimulation.force('charge', d3.forceManyBody().strength(value))
+	})
+
+	document.querySelector('#centerForce')?.addEventListener('change', (event) => {
+		const inputElement = event.target as HTMLInputElement
+		const value = Number.parseInt(inputElement.value)
+		forceSimulation.force('center', null)
+		forceSimulation.force('center', d3.forceCenter().strength(value))
+	})
 
 	// Zoom
 	const zoom = d3.zoom()
@@ -113,4 +145,6 @@ export const drawGraph = (nodes: Node[], connections: Connection[]) => {
 		.text((d: Node) => {
 			return d.name
 		})
+
+	return forceSimulation
 }

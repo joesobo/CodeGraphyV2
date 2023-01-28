@@ -39,16 +39,9 @@ const findFileConnections = async (
 		input: fs.createReadStream(file)
 	})
 
-	console.log(file)
-
 	const currentFileConnections: Connection[] = []
 
 	for await (let line of lineReader) {
-		if (file.includes('App.vue')) {
-			console.log(file)
-			const test = 5
-		}
-
 		if (findConnection(line) === -1) continue
 
 		// cleans up connection line
