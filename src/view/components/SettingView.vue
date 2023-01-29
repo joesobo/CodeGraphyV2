@@ -1,9 +1,9 @@
 <template>
   <div class="mt-4 flex flex-col">
     <div class="flex mt-4 items-center">
-      <div class="flex w-2/3">
-        <button>Reset Graph</button>
-      </div>
+      <button @click="emit('resetGraph')">
+        Reset Graph
+      </button>
     </div>
     <div class="flex mt-4 items-center">
       <label class="w-1/3">Connection</label>
@@ -88,4 +88,10 @@ let centerForce: Ref<number> = ref(0)
 let chargeForce: Ref<number> = ref(-100)
 let linkForce: Ref<number> = ref(0)
 let linkDistance: Ref<number> = ref(0)
+
+	interface SettingViewEmits {
+  (event: 'resetGraph'): void
+}
+
+const emit = defineEmits<SettingViewEmits>()
 </script>

@@ -31,6 +31,7 @@
     <SettingView
       v-show="activeTab === 'Settings'"
       class="mt-4"
+      @resetGraph="resetGraph"
     />
   </div>
 </template>
@@ -66,4 +67,10 @@ window.addEventListener('message', (event) => {
 		return
 	}
 })
+
+const resetGraph = () => {
+	if (nodes.value && connections.value) {
+		drawGraph(nodes.value, connections.value)
+	}
+}
 </script>

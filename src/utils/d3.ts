@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import type { Simulation, D3DragEvent } from 'd3'
 import type { Node, Connection, CustomSubject } from './types'
+import { getRandomInt } from './basic'
 
 const colorScale = ['orange', 'lightblue', '#B19CD9']
 
@@ -30,8 +31,23 @@ const drag = (simulation: Simulation<Node, undefined>) => {
 }
 
 export const drawGraph = (nodes: Node[], connections: Connection[]) => {
+
 	// Select svg
 	const svg = d3.select('svg')
+
+	// Reset graph, node placement, and scale
+	document.querySelector('g')?.remove()
+	nodes.forEach((node) => {
+		node.x = getRandomInt(500)
+		node.y = getRandomInt(500)
+		node.vx = 0
+		node.vy = 0
+	})
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3.select not properly typed
+	// @ts-ignore
+	d3.zoom().transform(svg, d3.zoomIdentity)
+
+	// Setup
 	const width: number = Number.parseInt(svg.attr('width'))
 	const height: number = Number.parseInt(svg.attr('height'))
 	const g = svg.append('g')
@@ -39,7 +55,7 @@ export const drawGraph = (nodes: Node[], connections: Connection[]) => {
 	// Force simulation
 	const forceSimulation = d3.forceSimulation()
 		.force('link', d3.forceLink())
-		.force('charge', d3.forceManyBody().strength(-100))
+		.force('charge', d3.forceManyBody().strength(-10))
 		.force('center', d3.forceCenter())
 		.force('collision', d3.forceCollide().radius((d: any) => { return d.radius }))
 

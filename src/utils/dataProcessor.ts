@@ -16,7 +16,7 @@ export const processData = (
 			name: fileName,
 			fullPath: file,
 			radius: getRandomInt(15) + 10,
-			category: getRandomInt(3)
+			category: getRandomInt(3),
 		})
 	}
 
