@@ -7,7 +7,9 @@
       :tabindex="disabled ? -1 : 0"
       class="flex justify-between items-center cursor-pointer"
     >
-      {{ title }}
+      <span class="text-sm font-medium text-gray-300">
+        {{ title }}
+      </span>
       <ChevronDown
         v-if="state"
         class="text-base"

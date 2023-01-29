@@ -6,19 +6,19 @@
       </button>
     </div>
     <div class="flex mt-4 items-center">
-      <label class="w-1/3">Connection</label>
+      <label class="w-1/3 text-sm font-medium text-gray-300">Connection</label>
       <div class="flex w-2/3">
         <SwitchButton :options="['Interaction', 'Directory']" />
       </div>
     </div>
     <div class="flex mt-4 items-center">
-      <label class="w-1/3">Display</label>
+      <label class="w-1/3 text-sm font-medium text-gray-300">Display</label>
       <div class="flex w-2/3">
         <SwitchButton :options="['Graph', 'Local']" />
       </div>
     </div>
     <div class="flex mt-4 items-center">
-      <label class="w-1/3">Node Size</label>
+      <label class="w-1/3 text-sm font-medium text-gray-300">Node Size</label>
       <div class="flex w-2/3">
         <SwitchButton :options="['Connections', 'Lines', 'Views']" />
       </div>
@@ -66,12 +66,12 @@
         title="Extra"
       >
         <div class="flex flex-col w-2/3 ml-auto mt-2">
-          <switch>Hide Orphans</switch>
-          <switch>Hide Labels</switch>
+          <ToggleSwitch label="Hide Ophans" />
+          <ToggleSwitch label="Hide Labels" />
           <div>Line width</div>
           <div>Line color</div>
-          <switch>Node outline</switch>
-          <switch>Collisions</switch>
+          <ToggleSwitch label="Outlines" />
+          <ToggleSwitch label="Collions" />
         </div>
       </Disclosure>
     </div>
@@ -81,6 +81,7 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
 import SliderRow from './SliderRow.vue'
+import ToggleSwitch from './ToggleSwitch.vue'
 import Disclosure from './Disclosure.vue'
 import SwitchButton from './SwitchButton.vue'
 
