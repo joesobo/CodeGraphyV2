@@ -38,6 +38,7 @@
           <PickColors
             v-model:value="extension.color"
             class="cursor-pointer"
+            @change="updateExtension"
           />
         </td>
         <td>
@@ -55,7 +56,18 @@ import PickColors from 'vue-pick-colors'
 import CloseIcon from '~icons/mdi/close-circle'
 import type { Extension } from '../../utils/types'
 
-defineProps<{
+const props = defineProps<{
 	extensionList: Extension[]
 }>()
+
+interface SettingViewEmits {
+  (event: 'resetGraph'): void
+	(event: 'updateExtension', extensionList: Extension[]): void
+}
+
+const emit = defineEmits<SettingViewEmits>()
+
+const updateExtension = () => {
+	emit('updateExtension', props.extensionList)
+}
 </script>

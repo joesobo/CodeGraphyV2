@@ -21,6 +21,7 @@
       v-show="activeTab === 'Languages'"
       class="mt-4"
       :extensionList="extensionList"
+      @updateExtension="updateExtension"
     />
     <!-- Settings Tab Content -->
     <SettingView
@@ -77,6 +78,12 @@ const updateGraph = (settingOptions: SettingsOptions) => {
 	if (nodes.value && connections.value) {
 		extensionList.value = parseExtensions(nodes.value, { useRandomColor: settingOptions.useRandomColor, d3Color: settingOptions.d3Color })
 		updateD3Graph(nodes.value, extensionList.value)
+	}
+}
+
+const updateExtension = (extensions: Extension[]) => {
+	if (nodes.value && connections.value) {
+		updateD3Graph(nodes.value, extensions)
 	}
 }
 </script>
