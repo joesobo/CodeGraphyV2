@@ -43,9 +43,12 @@ export const parseExtensions = (nodes: Node[], options: ParseOptions) => {
 				language: 'Test',
 				extension,
 				color,
-				count: 0,
-				lines: 0,
+				count: 1,
+				lines: node.lines,
 			})
+		} else {
+			extensions[extensionIndex].count ++
+			extensions[extensionIndex].lines += node.lines
 		}
 	})
 

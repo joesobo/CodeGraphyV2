@@ -1,8 +1,10 @@
+import readline from 'readline'
 import fs from 'fs'
 import path from 'path'
 import { containsBlacklist } from './blacklist'
+import type { File } from './types'
 
-const files: string[] = []
+const files: File[] = []
 const dirs: string[] = []
 
 // returns a full list of files in a dir and its subdirs
@@ -13,13 +15,22 @@ export const fetchFiles = (
 	try {
 		const dirContent = fs.readdirSync(directory)
 
-		dirContent.forEach((dirPath) => {
+		dirContent.forEach(async (dirPath) => {
 			const fullPath = path.join(directory, dirPath)
 
 			if (containsBlacklist(fullPath, blacklist)) return
 
 			if (fs.statSync(fullPath).isFile()) {
-				files.push(fullPath)
+				let count = 0
+				const lineReader = readline.createInterface({
+					input: fs.createReadStream(fullPath)
+				})
+
+				for await (const _line of lineReader) {
+					count++
+				}
+
+				files.push({ name: fullPath, lines: count })
 			} else {
 				dirs.push(fullPath)
 			}

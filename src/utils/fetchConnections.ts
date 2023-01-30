@@ -1,14 +1,14 @@
 import readline from 'readline'
 import fs from 'fs'
-import type { Connection } from './types'
+import type { File, Connection } from './types'
 import { replaceAll } from './basic'
 
-let globalFiles: string[] = []
+let globalFiles: File[] = []
 let globalPath = ''
 
 // Finds all connections for each file
 export const fetchConnections = async (
-	files: string[],
+	files: File[],
 	path: string
 ) => {
 	let connections: Connection[] = []
@@ -34,7 +34,7 @@ export const fetchConnections = async (
 const findFileConnections = async (
 	startIndex: number
 ) => {
-	const file = globalFiles[startIndex]
+	const file = globalFiles[startIndex].name
 	const lineReader = readline.createInterface({
 		input: fs.createReadStream(file)
 	})
@@ -133,7 +133,7 @@ const indexOfPath = (testPath: string) => {
 	const potentialIndices = []
 
 	for (let index = 0; index < globalFiles.length; index++) {
-		if (globalFiles[index].includes(testPath)) {
+		if (globalFiles[index].name.includes(testPath)) {
 			potentialIndices.push(index)
 		}
 	}
@@ -142,8 +142,8 @@ const indexOfPath = (testPath: string) => {
 	let bestIndex = -1
 	let maxLength = 100
 	potentialIndices.forEach((index) => {
-		if (globalFiles[index].split('.').length < maxLength) {
-			maxLength = globalFiles[index].split('.').length
+		if (globalFiles[index].name.split('.').length < maxLength) {
+			maxLength = globalFiles[index].name.split('.').length
 			bestIndex = index
 		}
 	})
