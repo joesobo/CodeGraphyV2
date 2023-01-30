@@ -5,7 +5,6 @@ export interface Node extends SimulationNodeDatum {
 	name: string;
 	fullPath: string;
 	radius: number;
-	category: number;
 }
 
 export type Connection = {
@@ -22,4 +21,31 @@ export interface CustomSubject {
 	x: number;
 	y: number;
 	r: number;
+}
+
+export interface Extension {
+	language: string;
+	extension: string;
+	color: string;
+	count: number;
+	lines: number;
+}
+
+export interface ParseOptions {
+	useRandomColor: boolean
+	d3Color?: string
+}
+
+export interface D3Color {
+	name: string
+	interpolator: (t: number) => string
+}
+
+export interface SettingsOptions {
+	centerForce: number
+	chargeForce: number
+	linkForce: number
+	linkDistance: number
+	useRandomColor: boolean
+	d3Color: string
 }

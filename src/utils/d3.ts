@@ -1,9 +1,7 @@
 import * as d3 from 'd3'
 import type { Simulation, D3DragEvent } from 'd3'
-import type { Node, Connection, CustomSubject } from './types'
+import type { Node, Connection, CustomSubject, Extension } from './types'
 import { getRandomInt } from './basic'
-
-const colorScale = ['orange', 'lightblue', '#B19CD9']
 
 // drag
 const drag = (simulation: Simulation<Node, undefined>) => {
@@ -30,8 +28,7 @@ const drag = (simulation: Simulation<Node, undefined>) => {
 		.on('end', dragended)
 }
 
-export const drawGraph = (nodes: Node[], connections: Connection[]) => {
-
+export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions: Extension[]) => {
 	// Select svg
 	const svg = d3.select('svg')
 
@@ -150,7 +147,15 @@ export const drawGraph = (nodes: Node[], connections: Connection[]) => {
 	gs.append('circle')
 		.attr('r', (d: Node) => { return d.radius })
 		.attr('fill', (d: Node) => {
-			return colorScale[(d).category]
+			// find extension color to match nodes extension
+			let nodeExt = ''
+			if (d.name.startsWith('.')) {
+				nodeExt = d.name.substring(1).split('.').slice(1).join('.')
+			} else {
+				nodeExt = d.name.split('.').slice(1).join('.')
+			}
+
+			return extensions.find((ext) => { return ext.extension === nodeExt })?.color ?? '#000'
 		})
 
 	// Draw text
@@ -161,6 +166,26 @@ export const drawGraph = (nodes: Node[], connections: Connection[]) => {
 		.text((d: Node) => {
 			return d.name
 		})
-
 	return forceSimulation
+}
+
+export const updateD3Graph = (nodes: Node[], extensions: Extension[]) => {
+	const svg = d3.select('svg')
+	const selection = svg.selectAll('circle')
+
+	let index = 0
+	for (const element of selection) {
+		const node = nodes[index]
+
+		let nodeExt = ''
+		if (node.name.startsWith('.')) {
+			nodeExt = node.name.substring(1).split('.').slice(1).join('.')
+		} else {
+			nodeExt = node.name.split('.').slice(1).join('.')
+		}
+
+		(element as Element).setAttribute('fill', extensions.find((ext) => { return ext.extension === nodeExt })?.color ?? '#000')
+
+		index++
+	}
 }

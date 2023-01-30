@@ -17,9 +17,10 @@ const emit = defineEmits<(e: 'update', value: string) => void>()
 
 const props = defineProps<{
 	options: string[]
+	selected?: string
 }>()
 
-let currentOption = ref(props.options[0])
+let currentOption = ref(props.selected ?? props.options[0])
 
 const handleClick = (event: MouseEvent) => {
 	const target = event.target as HTMLButtonElement
