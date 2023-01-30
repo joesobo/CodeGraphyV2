@@ -26,7 +26,6 @@ export const parseExtensions = (nodes: Node[], options: ParseOptions) => {
 				})
 			} else {
 				// D3 Color
-				console.log(options.d3Color, d3ColorSchemes)
 				const selectedThemeInterpolator: ((t: number) => string) | undefined = d3ColorSchemes.find((theme: D3Color) => theme.name === options.d3Color)?.interpolator
 				const d3Color = d3.scaleSequential()
 					.domain([1,10])
