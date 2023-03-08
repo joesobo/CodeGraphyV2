@@ -1,24 +1,27 @@
-import readline from 'readline'
+import type { File } from './types'
+import { containsBlacklist } from './blacklist'
 import fs from 'fs'
 import path from 'path'
-import { containsBlacklist } from './blacklist'
-import type { File } from './types'
+import readline from 'readline'
 
 const files: File[] = []
 const dirs: string[] = []
 
 // returns a full list of files in a dir and its subdirs
-export const fetchFiles = (
+export const fetchFiles = async (
 	directory: any,
 	blacklist: string[] = []
-) => {
+): Promise<File[]> => {
 	try {
-		const dirContent = fs.readdirSync(directory)
+		// mac directory fix
+		const test = ('\\' + directory).replace(/\\/g, '/')
 
-		dirContent.forEach(async (dirPath) => {
-			const fullPath = path.join(directory, dirPath)
+		const dirContent = fs.readdirSync(test)
 
-			if (containsBlacklist(fullPath, blacklist)) return
+		for (const dirPath of dirContent) {
+			const fullPath = path.join(test, dirPath)
+
+			if (containsBlacklist(fullPath, blacklist)) continue
 
 			if (fs.statSync(fullPath).isFile()) {
 				let count = 0
@@ -30,14 +33,16 @@ export const fetchFiles = (
 					count++
 				}
 
+				lineReader.close()
+
 				files.push({ name: fullPath, lines: count })
 			} else {
 				dirs.push(fullPath)
 			}
-		})
+		}
 
 		if (dirs.length !== 0) {
-			fetchFiles(dirs.pop())
+			await fetchFiles(dirs.pop(), blacklist)
 		}
 
 		return files

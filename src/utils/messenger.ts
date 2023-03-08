@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
-import { fetchFiles } from './fetchFiles'
+
 import { fetchConnections } from './fetchConnections'
+import { fetchFiles } from './fetchFiles'
 import { processData } from './dataProcessor'
 import { replaceAll } from './basic'
 
@@ -18,11 +19,10 @@ const receiveMessages = async (webview: vscode.Webview) => {
 	currentPath = currentPath.startsWith('/') ? currentPath.substring(1) : currentPath
 	currentPath = replaceAll(currentPath, '/', '\\')
 
-	const files = fetchFiles(currentPath, blacklist)
-
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
 		case 'getGraphData': {
+			const files = await fetchFiles(currentPath, blacklist)
 			await webview.postMessage({
 				command: 'setGraphData',
 				text: {
