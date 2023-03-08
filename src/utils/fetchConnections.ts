@@ -1,6 +1,7 @@
-import readline from 'readline'
+import type { Connection, File } from './types'
+
 import fs from 'fs'
-import type { File, Connection } from './types'
+import readline from 'readline'
 import { replaceAll } from './basic'
 
 let globalFiles: File[] = []
@@ -96,7 +97,7 @@ const findConnectionIndex = (file: string, importPath: string) => {
 	} else {
 		path = handleDirectPath(importPath)
 	}
-	path = replaceAll(path, '/', '\\')
+	// path = replaceAll(path, '/', '\\')
 
 	foundIndex = indexOfPath(path)
 
@@ -105,8 +106,9 @@ const findConnectionIndex = (file: string, importPath: string) => {
 
 // if a relative path, walk back from current file path
 const handleRelativePath = (importPath: string, filePath: string) => {
+
 	const relativePathArr = importPath.split('/')
-	const tempPath = filePath.split('\\')
+	const tempPath = filePath.split(/[\\/]+/)
 
 	if (importPath.startsWith('..')) {
 		tempPath.pop()
