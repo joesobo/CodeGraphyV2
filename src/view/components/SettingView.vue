@@ -143,7 +143,7 @@ const colorSchemes = [
 let centerForce: Ref<number> = ref(0)
 let chargeForce: Ref<number> = ref(-100)
 let linkForce: Ref<number> = ref(0)
-let linkDistance: Ref<number> = ref(0)
+let linkDistance: Ref<number> = ref(100)
 
 let nodeColor: Ref<string> = ref('D3')
 let selectedD3Color: Ref<number> = ref(colorSchemes.findIndex(scheme => scheme === 'Turbo'))

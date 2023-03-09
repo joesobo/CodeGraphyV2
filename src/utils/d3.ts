@@ -1,6 +1,8 @@
 import * as d3 from 'd3'
-import type { Simulation, D3DragEvent } from 'd3'
-import type { Node, Connection, CustomSubject, Extension } from './types'
+
+import type { Connection, CustomSubject, Extension, Node } from './types'
+import type { D3DragEvent, Simulation } from 'd3'
+
 import { getRandomInt } from './basic'
 
 // drag
@@ -31,12 +33,14 @@ const drag = (simulation: Simulation<Node, undefined>) => {
 export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions: Extension[]) => {
 	// Select svg
 	const svg = d3.select('svg')
+	const width: number = Number.parseInt(svg.attr('width'))
+	const height: number = Number.parseInt(svg.attr('height'))
 
 	// Reset graph, node placement, and scale
 	document.querySelector('g')?.remove()
 	nodes.forEach((node) => {
-		node.x = getRandomInt(500)
-		node.y = getRandomInt(500)
+		node.x = getRandomInt(width)
+		node.y = getRandomInt(height)
 		node.vx = 0
 		node.vy = 0
 	})
@@ -45,46 +49,41 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 	d3.zoom().transform(svg, d3.zoomIdentity)
 
 	// Setup
-	const width: number = Number.parseInt(svg.attr('width'))
-	const height: number = Number.parseInt(svg.attr('height'))
 	const g = svg.append('g')
 
 	// Force simulation
 	const forceSimulation = d3.forceSimulation()
-		.force('link', d3.forceLink())
-		.force('charge', d3.forceManyBody().strength(-10))
-		.force('center', d3.forceCenter())
+		.force('link', d3.forceLink().distance(100))
+		.force('charge', d3.forceManyBody().strength(-10).distanceMax(width / 2))
+		.force('center', d3.forceCenter(width / 2, height / 2))
 		.force('collision', d3.forceCollide().radius((d: any) => { return d.radius }))
 
 	document.querySelector('#linkForce')?.addEventListener('change', (event) => {
 		const inputElement = event.target as HTMLInputElement
 		const value = Number.parseInt(inputElement.value)
 		forceSimulation.force('link', null)
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
-		// @ts-ignore
-		forceSimulation.force('link').links(connections).strength(value)
+		forceSimulation.force('link', d3.forceLink().strength(value))
 	})
 
 	document.querySelector('#linkDistance')?.addEventListener('change', (event) => {
 		const inputElement = event.target as HTMLInputElement
 		const value = Number.parseInt(inputElement.value)
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
-		// @ts-ignore
-		forceSimulation.force('link').links(connections).distance(value)
+		forceSimulation.force('link', null)
+		forceSimulation.force('link', d3.forceLink().distance(value))
 	})
 
 	document.querySelector('#chargeForce')?.addEventListener('change', (event) => {
 		const inputElement = event.target as HTMLInputElement
 		const value = Number.parseInt(inputElement.value)
 		forceSimulation.force('charge', null)
-		forceSimulation.force('charge', d3.forceManyBody().strength(value))
+		forceSimulation.force('charge', d3.forceManyBody().strength(value).distanceMax(width / 2))
 	})
 
 	document.querySelector('#centerForce')?.addEventListener('change', (event) => {
 		const inputElement = event.target as HTMLInputElement
 		const value = Number.parseInt(inputElement.value)
 		forceSimulation.force('center', null)
-		forceSimulation.force('center', d3.forceCenter().strength(value))
+		forceSimulation.force('center', d3.forceCenter(width / 2, height / 2).strength(value))
 	})
 
 	// Zoom
@@ -126,12 +125,6 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 	// @ts-ignore
 	forceSimulation.force('link').links(connections)
 		.id((d: Connection) => { return d.id })
-
-	// Set drawing center location
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceCenter is not typed
-	// @ts-ignore
-	forceSimulation.force('center').x(width / 2)
-		.y(height / 2)
 
 	// Create group
 	const gs = g.selectAll('.circleText')
