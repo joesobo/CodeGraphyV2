@@ -32,6 +32,19 @@ CodeGraphyV2 is coming soon...
 - File blacklist
 - and more!
 
+## Upcoming in V2
+
+- [ ] Displays connections to external packages
+- [ ] Switch between different connection display (interactions vs classic directory)
+- [ ] Switch between different level of view (entire graph vs local graph)
+- [ ] Switch between different node size factors (connections vs lines vs views)
+- [x] Switch between different base color palette (d3 vs random)
+- [x] Variety of d3 base palettes
+- [x] Variety of d3 force sliders to change graph physics
+- [x] Variety of options to hide / display different features within the graph
+- [x] Analyzed table view of directory contents
+- [x] Entirely built on Vite & D3 so its much faster
+
 ### Node Graph
 
 CodeGraphy's main feature is its ability to display the file hierarchy in a completely different way. Look within the current directory and the connections between the files of the directory.
@@ -54,7 +67,7 @@ You can also `blacklist` any files or folders you want ignored. Add this configu
     ".github",
     "node_modules",
     "dist",
-		...
+	...
 ],
 ```
 
