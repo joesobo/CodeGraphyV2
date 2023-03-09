@@ -29,6 +29,7 @@
       class="mt-4"
       @resetGraph="resetGraph"
       @updateGraph="updateGraph"
+      @updateNodeSize="updateNodeSize"
     />
   </div>
 </template>
@@ -51,6 +52,7 @@ let activeTab: Ref<string> = ref('Settings')
 
 vscode.postMessage({
 	command: 'getGraphData',
+	nodeSize: 'Lines'
 })
 
 window.addEventListener('message', (event) => {
@@ -72,6 +74,13 @@ const resetGraph = () => {
 	if (nodes.value && connections.value) {
 		drawD3Graph(nodes.value, connections.value, extensionList.value)
 	}
+}
+
+const updateNodeSize = (nodeSize: string) => {
+	vscode.postMessage({
+		command: 'getGraphData',
+		nodeSize
+	})
 }
 
 const updateGraph = (settingOptions: SettingsOptions) => {

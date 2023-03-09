@@ -4,14 +4,20 @@ import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
 
-const files: File[] = []
-const dirs: string[] = []
+let files: File[] = []
+let dirs: string[] = []
 
 // returns a full list of files in a dir and its subdirs
 export const fetchFiles = async (
 	directory: any,
-	blacklist: string[] = []
+	blacklist: string[] = [],
+	reset?: boolean
 ): Promise<File[]> => {
+	if (reset) {
+		files = []
+		dirs = []
+	}
+
 	try {
 		// mac directory fix
 		const test = ('\\' + directory).replace(/\\/g, '/')

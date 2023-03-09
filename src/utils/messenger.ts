@@ -22,12 +22,13 @@ const receiveMessages = async (webview: vscode.Webview) => {
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
 		case 'getGraphData': {
-			const files = await fetchFiles(currentPath, blacklist)
+			const nodeSize = message.nodeSize
+			const files = await fetchFiles(currentPath, blacklist, true)
 			await webview.postMessage({
 				command: 'setGraphData',
 				text: {
 					connections: await fetchConnections(files, currentPath),
-					nodes: processData(files)
+					nodes: processData(files, nodeSize)
 				}
 			})
 			return
