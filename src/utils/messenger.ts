@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 
 import { fetchConnections } from './fetchConnections'
 import { fetchFiles } from './fetchFiles'
-import { processData } from './dataProcessor'
+import { processData } from './processData'
 import { replaceAll } from './basic'
 
 export const handleMessages = (webview: vscode.Webview) => {
@@ -24,11 +24,12 @@ const receiveMessages = async (webview: vscode.Webview) => {
 		case 'getGraphData': {
 			const nodeSize = message.nodeSize
 			const files = await fetchFiles(currentPath, blacklist, true)
+			const connections = await fetchConnections(files, currentPath)
 			await webview.postMessage({
 				command: 'setGraphData',
 				text: {
-					connections: await fetchConnections(files, currentPath),
-					nodes: processData(files, nodeSize)
+					connections: connections,
+					nodes: processData(files, nodeSize, connections)
 				}
 			})
 			return

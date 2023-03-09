@@ -21,7 +21,7 @@
       <label class="w-1/3 text-sm font-medium text-gray-300">Node Size</label>
       <div class="flex w-2/3">
         <SwitchButton
-          :options="['Connections', 'Lines', 'Views']"
+          :options="['Connections', 'Lines']"
           :selected="nodeSize"
           @update="(value) => {
             nodeSize = value
