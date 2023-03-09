@@ -3,32 +3,40 @@
  </p>
 
  <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://vsmarketplacebadge.apphb.com/version-short/codegraphy.codegraphy.svg" alt="Marketplace"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://vsmarketplacebadge.apphb.com/downloads-short/codegraphy.codegraphy.svg" alt="Marketplace"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://vsmarketplacebadge.apphb.com/rating-short/codegraphy.codegraphy.svg" alt="Marketplace"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://img.shields.io/visual-studio-marketplace/v/codegraphy.codegraphy" alt="Version"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://img.shields.io/visual-studio-marketplace/d/codegraphy.codegraphy" alt="Downloads"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy"><img src="https://img.shields.io/visual-studio-marketplace/stars/codegraphy.codegraphy" alt="Rating"></a>
 </p>
 
 # CodeGraphy
 
 > CodeGraphy **enhances** files connections inside VSCode and allows for **birds eye views** of each repository. It helps you to **visualize code hierarchy** at a glance, **seamlessly navigate and explore** your file hierarchy, **gain valuable insights** via a force based node graph UI, and more.
 
-CodeGraphy is an [open-source](https://github.com/joesobo/CodeGraphy "Open CodeGraphy on GitHub") extension for [Visual Studio Code](https://code.visualstudio.com).
+CodeGraphy is an [open-source](https://github.com/joesobo/CodeGraphyV2 "Open CodeGraphyV2 on GitHub") extension for [Visual Studio Code](https://code.visualstudio.com).
 
 Simply CodeGraphy helps you **better understand file connections**. With its force-based graph you can get a completely different view of the architecture of your codebase and make quick informed decisions about where your code is "knotted" in the graph.
 
-## Install CodeGraphy
+## Install CodeGraphyV2
 
-Install CodeGraphy for [VSCode](https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy)
+Install old CodeGraphy for [VSCode](https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy)
+
+CodeGraphyV2 is coming soon...
 
 ## Features
 
-![]()
+![screenshot](src/assets/img/screenshot1.png)
+- D3 physics based graph
+- Color coding nodes
+- Multiple color palette options
+- Customizable overrides
+- File blacklist
+- and more!
 
 ### Node Graph
 
-CodeGraphy's main feature is its ability to display the file hierarchy within the current directory and the connections within the files of the directory.
+CodeGraphy's main feature is its ability to display the file hierarchy in a completely different way. Look within the current directory and the connections between the files of the directory.
 
-- Ability to open files directly from CodeGraphy
+- Ability to open files directly from nodes (Coming Soon)
 - Can change the style of the force-based graph
 - Displays connections between files
 
@@ -36,7 +44,7 @@ CodeGraphy's main feature is its ability to display the file hierarchy within th
 
 ### Settings
 
-To color of nodes and selected node of the graph add these configurations to your `settings.json`. You can also `blacklist` any files or folders you want ignored. These can be manually editted from the `Config` section of the extension.
+You can also `blacklist` any files or folders you want ignored. Add this configuration to your vscode `settings.json`
 
 ```json
 "codegraphy.blacklist": [
@@ -46,12 +54,16 @@ To color of nodes and selected node of the graph add these configurations to you
     ".github",
     "node_modules",
     "dist",
+		...
 ],
 ```
 
 ![]()
 
 ## Known Issues
+
+- This extension is currently being developed for the JS programming language, hopefully more support will come soon.
+- This extension does not support custom import paths ex: `import x from '@/src/components'`
 
 
 ## Contributing
