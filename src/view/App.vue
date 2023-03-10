@@ -52,7 +52,7 @@ let activeTab: Ref<string> = ref('Settings')
 
 vscode.postMessage({
 	command: 'getGraphData',
-	nodeSize: 'Lines'
+	nodeSize: 'Connections'
 })
 
 window.addEventListener('message', (event) => {
