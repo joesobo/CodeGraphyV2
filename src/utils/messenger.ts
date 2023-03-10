@@ -35,6 +35,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			} else {
 				connections = fetchDirectoryConnections(files, dirs)
 				nodes = processData(files, nodeSize, connections, dirs)
+				// console.log('TEST', connections, nodes)
 			}
 
 			await webview.postMessage({
