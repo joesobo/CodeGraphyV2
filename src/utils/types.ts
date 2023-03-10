@@ -5,7 +5,7 @@ export interface Node extends SimulationNodeDatum {
 	name: string
 	fullPath: string
 	radius: number
-	lines: number
+	lines?: number
 }
 
 export type Connection = {
@@ -54,4 +54,8 @@ export interface SettingsOptions {
 export interface File {
 	name: string
 	lines: number
+}
+
+export interface Directory {
+	name: string
 }

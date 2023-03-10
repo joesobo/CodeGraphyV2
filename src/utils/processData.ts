@@ -1,4 +1,4 @@
-import type { Connection, File, Node } from './types'
+import type { Connection, Directory, File, Node } from './types'
 
 import { getRandomInt } from './basic'
 
@@ -8,40 +8,40 @@ const MAX_RADIUS = 25
 export const processData = (
 	files: File[],
 	nodeSize: string,
-	connections: Connection[]
+	connections: Connection[],
+	dirs?: Directory[],
 ) => {
 	const nodes: Node[] = []
-	const tempFiles: File[] = files
 
-	const MAX_LINES = getMaxLines(tempFiles)
-	const MAX_CONNECTIONS = getMaxConnections(connections)
+	let nodeIndex = 0
+
+	if (dirs) {
+		dirs.forEach((dir, dirIndex) => {
+			const dirPath = dir.name.replace(/\\/g, '/')
+			const dirName = dirPath.split('/').pop() || ''
+
+			const radius = getNodeSize(nodeSize, dirIndex, files, connections)
+
+			nodes.push({
+				id: nodeIndex,
+				name: dirName,
+				fullPath: dir.name,
+				radius,
+			})
+			nodeIndex++
+		})
+	}
 
 	// push root nodes
-	for (let index = 0; index < tempFiles.length; index++) {
-		const file = tempFiles[index]
+	for (let index = 0; index < files.length; index++) {
+		const file = files[index]
 		const filePath = file.name.replace(/\\/g, '/')
 		const fileName = filePath.split('/').pop() || ''
 
-		// Find the Radius for the Node based on settings
-		let radius = getRandomInt(15) + 10
-
-		if (nodeSize === 'Lines') {
-			radius = MIN_RADIUS + (MAX_RADIUS - MIN_RADIUS) * file.lines / MAX_LINES
-		}
-		else if (nodeSize === 'Connections') {
-			let connectionCount = 0
-
-			connections.forEach((connection) => {
-				if (connection.source === index || connection.target === index) {
-					connectionCount++
-				}
-			})
-
-			radius = MIN_RADIUS + (MAX_RADIUS - MIN_RADIUS) * connectionCount / MAX_CONNECTIONS
-		}
+		const radius = getNodeSize(nodeSize, index, files, connections)
 
 		nodes.push({
-			id: index,
+			id: nodeIndex + index,
 			name: fileName,
 			fullPath: file.name,
 			radius,
@@ -52,10 +52,36 @@ export const processData = (
 	return nodes
 }
 
+// Find the Radius for the Node based on settings
+const getNodeSize = (nodeSize: string, fileIndex: number, files: File[], connections: Connection[]) => {
+	const file = files[fileIndex]
+	const MAX_LINES = getMaxLines(files)
+	const MAX_CONNECTIONS = getMaxConnections(connections)
+
+	let radius = getRandomInt(15) + 10
+
+	if (nodeSize === 'Lines') {
+		radius = MIN_RADIUS + (MAX_RADIUS - MIN_RADIUS) * file.lines / MAX_LINES
+	}
+	else if (nodeSize === 'Connections') {
+		let connectionCount = 0
+
+		connections.forEach((connection) => {
+			if (connection.source === fileIndex || connection.target === fileIndex) {
+				connectionCount++
+			}
+		})
+
+		radius = MIN_RADIUS + (MAX_RADIUS - MIN_RADIUS) * connectionCount / MAX_CONNECTIONS
+	}
+
+	return radius
+}
+
 // Find the most lines in a file
-function getMaxLines(tempFiles: File[]) {
+const getMaxLines = (files: File[]) => {
 	let MAX_LINES = 100
-	tempFiles.forEach((file) => {
+	files.forEach((file) => {
 		if (file.lines > MAX_LINES) {
 			MAX_LINES = file.lines
 		}
@@ -64,7 +90,7 @@ function getMaxLines(tempFiles: File[]) {
 }
 
 // Find the most connections in a file
-function getMaxConnections(connections: Connection[]) {
+const getMaxConnections = (connections: Connection[]) => {
 	const connectionMap: number[] = []
 
 	connections.forEach((connection) => {

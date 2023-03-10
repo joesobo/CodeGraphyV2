@@ -1,8 +1,10 @@
 import * as d3 from 'd3'
-import type { Node, Extension, ParseOptions, D3Color } from './types'
-import randomColor from 'randomcolor'
+
+import type { D3Color, Extension, Node, ParseOptions } from './types'
+
 import { d3ColorSchemes } from './d3ColorSchemes'
 import { getRandomIntSeed } from './basic'
+import randomColor from 'randomcolor'
 
 export const parseExtensions = (nodes: Node[], options: ParseOptions) => {
 	const extensions: Extension[] = []
@@ -43,11 +45,11 @@ export const parseExtensions = (nodes: Node[], options: ParseOptions) => {
 				extension,
 				color,
 				count: 1,
-				lines: node.lines,
+				lines: node.lines ?? 0,
 			})
 		} else {
 			extensions[extensionIndex].count ++
-			extensions[extensionIndex].lines += node.lines
+			extensions[extensionIndex].lines += node.lines ?? 0
 		}
 	})
 

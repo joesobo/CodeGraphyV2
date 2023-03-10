@@ -1,59 +1,65 @@
-import type { File } from './types'
+import type { Directory, File } from './types'
+
 import { containsBlacklist } from './blacklist'
 import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
 
-let files: File[] = []
 let dirs: string[] = []
+let saveFiles: File[] = []
+let saveDirs: Directory[] = []
 
 // returns a full list of files in a dir and its subdirs
 export const fetchFiles = async (
-	directory: any,
+	directory: string,
 	blacklist: string[] = [],
-	reset?: boolean
-): Promise<File[]> => {
-	if (reset) {
-		files = []
+	init?: boolean
+) => {
+	if (init) {
+		saveFiles = []
 		dirs = []
+		saveDirs = []
 	}
 
 	try {
-		// mac directory fix
-		const test = ('\\' + directory).replace(/\\/g, '/')
+		const files = fs.readdirSync(directory)
 
-		const dirContent = fs.readdirSync(test)
+		for (const file of files) {
+			const filePath = path.join(directory, file)
 
-		for (const dirPath of dirContent) {
-			const fullPath = path.join(test, dirPath)
+			if (containsBlacklist(filePath, blacklist)) continue
 
-			if (containsBlacklist(fullPath, blacklist)) continue
-
-			if (fs.statSync(fullPath).isFile()) {
-				let count = 0
+			if (fs.statSync(filePath).isFile()) {
 				const lineReader = readline.createInterface({
-					input: fs.createReadStream(fullPath)
+					input: fs.createReadStream(filePath)
 				})
-
-				for await (const _line of lineReader) {
-					count++
-				}
 
 				lineReader.close()
 
-				files.push({ name: fullPath, lines: count })
+				saveFiles.push({ name: filePath, lines: fs.readFileSync(filePath, 'utf8').split('\n').length })
 			} else {
-				dirs.push(fullPath)
+				dirs.push(filePath)
+				saveDirs.push({ name: filePath })
 			}
 		}
 
 		if (dirs.length !== 0) {
-			await fetchFiles(dirs.pop(), blacklist)
+			await fetchFiles(dirs.pop() || '', blacklist)
 		}
 
-		return files
+		saveDirs.push({ name: directory })
+
+		if (init) {
+			saveDirs = saveDirs.filter((dir, index, self) => {
+				return index === self.findIndex((t) => (
+					t.name === dir.name
+				))
+			})
+		}
+
+		return { files: saveFiles, dirs: saveDirs }
 	} catch (ex) {
 		console.log(ex)
-		return []
+		return { files: [], dirs: [] }
 	}
 }

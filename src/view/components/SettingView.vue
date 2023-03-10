@@ -8,7 +8,14 @@
     <div class="flex mt-4 items-center">
       <label class="w-1/3 text-sm font-medium text-gray-300">Connection</label>
       <div class="flex w-2/3">
-        <SwitchButton :options="['Interaction', 'Directory']" />
+        <SwitchButton
+          :options="['Interaction', 'Directory']"
+          :selected="connectionType"
+          @update="(value) => {
+            connectionType = value
+            updateNodeSettings()
+          }"
+        />
       </div>
     </div>
     <div class="flex mt-4 items-center">
@@ -25,7 +32,7 @@
           :selected="nodeSize"
           @update="(value) => {
             nodeSize = value
-            updateNodeSize()
+            updateNodeSettings()
           }"
         />
       </div>
@@ -152,6 +159,7 @@ let chargeForce: Ref<number> = ref(-100)
 let linkForce: Ref<number> = ref(0)
 let linkDistance: Ref<number> = ref(100)
 
+let connectionType: Ref<string> = ref('Interaction')
 let nodeSize: Ref<string> = ref('Lines')
 let nodeColor: Ref<string> = ref('D3')
 let selectedD3Color: Ref<number> = ref(colorSchemes.findIndex(scheme => scheme === 'Turbo'))
@@ -159,8 +167,9 @@ let selectedD3Color: Ref<number> = ref(colorSchemes.findIndex(scheme => scheme =
 interface SettingViewEmits {
   (event: 'resetGraph'): void
 	(event: 'updateGraph', value: SettingsOptions): void
-	(event: 'updateNodeSize',
-		nodeSize: string
+	(event: 'updateNodeSettings',
+		nodeSize: string,
+		connectionType: string
 	): void
 }
 
@@ -177,7 +186,7 @@ const updateGraph = () => {
 	})
 }
 
-const updateNodeSize = () => {
-	emit('updateNodeSize', nodeSize.value)
+const updateNodeSettings = () => {
+	emit('updateNodeSettings', nodeSize.value, connectionType.value)
 }
 </script>

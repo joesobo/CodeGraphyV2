@@ -8,7 +8,7 @@ let globalFiles: File[] = []
 let globalPath = ''
 
 // Finds all connections for each file
-export const fetchConnections = async (
+export const fetchInteractionConnections = async (
 	files: File[],
 	path: string
 ) => {

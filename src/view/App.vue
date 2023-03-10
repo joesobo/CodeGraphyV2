@@ -29,7 +29,7 @@
       class="mt-4"
       @resetGraph="resetGraph"
       @updateGraph="updateGraph"
-      @updateNodeSize="updateNodeSize"
+      @updateNodeSettings="updateNodeSettings"
     />
   </div>
 </template>
@@ -52,7 +52,8 @@ let activeTab: Ref<string> = ref('Settings')
 
 vscode.postMessage({
 	command: 'getGraphData',
-	nodeSize: 'Connections'
+	nodeSize: 'Connections',
+	interactionConnections: 'Interaction'
 })
 
 window.addEventListener('message', (event) => {
@@ -76,10 +77,11 @@ const resetGraph = () => {
 	}
 }
 
-const updateNodeSize = (nodeSize: string) => {
+const updateNodeSettings = (nodeSize: string, interactionConnections: string) => {
 	vscode.postMessage({
 		command: 'getGraphData',
-		nodeSize
+		nodeSize,
+		interactionConnections
 	})
 }
 
