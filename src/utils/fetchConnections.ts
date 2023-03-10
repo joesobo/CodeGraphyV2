@@ -43,10 +43,10 @@ const findFileConnections = async (
 	const currentFileConnections: Connection[] = []
 
 	for await (let line of lineReader) {
-		if (findConnection(line) === -1) continue
+		if (findConnection(line.trim()) === -1) continue
 
 		// cleans up connection line
-		line = line.replace('(', ' ').replace(')', '').replace(';', '')
+		line = line.trim().replace('(', ' ').replace(')', '').replace(';', '')
 
 		// find the path of the file connected to
 		const importPath = findImportPath(line)
@@ -67,15 +67,7 @@ const findFileConnections = async (
 
 // returns the index of the connection if found, -1 if not
 const findConnection = (line: string) => {
-	let result = -1
-	// Trim any whitespace that might interfere with the regex
-	const testInput = replaceAll(line, '/t', '').trim()
-
-	result = testInput.search(/^import.*from.*("|').*("|')/)
-	result = result === -1 ? testInput.search(/.*require(('|").*('|"))/) : result
-	result = result === -1 ? testInput.search(/^export.*from.*("|').*("|')/) : result
-	result = result === -1 ? testInput.search(/.*CodeGraphy connect: ('|").*.('|").*/) : result
-	return result
+	return line.search(/^(import|export).*from\s+(['"]).*\2|.*require\s*\(\s*(['"]).*\3|.*CodeGraphy\s+connect:\s+(['"]).*\4/)
 }
 
 const findImportPath = (line: string) => {
