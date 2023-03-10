@@ -65,13 +65,16 @@ const findFileConnections = async (
 	return currentFileConnections
 }
 
+// returns the index of the connection if found, -1 if not
 const findConnection = (line: string) => {
 	let result = -1
+	// Trim any whitespace that might interfere with the regex
+	const testInput = replaceAll(line, '/t', '').trim()
 
-	result = line.search(/^import.*from.*("|').*("|')/)
-	result = result === -1 ? line.search(/.*require(('|").*('|"))/) : result
-	result = result === -1 ? line.search(/^export.*from.*("|').*("|')/) : result
-	result = result === -1 ? line.search(/.*CodeGraphy connect: ('|").*.('|").*/) : result
+	result = testInput.search(/^import.*from.*("|').*("|')/)
+	result = result === -1 ? testInput.search(/.*require(('|").*('|"))/) : result
+	result = result === -1 ? testInput.search(/^export.*from.*("|').*("|')/) : result
+	result = result === -1 ? testInput.search(/.*CodeGraphy connect: ('|").*.('|").*/) : result
 	return result
 }
 
