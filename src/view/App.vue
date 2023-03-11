@@ -121,36 +121,16 @@
         </div>
       </div>
       <!-- D3 Color List -->
-      <Disclosure
-        v-if="nodeColor === 'D3'"
-        title="Color List"
+      <Dropdown
+        title="D3 Color List"
+        :options="colorSchemes"
+        :initialActive="selectedD3Color"
         class="mt-4"
-      >
-        <div class="ml-auto flex w-2/3 flex-col">
-          <div
-            v-for="(colorScheme, index) in colorSchemes"
-            :key="colorScheme"
-            class="mb-4 flex items-center"
-          >
-            <label
-              class="w-32 text-sm font-medium text-gray-300"
-            >
-              {{ colorScheme }}
-            </label>
-            <input
-              type="radio"
-              value=""
-              :checked="selectedD3Color === index"
-              name="default-radio"
-              class="h-4 !w-4 border-gray-600 bg-gray-700 text-[#2174b8] ring-offset-gray-800 focus:ring-2 focus:ring-[#2174b8]"
-              @change="() => {
-                selectedD3Color = index
-                updateGraph()
-              }"
-            >
-          </div>
-        </div>
-      </Disclosure>
+        @update="(value) => {
+          selectedD3Color = value
+          updateGraph()
+        }"
+      />
       <!-- D3 Settings -->
       <Disclosure
         title="D3"
@@ -220,6 +200,7 @@ import { tableHeaders } from '../utils/tableHeaders'
 import type { Connection, Extension, Node } from '../utils/types'
 
 import Disclosure from './components/Disclosure.vue'
+import Dropdown from './components/Dropdown.vue'
 import SliderRow from './components/SliderRow.vue'
 import SwitchButton from './components/SwitchButton.vue'
 import ToggleSwitch from './components/ToggleSwitch.vue'
@@ -235,7 +216,7 @@ let activeTab: Ref<string> = ref('Settings')
 let connectionType: Ref<string> = ref('Interaction')
 let nodeSize: Ref<string> = ref('Connections')
 let nodeColor: Ref<string> = ref('D3')
-let selectedD3Color: Ref<number> = ref(colorSchemes.findIndex(scheme => scheme === 'Turbo'))
+let selectedD3Color: Ref<string> = ref('Sinebow')
 
 // D3 Settings
 let centerForce: Ref<number> = ref(0)
@@ -252,7 +233,7 @@ window.addEventListener('message', (event) => {
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
 
-		extensionList.value = parseExtensions(nodes.value, { useRandomColor: false, d3Color: 'Turbo' })
+		extensionList.value = parseExtensions(nodes.value, { useRandomColor: false, d3Color: selectedD3Color.value })
 		drawD3Graph(nodes.value, connections.value, extensionList.value)
 		return
 	}
@@ -265,7 +246,7 @@ const updateNodeSettings = () => {
 
 // Update the graph without regenerating the nodes / connections
 const updateGraph = () => {
-	extensionList.value = parseExtensions(nodes.value, { useRandomColor: nodeColor.value === 'Random', d3Color: colorSchemes[selectedD3Color.value] })
+	extensionList.value = parseExtensions(nodes.value, { useRandomColor: nodeColor.value === 'Random', d3Color: selectedD3Color.value })
 	updateD3Graph(nodes.value, extensionList.value)
 }
 </script>

@@ -13,7 +13,6 @@
         :min="props.min ?? 0"
         :max="props.max ?? 100"
         :step="props.step ?? 1"
-        @input="emit.input"
       >
     </div>
   </div>
@@ -21,10 +20,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
-const emit = defineEmits<{
-	input: (event: InputEvent) => void
-}>()
 
 const props = defineProps<{
 	id?: string

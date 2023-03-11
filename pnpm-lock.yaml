@@ -1,8 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@headlessui/vue': ^1.7.12
   '@iconify-json/mdi': ^1.1.39
   '@intlify/unplugin-vue-i18n': ^0.8.1
+  '@mertasan/tailwindcss-variables': ^2.6.0
   '@testing-library/jest-dom': ^5.16.5
   '@testing-library/user-event': ^14.4.3
   '@testing-library/vue': ^6.6.1
@@ -36,6 +38,7 @@ specifiers:
   vue-tsc: ^0.40.6
 
 dependencies:
+  '@headlessui/vue': 1.7.12_vue@3.2.47
   '@intlify/unplugin-vue-i18n': 0.8.2_vue-i18n@9.2.2
   '@types/random-seed': 0.3.3
   '@vitest/ui': 0.26.3
@@ -48,6 +51,7 @@ dependencies:
 
 devDependencies:
   '@iconify-json/mdi': 1.1.49
+  '@mertasan/tailwindcss-variables': 2.6.0
   '@testing-library/jest-dom': 5.16.5
   '@testing-library/user-event': 14.4.3
   '@testing-library/vue': 6.6.1_vue@3.2.47
@@ -364,6 +368,15 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
+  /@headlessui/vue/1.7.12_vue@3.2.47:
+    resolution: {integrity: sha512-IV0k1I2I8Bj37HljFF231Y9cpldfiucf+inMCxA/VPoQT6UTxo0N/rb78CrogBxXNfsPxKmz3y/nlv+eRz6zvg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: 3.2.47
+    dev: false
+
   /@humanwhocodes/config-array/0.11.8:
     resolution: {integrity: sha512-UybHIJzJnR5Qc/MsD9Kr+RpO2h+/P1GhOwdiLPXK5TWk5sgTdu88bTD9UP+CKbPPh5Rni1u0GjAdYQLemG8g+g==}
     engines: {node: '>=10.10.0'}
@@ -534,6 +547,16 @@ packages:
       '@types/node': 18.14.6
       '@types/yargs': 17.0.22
       chalk: 4.1.2
+    dev: true
+
+  /@mertasan/tailwindcss-variables/2.6.0:
+    resolution: {integrity: sha512-XQFs+5cw27QvL97FJeU/T1clcomUV3or8poA6vwiHyRjounI+KcfNbvILSTKVbB8kF9+EvgCW7k4GCVnBWmrGQ==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      autoprefixer: ^10.0.2
+      postcss: ^8.0.9
+    dependencies:
+      lodash: 4.17.21
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:

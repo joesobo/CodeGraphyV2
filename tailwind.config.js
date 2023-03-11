@@ -2,7 +2,14 @@
 module.exports = {
 	content: ['./src/**/*.{html,js,vue,ts}'],
 	theme: {
-		extend: {},
+		extend: {
+			colors: {
+				'foreground': 'var(--vscode-button-foreground)',
+				'primary': 'var(--vscode-button-background)',
+				'primary-hover': 'var(--vscode-extensionButton-prominentHoverBackground)',
+				'dropdown': 'var(--vscode-dropdown-background)',
+			}
+		},
 	},
 	plugins: [],
 }
