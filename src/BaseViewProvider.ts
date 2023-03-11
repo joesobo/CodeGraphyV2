@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+
 import { handleMessages } from './utils/messenger'
 
 export class BaseViewProvider implements vscode.WebviewViewProvider {

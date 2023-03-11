@@ -1,6 +1,6 @@
 {
   "root": true,
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "simple-import-sort"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -22,7 +22,27 @@
     ],
     "object-curly-spacing": ["error", "always"],
     "semi": ["error", "never"],
-    "indent": ["error", "tab"]
+    "indent": ["error", "tab"],
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          // Packages `vue` related packages come first.
+          ["^vue", "^@?\\w"],
+          // Internal packages.
+          ["^(@|components)(/.*|$)"],
+          // Side effect imports.
+          ["^\\u0000"],
+          // Parent imports. Put `..` last.
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          // Other relative imports. Put same-folder imports and `.` last.
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+          // Style imports.
+          ["^.+\\.?(css)$"]
+        ]
+      }
+    ],
+    "simple-import-sort/exports": "error"
   },
   "parser": "vue-eslint-parser",
   "parserOptions": {

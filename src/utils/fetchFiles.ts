@@ -1,9 +1,9 @@
-import type { Directory, File } from './types'
-
-import { containsBlacklist } from './blacklist'
 import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
+
+import { containsBlacklist } from './blacklist'
+import type { Directory, File } from './types'
 
 let dirs: string[] = []
 let saveFiles: File[] = []

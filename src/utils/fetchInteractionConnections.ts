@@ -1,8 +1,8 @@
-import type { Connection, File } from './types'
-
 import fs from 'fs'
 import readline from 'readline'
+
 import { replaceAll } from './basic'
+import type { Connection, File } from './types'
 
 let globalFiles: File[] = []
 let globalPath = ''

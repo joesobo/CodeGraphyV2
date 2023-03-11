@@ -35,11 +35,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { Ref } from 'vue'
+import { ref } from 'vue'
+
 import { drawD3Graph, updateD3Graph } from '../utils/d3'
 import { parseExtensions } from '../utils/parseExtensions'
-import type { Node, Connection, Extension, SettingsOptions } from '../utils/types'
+import type { Connection, Extension, Node, SettingsOptions } from '../utils/types'
+
 import LanguageView from './components/LanguageView.vue'
 import SettingView from './components/SettingView.vue'
 import SwitchButton from './components/SwitchButton.vue'

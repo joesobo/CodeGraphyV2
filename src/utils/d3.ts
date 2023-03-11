@@ -1,9 +1,8 @@
+import type { D3DragEvent, Simulation } from 'd3'
 import * as d3 from 'd3'
 
-import type { Connection, CustomSubject, Extension, Node } from './types'
-import type { D3DragEvent, Simulation } from 'd3'
-
 import { getRandomInt } from './basic'
+import type { Connection, CustomSubject, Extension, Node } from './types'
 
 // drag
 const drag = (simulation: Simulation<Node, undefined>) => {

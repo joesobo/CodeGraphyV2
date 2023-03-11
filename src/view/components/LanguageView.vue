@@ -53,8 +53,10 @@
 
 <script setup lang="ts">
 import PickColors from 'vue-pick-colors'
-import CloseIcon from '~icons/mdi/close-circle'
+
 import type { Extension } from '../../utils/types'
+
+import CloseIcon from '~icons/mdi/close-circle'
 
 const props = defineProps<{
 	extensionList: Extension[]

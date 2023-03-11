@@ -1,6 +1,5 @@
-import type { Connection, Directory, File, Node } from './types'
-
 import { getRandomInt } from './basic'
+import type { Connection, Directory, File, Node } from './types'
 
 const MIN_RADIUS = 10
 const MAX_RADIUS = 25

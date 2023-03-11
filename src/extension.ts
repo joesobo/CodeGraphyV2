@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+
 import { BaseViewProvider } from './BaseViewProvider'
 
 export function activate(context: vscode.ExtensionContext) {

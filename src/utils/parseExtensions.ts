@@ -1,10 +1,9 @@
 import * as d3 from 'd3'
-
-import type { D3Color, Extension, Node, ParseOptions } from './types'
-
-import { d3ColorSchemes } from './d3ColorSchemes'
-import { getRandomIntSeed } from './basic'
 import randomColor from 'randomcolor'
+
+import { getRandomIntSeed } from './basic'
+import { d3ColorSchemes } from './d3ColorSchemes'
+import type { D3Color, Extension, Node, ParseOptions } from './types'
 
 export const parseExtensions = (nodes: Node[], options: ParseOptions) => {
 	const extensions: Extension[] = []

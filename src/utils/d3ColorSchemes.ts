@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+
 import { D3Color } from './types'
 
 export const d3ColorSchemes: D3Color[] = [

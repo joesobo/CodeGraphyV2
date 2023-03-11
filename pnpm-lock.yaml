@@ -19,6 +19,7 @@ specifiers:
   concurrently: ^7.6.0
   d3: ^7.8.0
   eslint: ^8.30.0
+  eslint-plugin-simple-import-sort: ^10.0.0
   eslint-plugin-vue: ^9.8.0
   jsdom: ^20.0.3
   random-seed: ^0.3.0
@@ -59,6 +60,7 @@ devDependencies:
   '@vitejs/plugin-vue': 2.3.4_vite@2.9.15+vue@3.2.47
   concurrently: 7.6.0
   eslint: 8.35.0
+  eslint-plugin-simple-import-sort: 10.0.0_eslint@8.35.0
   eslint-plugin-vue: 9.9.0_eslint@8.35.0
   jsdom: 20.0.3
   tailwindcss: 3.2.7
@@ -2218,6 +2220,14 @@ packages:
       optionator: 0.8.3
     optionalDependencies:
       source-map: 0.6.1
+    dev: true
+
+  /eslint-plugin-simple-import-sort/10.0.0_eslint@8.35.0:
+    resolution: {integrity: sha512-AeTvO9UCMSNzIHRkg8S6c3RPy5YEwKWSQPx3DYghLedo2ZQxowPFLGDN1AZ2evfg6r6mjBSZSLxLFsWSu3acsw==}
+    peerDependencies:
+      eslint: '>=5.0.0'
+    dependencies:
+      eslint: 8.35.0
     dev: true
 
   /eslint-plugin-vue/9.9.0_eslint@8.35.0:

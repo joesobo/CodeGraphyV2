@@ -136,12 +136,14 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
-import SliderRow from './SliderRow.vue'
-import ToggleSwitch from './ToggleSwitch.vue'
-import Disclosure from './Disclosure.vue'
-import SwitchButton from './SwitchButton.vue'
 import type { SettingsOptions } from 'utils/types'
+
+import { Ref, ref } from 'vue'
+
+import Disclosure from './Disclosure.vue'
+import SliderRow from './SliderRow.vue'
+import SwitchButton from './SwitchButton.vue'
+import ToggleSwitch from './ToggleSwitch.vue'
 
 const colorSchemes = [
 	'Inferno',
