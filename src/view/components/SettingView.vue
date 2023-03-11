@@ -1,11 +1,11 @@
 <template>
   <div class="mt-4 flex flex-col">
-    <div class="flex mt-4 items-center">
+    <div class="mt-4 flex items-center">
       <button @click="emit('resetGraph')">
         Reset Graph
       </button>
     </div>
-    <div class="flex mt-4 items-center">
+    <div class="mt-4 flex items-center">
       <label class="w-1/3 text-sm font-medium text-gray-300">Connection</label>
       <div class="flex w-2/3">
         <SwitchButton
@@ -18,13 +18,13 @@
         />
       </div>
     </div>
-    <div class="flex mt-4 items-center">
+    <div class="mt-4 flex items-center">
       <label class="w-1/3 text-sm font-medium text-gray-300">Display</label>
       <div class="flex w-2/3">
         <SwitchButton :options="['Graph', 'Local']" />
       </div>
     </div>
-    <div class="flex mt-4 items-center">
+    <div class="mt-4 flex items-center">
       <label class="w-1/3 text-sm font-medium text-gray-300">Node Size</label>
       <div class="flex w-2/3">
         <SwitchButton
@@ -37,7 +37,7 @@
         />
       </div>
     </div>
-    <div class="flex mt-4 items-center">
+    <div class="mt-4 flex items-center">
       <label class="w-1/3 text-sm font-medium text-gray-300">Node Color</label>
       <div class="flex w-2/3">
         <SwitchButton
@@ -55,14 +55,14 @@
       title="Color List"
       class="mt-4"
     >
-      <div class="flex flex-col ml-auto w-2/3">
+      <div class="ml-auto flex w-2/3 flex-col">
         <div
           v-for="(colorScheme, index) in colorSchemes"
           :key="colorScheme"
-          class="flex items-center mb-4"
+          class="mb-4 flex items-center"
         >
           <label
-            class="text-sm font-medium text-gray-300 w-32"
+            class="w-32 text-sm font-medium text-gray-300"
           >
             {{ colorScheme }}
           </label>
@@ -71,7 +71,7 @@
             value=""
             :checked="selectedD3Color === index"
             name="default-radio"
-            class="!w-4 h-4 text-[#2174b8] focus:ring-[#2174b8] ring-offset-gray-800 focus:ring-2 bg-gray-700 border-gray-600"
+            class="h-4 !w-4 border-gray-600 bg-gray-700 text-[#2174b8] ring-offset-gray-800 focus:ring-2 focus:ring-[#2174b8]"
             @change="() => {
               selectedD3Color = index
               updateGraph()
@@ -84,7 +84,7 @@
       <Disclosure
         title="D3"
       >
-        <div class="flex flex-col ml-auto w-2/3">
+        <div class="ml-auto flex w-2/3 flex-col">
           <SliderRow
             id="linkForce"
             :value="linkForce"
@@ -122,7 +122,7 @@
       <Disclosure
         title="Extra"
       >
-        <div class="flex flex-col w-2/3 ml-auto mt-2">
+        <div class="ml-auto mt-2 flex w-2/3 flex-col">
           <ToggleSwitch label="Hide Orphans" />
           <ToggleSwitch label="Hide Labels" />
           <div>Line width</div>
@@ -136,9 +136,8 @@
 </template>
 
 <script setup lang="ts">
-import type { SettingsOptions } from 'utils/types'
-
 import { Ref, ref } from 'vue'
+import type { SettingsOptions } from 'utils/types'
 
 import Disclosure from './Disclosure.vue'
 import SliderRow from './SliderRow.vue'

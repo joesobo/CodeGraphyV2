@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-col max-w-[500px]">
+  <div class="flex max-w-[500px] flex-col">
     <!-- D3 Graph -->
     <svg
       width="500"
       height="500"
-      class="container-border bg-zinc-900 overflow-hidden"
+      class="overflow-hidden bg-zinc-900"
     />
 
     <!-- Tab Switch -->
-    <div class="flex mt-4">
+    <div class="mt-4 flex">
       <SwitchButton
         :options="['Languages', 'Settings']"
         :selected="activeTab"

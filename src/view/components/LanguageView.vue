@@ -2,7 +2,7 @@
   <table class="w-full table-auto">
     <thead class="bg-zinc-700">
       <tr class="py-1">
-        <th class="text-start pl-2">
+        <th class="pl-2 text-start">
           Language
         </th>
         <th class="text-start">
@@ -26,7 +26,7 @@
       <tr
         v-for="extension in extensionList"
         :key="extension.extension"
-        class="bg-zinc-800 border border-zinc-700"
+        class="border border-zinc-700 bg-zinc-800"
       >
         <td class="pl-2">
           {{ extension.language }}
@@ -42,8 +42,8 @@
           />
         </td>
         <td>
-          <button class="text-red-500 bg-transparent hover:background-white w-4 h-4 rounded-full">
-            <CloseIcon class="w-4 h-4" />
+          <button class="h-4 w-4 rounded-full bg-transparent text-red-500 hover:bg-white">
+            <CloseIcon class="h-4 w-4" />
           </button>
         </td>
       </tr>

@@ -5,7 +5,7 @@
   >
     <summary
       :tabindex="disabled ? -1 : 0"
-      class="flex justify-between items-center cursor-pointer"
+      class="flex cursor-pointer items-center justify-between"
     >
       <span class="text-sm font-medium text-gray-300">
         {{ title }}

@@ -1,12 +1,12 @@
 <template>
-  <label class="relative inline-flex items-center mb-4 cursor-pointer">
+  <label class="relative mb-4 inline-flex cursor-pointer items-center">
     <input
       :id="props.id"
       type="checkbox"
       :value="value"
-      class="sr-only peer"
+      class="peer sr-only"
     >
-    <div class="w-11 h-6 rounded-full peer peer-focus:ring-2 peer-focus:ring-[#2174b8] bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all border-gray-600 peer-checked:bg-[#2174b8]" />
+    <div class="peer h-6 w-11 rounded-full border-gray-600 bg-gray-700 after:absolute after:top-0.5 after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#2174b8] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-2 peer-focus:ring-[#2174b8]" />
     <span class="ml-3 text-sm font-medium text-gray-300">{{ label }}</span>
   </label>
 </template>
