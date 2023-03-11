@@ -42,15 +42,6 @@ export interface D3Color {
 	interpolator: (t: number) => string
 }
 
-export interface SettingsOptions {
-	centerForce: number
-	chargeForce: number
-	linkForce: number
-	linkDistance: number
-	useRandomColor: boolean
-	d3Color: string
-}
-
 export interface File {
 	name: string
 	lines: number

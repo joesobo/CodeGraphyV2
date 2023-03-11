@@ -17,46 +17,233 @@
     </div>
 
     <!-- Language Tab Content -->
-    <LanguageView
+    <table
       v-show="activeTab === 'Languages'"
-      class="mt-4"
-      :extensionList="extensionList"
-      @updateExtension="updateExtension"
-    />
+      class="mt-4 w-full table-auto"
+    >
+      <thead class="bg-zinc-700">
+        <tr class="py-1 pl-2">
+          <th
+            v-for="header in tableHeaders"
+            :key="header"
+            class="text-start"
+          >
+            {{ header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="extension in extensionList"
+          :key="extension.extension"
+          class="border border-zinc-700 bg-zinc-800"
+        >
+          <td class="pl-2">
+            {{ extension.language }}
+          </td>
+          <td>.{{ extension.extension }}</td>
+          <td>{{ extension.count }}</td>
+          <td>{{ extension.lines }}</td>
+          <td>
+            <PickColors
+              v-model:value="extension.color"
+              class="cursor-pointer"
+              @change="updateD3Graph(nodes, extensionList)"
+            />
+          </td>
+          <td>
+            <button class="h-4 w-4 bg-transparent hover:bg-transparent">
+              <CloseIcon class="h-4 w-4 rounded-full text-red-500 hover:bg-white" />
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <!-- Settings Tab Content -->
-    <SettingView
+    <div
       v-show="activeTab === 'Settings'"
-      class="mt-4"
-      @resetGraph="resetGraph"
-      @updateGraph="updateGraph"
-      @updateNodeSettings="updateNodeSettings"
-    />
+      class="mt-4 flex flex-col"
+    >
+      <!-- Reset Graph Button -->
+      <div class="mt-4 flex items-center">
+        <button @click="drawD3Graph(nodes, connections, extensionList)">
+          Reset Graph
+        </button>
+      </div>
+      <!-- Node Connection Switch -->
+      <div class="mt-4 flex items-center">
+        <label class="w-1/3 text-sm font-medium text-gray-300">Connection</label>
+        <div class="flex w-2/3">
+          <SwitchButton
+            :options="['Interaction', 'Directory']"
+            :selected="connectionType"
+            @update="(value) => {
+              connectionType = value
+              updateNodeSettings()
+            }"
+          />
+        </div>
+      </div>
+      <!-- Node Display Switch -->
+      <div class="mt-4 flex items-center">
+        <label class="w-1/3 text-sm font-medium text-gray-300">Display</label>
+        <div class="flex w-2/3">
+          <SwitchButton :options="['Graph', 'Local']" />
+        </div>
+      </div>
+      <!-- Node Size Switch -->
+      <div class="mt-4 flex items-center">
+        <label class="w-1/3 text-sm font-medium text-gray-300">Node Size</label>
+        <div class="flex w-2/3">
+          <SwitchButton
+            :options="['Connections', 'Lines']"
+            :selected="nodeSize"
+            @update="(value) => {
+              nodeSize = value
+              updateNodeSettings()
+            }"
+          />
+        </div>
+      </div>
+      <!-- Node Color Switch -->
+      <div class="mt-4 flex items-center">
+        <label class="w-1/3 text-sm font-medium text-gray-300">Node Color</label>
+        <div class="flex w-2/3">
+          <SwitchButton
+            :options="['D3', 'Random']"
+            :selected="nodeColor"
+            @update="(value) => {
+              nodeColor = value
+              updateGraph()
+            }"
+          />
+        </div>
+      </div>
+      <!-- D3 Color List -->
+      <Disclosure
+        v-if="nodeColor === 'D3'"
+        title="Color List"
+        class="mt-4"
+      >
+        <div class="ml-auto flex w-2/3 flex-col">
+          <div
+            v-for="(colorScheme, index) in colorSchemes"
+            :key="colorScheme"
+            class="mb-4 flex items-center"
+          >
+            <label
+              class="w-32 text-sm font-medium text-gray-300"
+            >
+              {{ colorScheme }}
+            </label>
+            <input
+              type="radio"
+              value=""
+              :checked="selectedD3Color === index"
+              name="default-radio"
+              class="h-4 !w-4 border-gray-600 bg-gray-700 text-[#2174b8] ring-offset-gray-800 focus:ring-2 focus:ring-[#2174b8]"
+              @change="() => {
+                selectedD3Color = index
+                updateGraph()
+              }"
+            >
+          </div>
+        </div>
+      </Disclosure>
+      <!-- D3 Settings -->
+      <Disclosure
+        title="D3"
+        class="mt-4"
+      >
+        <div class="ml-auto flex w-2/3 flex-col">
+          <SliderRow
+            id="linkForce"
+            :value="linkForce"
+            label="Link Force"
+            :min="-100"
+            @input="event => linkForce = event.target.value"
+          />
+          <SliderRow
+            id="linkDistance"
+            :value="linkDistance"
+            label="Link Distance"
+            :max="1000"
+            :step="10"
+            @input="event => linkDistance = event.target.value"
+          />
+          <SliderRow
+            id="chargeForce"
+            :value="chargeForce"
+            label="Charge Force"
+            :min="-100"
+            @input="event => chargeForce = event.target.value"
+          />
+          <SliderRow
+            id="centerForce"
+            :value="centerForce"
+            label="Center Force"
+            :max="1"
+            :step="0.01"
+            @input="event => centerForce = event.target.value"
+          />
+        </div>
+      </Disclosure>
+      <!-- Extra Settings -->
+      <Disclosure
+        title="Extra"
+        class="mt-4"
+      >
+        <div class="ml-auto mt-2 flex w-2/3 flex-col">
+          <ToggleSwitch label="Hide Orphans" />
+          <ToggleSwitch label="Hide Labels" />
+          <div>Line width</div>
+          <div>Line color</div>
+          <ToggleSwitch label="Outlines" />
+          <ToggleSwitch label="Collions" />
+        </div>
+      </Disclosure>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { ref } from 'vue'
+import PickColors from 'vue-pick-colors'
 
 import { drawD3Graph, updateD3Graph } from '../utils/d3'
+import { colorSchemes } from '../utils/d3ColorSchemes'
+import { getGraphData } from '../utils/graphMessanger'
 import { parseExtensions } from '../utils/parseExtensions'
-import type { Connection, Extension, Node, SettingsOptions } from '../utils/types'
+import { tableHeaders } from '../utils/tableHeaders'
+import type { Connection, Extension, Node } from '../utils/types'
 
-import LanguageView from './components/LanguageView.vue'
-import SettingView from './components/SettingView.vue'
+import Disclosure from './components/Disclosure.vue'
+import SliderRow from './components/SliderRow.vue'
 import SwitchButton from './components/SwitchButton.vue'
+import ToggleSwitch from './components/ToggleSwitch.vue'
+
+import CloseIcon from '~icons/mdi/close-circle'
 
 let nodes: Ref<Node[] | undefined> = ref()
 let connections: Ref<Connection[] | undefined> = ref()
 let extensionList: Ref<Extension[]> = ref([])
 
+// Display Settings
 let activeTab: Ref<string> = ref('Settings')
+let connectionType: Ref<string> = ref('Interaction')
+let nodeSize: Ref<string> = ref('Connections')
+let nodeColor: Ref<string> = ref('D3')
+let selectedD3Color: Ref<number> = ref(colorSchemes.findIndex(scheme => scheme === 'Turbo'))
 
-vscode.postMessage({
-	command: 'getGraphData',
-	nodeSize: 'Connections',
-	interactionConnections: 'Interaction'
-})
+// D3 Settings
+let centerForce: Ref<number> = ref(0)
+let chargeForce: Ref<number> = ref(-100)
+let linkForce: Ref<number> = ref(0)
+let linkDistance: Ref<number> = ref(100)
+
+getGraphData({ nodeSize: nodeSize.value, interactionConnections: connectionType.value })
 
 window.addEventListener('message', (event) => {
 	const message = event.data // The JSON data our extension sent
@@ -65,38 +252,20 @@ window.addEventListener('message', (event) => {
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
 
-		if (nodes.value && connections.value) {
-			extensionList.value = parseExtensions(nodes.value, { useRandomColor: false, d3Color: 'Turbo' })
-			drawD3Graph(nodes.value, connections.value, extensionList.value)
-		}
+		extensionList.value = parseExtensions(nodes.value, { useRandomColor: false, d3Color: 'Turbo' })
+		drawD3Graph(nodes.value, connections.value, extensionList.value)
 		return
 	}
 })
 
-const resetGraph = () => {
-	if (nodes.value && connections.value) {
-		drawD3Graph(nodes.value, connections.value, extensionList.value)
-	}
+// Update the graph with new settings
+const updateNodeSettings = () => {
+	getGraphData({ nodeSize: nodeSize.value, interactionConnections: connectionType.value })
 }
 
-const updateNodeSettings = (nodeSize: string, interactionConnections: string) => {
-	vscode.postMessage({
-		command: 'getGraphData',
-		nodeSize,
-		interactionConnections
-	})
-}
-
-const updateGraph = (settingOptions: SettingsOptions) => {
-	if (nodes.value && connections.value) {
-		extensionList.value = parseExtensions(nodes.value, { useRandomColor: settingOptions.useRandomColor, d3Color: settingOptions.d3Color })
-		updateD3Graph(nodes.value, extensionList.value)
-	}
-}
-
-const updateExtension = (extensions: Extension[]) => {
-	if (nodes.value && connections.value) {
-		updateD3Graph(nodes.value, extensions)
-	}
+// Update the graph without regenerating the nodes / connections
+const updateGraph = () => {
+	extensionList.value = parseExtensions(nodes.value, { useRandomColor: nodeColor.value === 'Random', d3Color: colorSchemes[selectedD3Color.value] })
+	updateD3Graph(nodes.value, extensionList.value)
 }
 </script>

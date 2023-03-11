@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-import { handleMessages } from './utils/messenger'
+import { handleMessages } from './utils/messageHandler'
 
 export class BaseViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'base-view-sidebar'

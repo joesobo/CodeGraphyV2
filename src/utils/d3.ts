@@ -6,30 +6,43 @@ import type { Connection, CustomSubject, Extension, Node } from './types'
 
 // drag
 const drag = (simulation: Simulation<Node, undefined>) => {
-	const dragstarted = (event: D3DragEvent<SVGCircleElement, Node, CustomSubject>) => {
+	const dragstarted = (
+		event: D3DragEvent<SVGCircleElement, Node, CustomSubject>
+	) => {
 		if (!event.active) simulation.alphaTarget(0.3).restart()
 		event.subject.fx = event.subject.x
 		event.subject.fy = event.subject.y
 	}
 
-	const dragged = (event: D3DragEvent<SVGCircleElement, Node, CustomSubject>) => {
+	const dragged = (
+		event: D3DragEvent<SVGCircleElement, Node, CustomSubject>
+	) => {
 		event.subject.fx = event.x
 		event.subject.fy = event.y
 	}
 
-	const dragended = (event: D3DragEvent<SVGCircleElement, Node, CustomSubject>) => {
+	const dragended = (
+		event: D3DragEvent<SVGCircleElement, Node, CustomSubject>
+	) => {
 		if (!event.active) simulation.alphaTarget(0)
 		event.subject.fx = null
 		event.subject.fy = null
 	}
 
-	return d3.drag()
+	return d3
+		.drag()
 		.on('start', dragstarted)
 		.on('drag', dragged)
 		.on('end', dragended)
 }
 
-export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions: Extension[]) => {
+export const drawD3Graph = (
+	nodes: Node[] | undefined,
+	connections: Connection[] | undefined,
+	extensions: Extension[]
+) => {
+	if (!nodes || !connections) return
+
 	// Select svg
 	const svg = d3.select('svg')
 	const width: number = Number.parseInt(svg.attr('width'))
@@ -51,11 +64,23 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 	const g = svg.append('g')
 
 	// Force simulation
-	const forceSimulation = d3.forceSimulation()
+	const forceSimulation = d3
+		.forceSimulation()
 		.force('link', d3.forceLink().distance(100))
-		.force('charge', d3.forceManyBody().strength(-10).distanceMax(width / 2))
+		.force(
+			'charge',
+			d3
+				.forceManyBody()
+				.strength(-10)
+				.distanceMax(width / 2)
+		)
 		.force('center', d3.forceCenter(width / 2, height / 2))
-		.force('collision', d3.forceCollide().radius((d: any) => { return d.radius }))
+		.force(
+			'collision',
+			d3.forceCollide().radius((d: any) => {
+				return d.radius
+			})
+		)
 
 	document.querySelector('#linkForce')?.addEventListener('change', (event) => {
 		const inputElement = event.target as HTMLInputElement
@@ -64,39 +89,61 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 		forceSimulation.force('link', d3.forceLink().strength(value))
 	})
 
-	document.querySelector('#linkDistance')?.addEventListener('change', (event) => {
-		const inputElement = event.target as HTMLInputElement
-		const value = Number.parseInt(inputElement.value)
-		forceSimulation.force('link', null)
-		forceSimulation.force('link', d3.forceLink().distance(value))
-	})
+	document
+		.querySelector('#linkDistance')
+		?.addEventListener('change', (event) => {
+			const inputElement = event.target as HTMLInputElement
+			const value = Number.parseInt(inputElement.value)
+			forceSimulation.force('link', null)
+			forceSimulation.force('link', d3.forceLink().distance(value))
+		})
 
-	document.querySelector('#chargeForce')?.addEventListener('change', (event) => {
-		const inputElement = event.target as HTMLInputElement
-		const value = Number.parseInt(inputElement.value)
-		forceSimulation.force('charge', null)
-		forceSimulation.force('charge', d3.forceManyBody().strength(value).distanceMax(width / 2))
-	})
+	document
+		.querySelector('#chargeForce')
+		?.addEventListener('change', (event) => {
+			const inputElement = event.target as HTMLInputElement
+			const value = Number.parseInt(inputElement.value)
+			forceSimulation.force('charge', null)
+			forceSimulation.force(
+				'charge',
+				d3
+					.forceManyBody()
+					.strength(value)
+					.distanceMax(width / 2)
+			)
+		})
 
-	document.querySelector('#centerForce')?.addEventListener('change', (event) => {
-		const inputElement = event.target as HTMLInputElement
-		const value = Number.parseInt(inputElement.value)
-		forceSimulation.force('center', null)
-		forceSimulation.force('center', d3.forceCenter(width / 2, height / 2).strength(value))
-	})
+	document
+		.querySelector('#centerForce')
+		?.addEventListener('change', (event) => {
+			const inputElement = event.target as HTMLInputElement
+			const value = Number.parseInt(inputElement.value)
+			forceSimulation.force('center', null)
+			forceSimulation.force(
+				'center',
+				d3.forceCenter(width / 2, height / 2).strength(value)
+			)
+		})
 
 	// Zoom
-	const zoom = d3.zoom()
+	const zoom = d3
+		.zoom()
 		.scaleExtent([0.1, 10])
-		.translateExtent([[-width * 15, -height * 15], [width * 15, height * 15]])
-		.on('zoom', (event) => { g.attr('transform', event.transform) })
+		.translateExtent([
+			[-width * 15, -height * 15],
+			[width * 15, height * 15],
+		])
+		.on('zoom', (event) => {
+			g.attr('transform', event.transform)
+		})
 
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 zoom is not typed
 	// @ts-ignore
 	svg.call(zoom)
 
 	// Draw side
-	const links = g.append('g')
+	const links = g
+		.append('g')
 		.selectAll('line')
 		.data(connections)
 		.enter()
@@ -107,26 +154,39 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 	// ticked
 	const ticked = () => {
 		links
-			.attr('x1', (d: any) => { return d.source.x })
-			.attr('y1', (d: any) => { return d.source.y })
-			.attr('x2', (d: any) => { return d.target.x })
-			.attr('y2', (d: any) => { return d.target.y })
-		gs
-			.attr('transform', (d: any) => { return `translate(${d.x}, ${d.y})` })
+			.attr('x1', (d: any) => {
+				return d.source.x
+			})
+			.attr('y1', (d: any) => {
+				return d.source.y
+			})
+			.attr('x2', (d: any) => {
+				return d.target.x
+			})
+			.attr('y2', (d: any) => {
+				return d.target.y
+			})
+		gs.attr('transform', (d: any) => {
+			return `translate(${d.x}, ${d.y})`
+		})
 	}
 
 	// Generate node data
-	forceSimulation.nodes(nodes)
-		.on('tick', ticked)
+	forceSimulation.nodes(nodes).on('tick', ticked)
 
 	// Generate side data
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
-	// @ts-ignore
-	forceSimulation.force('link').links(connections)
-		.id((d: Connection) => { return d.id })
+	forceSimulation
+		.force('link')
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
+		// @ts-ignore
+		?.links(connections)
+		.id((d: Connection) => {
+			return d.id
+		})
 
 	// Create group
-	const gs = g.selectAll('.circleText')
+	const gs = g
+		.selectAll('.circleText')
 		.data(nodes)
 		.enter()
 		.append('g')
@@ -137,7 +197,9 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 
 	// Draw node
 	gs.append('circle')
-		.attr('r', (d: Node) => { return d.radius })
+		.attr('r', (d: Node) => {
+			return d.radius
+		})
 		.attr('fill', (d: Node) => {
 			// find extension color to match nodes extension
 			let nodeExt = ''
@@ -147,7 +209,11 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 				nodeExt = d.name.split('.').slice(1).join('.')
 			}
 
-			return extensions.find((ext) => { return ext.extension === nodeExt })?.color ?? '#000'
+			return (
+				extensions.find((ext) => {
+					return ext.extension === nodeExt
+				})?.color ?? '#000'
+			)
 		})
 
 	// Draw text
@@ -161,7 +227,9 @@ export const drawD3Graph = (nodes: Node[], connections: Connection[], extensions
 	return forceSimulation
 }
 
-export const updateD3Graph = (nodes: Node[], extensions: Extension[]) => {
+export const updateD3Graph = (nodes: Node[] | undefined, extensions: Extension[]) => {
+	if (!nodes) return
+
 	const svg = d3.select('svg')
 	const selection = svg.selectAll('circle')
 
@@ -176,7 +244,12 @@ export const updateD3Graph = (nodes: Node[], extensions: Extension[]) => {
 			nodeExt = node.name.split('.').slice(1).join('.')
 		}
 
-		(element as Element).setAttribute('fill', extensions.find((ext) => { return ext.extension === nodeExt })?.color ?? '#000')
+		(element as Element).setAttribute(
+			'fill',
+			extensions.find((ext) => {
+				return ext.extension === nodeExt
+			})?.color ?? '#000'
+		)
 
 		index++
 	}

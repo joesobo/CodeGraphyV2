@@ -5,8 +5,10 @@ import { getRandomIntSeed } from './basic'
 import { d3ColorSchemes } from './d3ColorSchemes'
 import type { D3Color, Extension, Node, ParseOptions } from './types'
 
-export const parseExtensions = (nodes: Node[], options: ParseOptions) => {
+export const parseExtensions = (nodes: Node[] | undefined, options: ParseOptions) => {
 	const extensions: Extension[] = []
+	if (!nodes) return extensions
+
 	nodes.forEach((node) => {
 		let extension = ''
 		if (node.name.startsWith('.')) {

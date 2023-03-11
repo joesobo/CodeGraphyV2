@@ -36,3 +36,14 @@ export const d3ColorSchemes: D3Color[] = [
 		interpolator: d3.interpolateSinebow
 	}
 ]
+
+export const colorSchemes = [
+	'Inferno',
+	'Magma',
+	'Turbo',
+	'Cool',
+	'Warm',
+	'CubehelixDefault',
+	'Rainbow',
+	'Sinebow',
+]
