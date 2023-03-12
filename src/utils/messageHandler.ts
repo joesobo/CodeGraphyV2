@@ -7,6 +7,8 @@ import { processData } from './processData'
 
 export const handleMessages = (webview: vscode.Webview) => {
 	receiveMessages(webview)
+
+	sendMessages(webview)
 }
 
 const receiveMessages = async (webview: vscode.Webview) => {
@@ -41,11 +43,23 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				command: 'setGraphData',
 				text: {
 					connections: connections,
-					nodes: nodes
+					nodes: nodes,
+					currentOpenFile: vscode.window.activeTextEditor?.document.fileName || null
 				}
 			})
 			return
 		}
+		}
+	})
+}
+
+const sendMessages = (webview: vscode.Webview) => {
+	vscode.window.onDidChangeActiveTextEditor(async (editor) => {
+		if (editor) {
+			await webview.postMessage({
+				command: 'setCurrentFile',
+				text: editor.document.fileName ?? null
+			})
 		}
 	})
 }

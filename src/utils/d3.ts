@@ -39,7 +39,8 @@ const drag = (simulation: Simulation<Node, undefined>) => {
 export const drawD3Graph = (
 	nodes: Node[] | undefined,
 	connections: Connection[] | undefined,
-	extensions: Extension[]
+	extensions: Extension[],
+	currentOpenFile?: string
 ) => {
 	if (!nodes || !connections) return
 
@@ -209,6 +210,10 @@ export const drawD3Graph = (
 				nodeExt = d.name.split('.').slice(1).join('.')
 			}
 
+			if (d.fullPath === currentOpenFile) {
+				return '#fff'
+			}
+
 			return (
 				extensions.find((ext) => {
 					return ext.extension === nodeExt
@@ -227,7 +232,7 @@ export const drawD3Graph = (
 	return forceSimulation
 }
 
-export const updateD3Graph = (nodes: Node[] | undefined, extensions: Extension[]) => {
+export const updateD3Graph = (nodes: Node[] | undefined, extensions: Extension[], currentOpenFile?: string) => {
 	if (!nodes) return
 
 	const svg = d3.select('svg')
@@ -250,6 +255,13 @@ export const updateD3Graph = (nodes: Node[] | undefined, extensions: Extension[]
 				return ext.extension === nodeExt
 			})?.color ?? '#000'
 		)
+
+		if (node.fullPath === currentOpenFile) {
+			(element as Element).setAttribute(
+				'fill',
+				'#fff'
+			)
+		}
 
 		index++
 	}

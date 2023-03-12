@@ -251,6 +251,7 @@ import RestartIcon from '~icons/mdi/restart'
 let nodes: Ref<Node[] | undefined> = ref()
 let connections: Ref<Connection[] | undefined> = ref()
 let extensionList: Ref<Extension[]> = ref([])
+let currentOpenFile: Ref<string> = ref('')
 
 let displaySettings: Ref<boolean> = ref(false)
 
@@ -275,9 +276,14 @@ window.addEventListener('message', (event) => {
 	case 'setGraphData':
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
+		currentOpenFile.value = message.text.currentOpenFile
 
 		extensionList.value = parseExtensions(nodes.value, { useRandomColor: false, d3Color: selectedD3Color.value })
-		drawD3Graph(nodes.value, connections.value, extensionList.value)
+		drawD3Graph(nodes.value, connections.value, extensionList.value, currentOpenFile.value)
+		return
+	case 'setCurrentFile':
+		currentOpenFile.value = message.text
+		updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
 		return
 	}
 })
