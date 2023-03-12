@@ -8,8 +8,11 @@ module.exports = {
 				'primary': 'var(--vscode-button-background)',
 				'primary-hover': 'var(--vscode-extensionButton-prominentHoverBackground)',
 				'dropdown': 'var(--vscode-dropdown-background)',
+				'border': 'var(--vscode-menu-separatorBackground)',
 			}
 		},
 	},
-	plugins: [],
+	plugins: [
+		require('tailwind-scrollbar-hide')
+	],
 }

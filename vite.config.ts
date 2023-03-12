@@ -1,10 +1,9 @@
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
 import Icons from 'unplugin-icons/vite'
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
-import { defineConfig } from 'vite'
-
-import type { InlineConfig } from 'vitest'
 import type { UserConfig } from 'vite'
+import { defineConfig } from 'vite'
+import type { InlineConfig } from 'vitest'
 
 interface VitestConfigExport extends UserConfig {
   test: InlineConfig;
@@ -17,7 +16,6 @@ module.exports = defineConfig({
 			autoInstall: true,
 		}),
 		VueI18nPlugin({ }),
-
 	],
 	build: {
 		lib: {

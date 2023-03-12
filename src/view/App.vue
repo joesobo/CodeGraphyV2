@@ -7,6 +7,102 @@
       class="overflow-hidden bg-zinc-900"
     />
 
+    <!-- Graph Overlay -->
+    <div class="pointer-events-none absolute flex h-[500px] w-[500px] justify-end">
+      <button
+        class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+        @click="drawD3Graph(nodes, connections, extensionList)"
+      >
+        <RestartIcon
+          width="1.25rem"
+          height="1.25rem"
+        />
+      </button>
+
+      <button
+        class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+        @click="displaySettings = true"
+      >
+        <SettingsIcon
+          width="1.25rem"
+          height="1.25rem"
+        />
+      </button>
+
+      <!-- Settings Popup -->
+      <div
+        v-if="displaySettings"
+        class="pointer-events-auto absolute top-0 right-0 mr-2 mt-2 flex max-h-96 w-full max-w-[200px] flex-col overflow-y-scroll rounded-md bg-dropdown pt-2 shadow-lg scrollbar-hide"
+      >
+        <div class="flex items-center justify-between px-2 text-lg">
+          <h1 class="m-0 p-0 font-bold text-white">
+            Settings
+          </h1>
+          <button
+            class="flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+            @click="displaySettings = false"
+          >
+            <CloseIcon
+              width="1.25rem"
+              height="1.25rem"
+            />
+          </button>
+        </div>
+        <!-- D3 Settings -->
+        <Disclosure
+          title="D3"
+          class="mt-4 border-t border-border p-2"
+        >
+          <div class="flex flex-col">
+            <SliderRow
+              id="linkForce"
+              :value="linkForce"
+              label="Link Force"
+              :min="-100"
+              @input="event => linkForce = event.target.value"
+            />
+            <SliderRow
+              id="linkDistance"
+              :value="linkDistance"
+              label="Link Distance"
+              :max="1000"
+              :step="10"
+              @input="event => linkDistance = event.target.value"
+            />
+            <SliderRow
+              id="chargeForce"
+              :value="chargeForce"
+              label="Charge Force"
+              :min="-100"
+              @input="event => chargeForce = event.target.value"
+            />
+            <SliderRow
+              id="centerForce"
+              :value="centerForce"
+              label="Center Force"
+              :max="1"
+              :step="0.01"
+              @input="event => centerForce = event.target.value"
+            />
+          </div>
+        </Disclosure>
+        <!-- Extra Settings -->
+        <Disclosure
+          title="Extra"
+          class="border-t border-border p-2"
+        >
+          <div class="mt-2 flex flex-col">
+            <ToggleSwitch label="Hide Orphans" />
+            <ToggleSwitch label="Hide Labels" />
+            <div>Line width:</div>
+            <div>Line color:</div>
+            <ToggleSwitch label="Outlines" />
+            <ToggleSwitch label="Collions" />
+          </div>
+        </Disclosure>
+      </div>
+    </div>
+
     <!-- Tab Switch -->
     <div class="mt-4 flex">
       <SwitchButton
@@ -65,12 +161,6 @@
       v-show="activeTab === 'Settings'"
       class="mt-4 flex flex-col"
     >
-      <!-- Reset Graph Button -->
-      <div class="mt-4 flex items-center">
-        <button @click="drawD3Graph(nodes, connections, extensionList)">
-          Reset Graph
-        </button>
-      </div>
       <!-- Node Connection Switch -->
       <div class="mt-4 flex items-center">
         <label class="w-1/3 text-sm font-medium text-gray-300">Connection</label>
@@ -122,6 +212,7 @@
       </div>
       <!-- D3 Color List -->
       <Dropdown
+        v-if="nodeColor === 'D3'"
         title="D3 Color List"
         :options="colorSchemes"
         :initialActive="selectedD3Color"
@@ -131,58 +222,6 @@
           updateGraph()
         }"
       />
-      <!-- D3 Settings -->
-      <Disclosure
-        title="D3"
-        class="mt-4"
-      >
-        <div class="ml-auto flex w-2/3 flex-col">
-          <SliderRow
-            id="linkForce"
-            :value="linkForce"
-            label="Link Force"
-            :min="-100"
-            @input="event => linkForce = event.target.value"
-          />
-          <SliderRow
-            id="linkDistance"
-            :value="linkDistance"
-            label="Link Distance"
-            :max="1000"
-            :step="10"
-            @input="event => linkDistance = event.target.value"
-          />
-          <SliderRow
-            id="chargeForce"
-            :value="chargeForce"
-            label="Charge Force"
-            :min="-100"
-            @input="event => chargeForce = event.target.value"
-          />
-          <SliderRow
-            id="centerForce"
-            :value="centerForce"
-            label="Center Force"
-            :max="1"
-            :step="0.01"
-            @input="event => centerForce = event.target.value"
-          />
-        </div>
-      </Disclosure>
-      <!-- Extra Settings -->
-      <Disclosure
-        title="Extra"
-        class="mt-4"
-      >
-        <div class="ml-auto mt-2 flex w-2/3 flex-col">
-          <ToggleSwitch label="Hide Orphans" />
-          <ToggleSwitch label="Hide Labels" />
-          <div>Line width</div>
-          <div>Line color</div>
-          <ToggleSwitch label="Outlines" />
-          <ToggleSwitch label="Collions" />
-        </div>
-      </Disclosure>
     </div>
   </div>
 </template>
@@ -205,11 +244,15 @@ import SliderRow from './components/SliderRow.vue'
 import SwitchButton from './components/SwitchButton.vue'
 import ToggleSwitch from './components/ToggleSwitch.vue'
 
+import SettingsIcon from '~icons/ant-design/setting-filled'
 import CloseIcon from '~icons/mdi/close-circle'
+import RestartIcon from '~icons/mdi/restart'
 
 let nodes: Ref<Node[] | undefined> = ref()
 let connections: Ref<Connection[] | undefined> = ref()
 let extensionList: Ref<Extension[]> = ref([])
+
+let displaySettings: Ref<boolean> = ref(false)
 
 // Display Settings
 let activeTab: Ref<string> = ref('Settings')

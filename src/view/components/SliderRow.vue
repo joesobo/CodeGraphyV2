@@ -1,11 +1,8 @@
 <template>
-  <div class="mt-2 flex justify-between">
-    <label class="w-1/3 text-sm font-medium text-gray-300">{{ props.label }}</label>
+  <div class="mt-2 flex flex-col justify-between">
+    <label class="w-full text-sm font-light text-gray-300">{{ props.label }}</label>
 
-    <div class="flex w-2/3 items-center">
-      <p class="mr-2 w-8 text-sm font-medium text-gray-300">
-        {{ value }}
-      </p>
+    <div class="flex w-full items-center">
       <input
         :id="props.id"
         v-model="value"
@@ -13,7 +10,11 @@
         :min="props.min ?? 0"
         :max="props.max ?? 100"
         :step="props.step ?? 1"
+        class="mr-2"
       >
+      <p class="w-8 text-sm font-medium text-gray-300">
+        {{ value }}
+      </p>
     </div>
   </div>
 </template>
