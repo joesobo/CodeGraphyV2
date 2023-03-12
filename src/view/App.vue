@@ -11,7 +11,7 @@
     <div class="pointer-events-none absolute flex h-[500px] w-[500px] justify-end">
       <button
         class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-        @click="drawD3Graph(nodes, connections, extensionList)"
+        @click="drawD3Graph(nodes, connections, extensionList, currentOpenFile)"
       >
         <RestartIcon
           width="1.25rem"
