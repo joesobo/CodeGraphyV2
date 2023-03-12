@@ -50,3 +50,7 @@ export interface File {
 export interface Directory {
 	name: string
 }
+
+export type SVGElement = d3.Selection<SVGSVGElement, unknown, HTMLElement, undefined>
+
+export type NodeSimulation = d3.Simulation<Node, d3.SimulationLinkDatum<Node>>

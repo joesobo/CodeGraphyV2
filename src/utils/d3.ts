@@ -1,40 +1,8 @@
-import type { D3DragEvent, Simulation } from 'd3'
 import * as d3 from 'd3'
+import { D3DragEvent, DragBehavior, Simulation } from 'd3'
 
 import { getRandomInt } from './basic'
-import type { Connection, CustomSubject, Extension, Node } from './types'
-
-// drag
-const drag = (simulation: Simulation<Node, undefined>) => {
-	const dragstarted = (
-		event: D3DragEvent<SVGCircleElement, Node, CustomSubject>
-	) => {
-		if (!event.active) simulation.alphaTarget(0.3).restart()
-		event.subject.fx = event.subject.x
-		event.subject.fy = event.subject.y
-	}
-
-	const dragged = (
-		event: D3DragEvent<SVGCircleElement, Node, CustomSubject>
-	) => {
-		event.subject.fx = event.x
-		event.subject.fy = event.y
-	}
-
-	const dragended = (
-		event: D3DragEvent<SVGCircleElement, Node, CustomSubject>
-	) => {
-		if (!event.active) simulation.alphaTarget(0)
-		event.subject.fx = null
-		event.subject.fy = null
-	}
-
-	return d3
-		.drag()
-		.on('start', dragstarted)
-		.on('drag', dragged)
-		.on('end', dragended)
-}
+import type { Connection, CustomSubject, Extension, Node, NodeSimulation, SVGElement } from './types'
 
 export const drawD3Graph = (
 	nodes: Node[] | undefined,
@@ -45,7 +13,7 @@ export const drawD3Graph = (
 	if (!nodes || !connections) return
 
 	// Select svg
-	const svg = d3.select('svg')
+	const svg: SVGElement = d3.select<SVGSVGElement, unknown>('svg')
 	const width: number = Number.parseInt(svg.attr('width'))
 	const height: number = Number.parseInt(svg.attr('height'))
 
@@ -57,78 +25,55 @@ export const drawD3Graph = (
 		node.vx = 0
 		node.vy = 0
 	})
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3.select not properly typed
-	// @ts-ignore
-	d3.zoom().transform(svg, d3.zoomIdentity)
 
 	// Setup
-	const g = svg.append('g')
+	const g = svg.append<SVGGElement>('g')
+
+	// Draw links
+	const links = g
+		.append('g')
+		.selectAll('line')
+		.data(connections)
+		.enter()
+		.append('line')
+		.attr('stroke', '#666')
+		.attr('stroke-width', 1)
 
 	// Force simulation
-	const forceSimulation = d3
-		.forceSimulation()
-		.force('link', d3.forceLink().distance(100))
+	const forceSimulation: NodeSimulation = d3
+		.forceSimulation<Node, d3.SimulationLinkDatum<Node>>()
+		.force('link', d3.forceLink<Node, d3.SimulationLinkDatum<Node>>().distance(100))
 		.force(
 			'charge',
 			d3
-				.forceManyBody()
+				.forceManyBody<Node>()
 				.strength(-10)
 				.distanceMax(width / 2)
 		)
 		.force('center', d3.forceCenter(width / 2, height / 2))
 		.force(
 			'collision',
-			d3.forceCollide().radius((d: any) => {
+			d3.forceCollide<Node>().radius((d: Node) => {
 				return d.radius
 			})
 		)
 
-	document.querySelector('#linkForce')?.addEventListener('change', (event) => {
-		const inputElement = event.target as HTMLInputElement
-		const value = Number.parseInt(inputElement.value)
-		forceSimulation.force('link', null)
-		forceSimulation.force('link', d3.forceLink().strength(value))
-	})
-
-	document
-		.querySelector('#linkDistance')
-		?.addEventListener('change', (event) => {
-			const inputElement = event.target as HTMLInputElement
-			const value = Number.parseInt(inputElement.value)
-			forceSimulation.force('link', null)
-			forceSimulation.force('link', d3.forceLink().distance(value))
-		})
-
-	document
-		.querySelector('#chargeForce')
-		?.addEventListener('change', (event) => {
-			const inputElement = event.target as HTMLInputElement
-			const value = Number.parseInt(inputElement.value)
-			forceSimulation.force('charge', null)
-			forceSimulation.force(
-				'charge',
-				d3
-					.forceManyBody()
-					.strength(value)
-					.distanceMax(width / 2)
-			)
-		})
-
-	document
-		.querySelector('#centerForce')
-		?.addEventListener('change', (event) => {
-			const inputElement = event.target as HTMLInputElement
-			const value = Number.parseInt(inputElement.value)
-			forceSimulation.force('center', null)
-			forceSimulation.force(
-				'center',
-				d3.forceCenter(width / 2, height / 2).strength(value)
-			)
-		})
+	// Force Setting Listeners
+	addForceChangeListener(forceSimulation, 'linkForce', d3.forceLink().strength)
+	addForceChangeListener(forceSimulation, 'linkDistance', d3.forceLink().distance)
+	addForceChangeListener(
+		forceSimulation, 'chargeForce',
+		(value) =>
+			d3.forceManyBody().strength(value).distanceMax(width / 2)
+	)
+	addForceChangeListener(
+		forceSimulation, 'centerForce',
+		(value) => d3.forceCenter(width / 2, height / 2).strength(value)
+	)
 
 	// Zoom
 	const zoom = d3
-		.zoom()
+		.zoom<SVGSVGElement, unknown>()
 		.scaleExtent([0.1, 10])
 		.translateExtent([
 			[-width * 15, -height * 15],
@@ -138,19 +83,7 @@ export const drawD3Graph = (
 			g.attr('transform', event.transform)
 		})
 
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 zoom is not typed
-	// @ts-ignore
-	svg.call(zoom)
-
-	// Draw side
-	const links = g
-		.append('g')
-		.selectAll('line')
-		.data(connections)
-		.enter()
-		.append('line')
-		.attr('stroke', '#666')
-		.attr('stroke-width', 1)
+	svg.call(zoom).call(zoom.transform, d3.zoomIdentity)
 
 	// ticked
 	const ticked = () => {
@@ -167,7 +100,7 @@ export const drawD3Graph = (
 			.attr('y2', (d: any) => {
 				return d.target.y
 			})
-		gs.attr('transform', (d: any) => {
+		gs.attr('transform', (d: Node) => {
 			return `translate(${d.x}, ${d.y})`
 		})
 	}
@@ -175,7 +108,7 @@ export const drawD3Graph = (
 	// Generate node data
 	forceSimulation.nodes(nodes).on('tick', ticked)
 
-	// Generate side data
+	// Generate line data
 	forceSimulation
 		.force('link')
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
@@ -192,8 +125,6 @@ export const drawD3Graph = (
 		.enter()
 		.append('g')
 		.attr('class', 'fill-white')
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- drag is not typed
-		// @ts-ignore
 		.call(drag(forceSimulation))
 
 	// Draw node
@@ -221,6 +152,8 @@ export const drawD3Graph = (
 			)
 		})
 
+		.on('click', click)
+
 	// Draw text
 	gs.append('text')
 		.attr('y', (d: Node) => -d.radius - 12)
@@ -236,33 +169,80 @@ export const updateD3Graph = (nodes: Node[] | undefined, extensions: Extension[]
 	if (!nodes) return
 
 	const svg = d3.select('svg')
-	const selection = svg.selectAll('circle')
+	const circles = svg.selectAll<SVGCircleElement, Node>('circle').data(nodes, (node: Node) => node.id)
 
-	let index = 0
-	for (const element of selection) {
-		const node = nodes[index]
+	circles.enter()
+		.append('circle')
+		.attr('r', (node: Node) => node.radius)
 
-		let nodeExt = ''
-		if (node.name.startsWith('.')) {
-			nodeExt = node.name.substring(1).split('.').slice(1).join('.')
-		} else {
-			nodeExt = node.name.split('.').slice(1).join('.')
-		}
+	circles.exit().remove()
 
-		(element as Element).setAttribute(
-			'fill',
-			extensions.find((ext) => {
-				return ext.extension === nodeExt
-			})?.color ?? '#000'
-		)
+	circles.attr('fill', (node: Node) => {
+		let color = '#000'
+		const nodeExt = node.name.startsWith('.')
+			? node.name.substring(1).split('.').slice(1).join('.')
+			: node.name.split('.').slice(1).join('.')
+		color = extensions.find((ext) => ext.extension === nodeExt)?.color ?? '#000'
 
 		if (node.fullPath === currentOpenFile) {
-			(element as Element).setAttribute(
-				'fill',
-				'#fff'
-			)
+			return '#fff'
 		}
 
-		index++
+		return color
+	})
+}
+
+const addForceChangeListener = (
+	forceSimulation: NodeSimulation,
+	forceName: string,
+	forceGenerator: (value: number) => any
+) => {
+	const element = document.querySelector(`#${forceName}`) as HTMLInputElement
+	if (element) {
+		element.addEventListener('change', (event) => {
+			const inputElement = event.target as HTMLInputElement
+			const value = Number.parseInt(inputElement.value)
+			forceSimulation.force(forceName, null)
+			forceSimulation.force(forceName, forceGenerator(value))
+		})
 	}
+}
+
+const drag = (simulation: Simulation<Node, undefined>): DragBehavior<SVGGElement, Node, CustomSubject> => {
+	const dragstarted = (
+		event: D3DragEvent<SVGGElement, Node, CustomSubject>
+	) => {
+		if (!event.active) simulation.alphaTarget(0.3).restart()
+		event.subject.fx = event.subject.x
+		event.subject.fy = event.subject.y
+	}
+
+	const dragged = (
+		event: D3DragEvent<SVGGElement, Node, CustomSubject>
+	) => {
+		event.subject.fx = event.x
+		event.subject.fy = event.y
+	}
+
+	const dragended = (
+		event: D3DragEvent<SVGGElement, Node, CustomSubject>
+	) => {
+		if (!event.active) simulation.alphaTarget(0)
+		event.subject.fx = null
+		event.subject.fy = null
+	}
+
+	return d3
+		.drag<SVGGElement, Node, CustomSubject>()
+		.on('start', dragstarted)
+		.on('drag', dragged)
+		.on('end', dragended)
+}
+
+const click = (_event: d3.Selection<d3.BaseType, unknown, HTMLElement, any>, d: Node) => {
+	const path = d.fullPath
+	vscode.postMessage({
+		command: 'openFile',
+		text: path
+	})
 }

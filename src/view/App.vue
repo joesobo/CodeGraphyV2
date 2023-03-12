@@ -31,7 +31,7 @@
 
       <!-- Settings Popup -->
       <div
-        v-if="displaySettings"
+        v-show="displaySettings"
         class="pointer-events-auto absolute top-0 right-0 mr-2 mt-2 flex max-h-96 w-full max-w-[200px] flex-col overflow-y-scroll rounded-md bg-dropdown pt-2 shadow-lg scrollbar-hide"
       >
         <div class="flex items-center justify-between px-2 text-lg">

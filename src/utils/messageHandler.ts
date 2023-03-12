@@ -18,11 +18,17 @@ const receiveMessages = async (webview: vscode.Webview) => {
 	const currentPath = vscode.workspace.workspaceFolders
 		? vscode.workspace.workspaceFolders[0].uri.path
 		: ''
+	const currentOpenFile = vscode.window.activeTextEditor?.document.fileName || null
 	// currentPath = currentPath.startsWith('/') ? currentPath.substring(1) : currentPath
 	// currentPath = replaceAll(currentPath, '/', '\\')
 
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
+		case 'openFile':
+			vscode.workspace.openTextDocument(vscode.Uri.file(message.text)).then(async (doc) => {
+				vscode.window.showTextDocument(doc)
+			})
+			return
 		case 'getGraphData': {
 			const nodeSize = message.nodeSize
 			const interactionConnections = message.interactionConnections
@@ -44,7 +50,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				text: {
 					connections: connections,
 					nodes: nodes,
-					currentOpenFile: vscode.window.activeTextEditor?.document.fileName || null
+					currentOpenFile: currentOpenFile
 				}
 			})
 			return
