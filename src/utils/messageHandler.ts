@@ -32,18 +32,23 @@ const receiveMessages = async (webview: vscode.Webview) => {
 		case 'getGraphData': {
 			const nodeSize = message.nodeSize
 			const interactionConnections = message.interactionConnections
+			const nodeDepth = message.nodeDepth
 			const { files, dirs } = await fetchFiles(currentPath, blacklist, true)
 
+			let processedData
 			let connections
-			let nodes
 
 			if (interactionConnections === 'Interaction') {
 				connections = await fetchInteractionConnections(files, currentPath)
-				nodes = processData(files, nodeSize, connections)
+				processedData = processData(files, nodeSize, connections, currentOpenFile, nodeDepth)
+
 			} else {
 				connections = fetchDirectoryConnections(files, dirs)
-				nodes = processData(files, nodeSize, connections, dirs)
+				processedData = processData(files, nodeSize, connections, currentOpenFile, nodeDepth, dirs)
 			}
+
+			const nodes = processedData.nodes
+			connections = processedData.connections
 
 			await webview.postMessage({
 				command: 'setGraphData',

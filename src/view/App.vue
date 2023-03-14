@@ -103,6 +103,18 @@
       </div>
     </div>
 
+    <!-- Depth Slider -->
+    <Slider
+      id="nodeDepth"
+      class="mt-2"
+      :value="nodeDepth"
+      :min="0"
+      @input="(event) => {
+        nodeDepth = event.target.value
+        updateNodeSettings()
+      }"
+    />
+
     <!-- Tab Switch -->
     <div class="mt-4 flex">
       <SwitchButton
@@ -175,13 +187,6 @@
           />
         </div>
       </div>
-      <!-- Node Display Switch -->
-      <div class="mt-4 flex items-center">
-        <label class="w-1/3 text-sm font-medium text-gray-300">Display</label>
-        <div class="flex w-2/3">
-          <SwitchButton :options="['Graph', 'Local']" />
-        </div>
-      </div>
       <!-- Node Size Switch -->
       <div class="mt-4 flex items-center">
         <label class="w-1/3 text-sm font-medium text-gray-300">Node Size</label>
@@ -240,6 +245,7 @@ import type { Connection, Extension, Node } from '../utils/types'
 
 import Disclosure from './components/Disclosure.vue'
 import Dropdown from './components/Dropdown.vue'
+import Slider from './components/Slider.vue'
 import SliderRow from './components/SliderRow.vue'
 import SwitchButton from './components/SwitchButton.vue'
 import ToggleSwitch from './components/ToggleSwitch.vue'
@@ -263,12 +269,13 @@ let nodeColor: Ref<string> = ref('D3')
 let selectedD3Color: Ref<string> = ref('Sinebow')
 
 // D3 Settings
+let nodeDepth: Ref<number> = ref(0)
 let centerForce: Ref<number> = ref(0)
 let chargeForce: Ref<number> = ref(-100)
 let linkForce: Ref<number> = ref(0)
 let linkDistance: Ref<number> = ref(100)
 
-getGraphData({ nodeSize: nodeSize.value, interactionConnections: connectionType.value })
+getGraphData({ nodeSize: nodeSize.value, interactionConnections: connectionType.value, nodeDepth: nodeDepth.value })
 
 window.addEventListener('message', (event) => {
 	const message = event.data // The JSON data our extension sent
@@ -290,7 +297,7 @@ window.addEventListener('message', (event) => {
 
 // Update the graph with new settings
 const updateNodeSettings = () => {
-	getGraphData({ nodeSize: nodeSize.value, interactionConnections: connectionType.value })
+	getGraphData({ nodeSize: nodeSize.value, interactionConnections: connectionType.value, nodeDepth: nodeDepth.value })
 }
 
 // Update the graph without regenerating the nodes / connections
