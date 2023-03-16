@@ -37,7 +37,7 @@ CodeGraphyV2 is coming soon...
 - [ ] Displays connections to external packages
 - [x] Ability to switch between files through graph nodes
 - [x] Switch between different connection display (interactions vs classic directory)
-- [ ] Switch between different level of view (entire graph vs local graph)
+- [x] Switch between different level of view (entire graph vs local graph)
 - [x] Switch between different node size factors (connections vs lines)
 - [x] Switch between different base color palette (d3 vs random)
 - [x] Variety of d3 base palettes
