@@ -8,26 +8,33 @@
     />
 
     <!-- Graph Overlay -->
-    <div class="pointer-events-none absolute flex h-[500px] w-[500px] justify-end">
-      <button
-        class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-        @click="drawD3Graph(nodes, connections, extensionList, currentOpenFile)"
-      >
-        <RestartIcon
-          width="1.25rem"
-          height="1.25rem"
-        />
-      </button>
+    <div class="pointer-events-none absolute flex h-[500px] w-[500px] flex-col justify-between">
+      <div class="flex justify-end">
+        <button
+          class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+          @click="drawD3Graph(nodes, connections, extensionList, currentOpenFile)"
+        >
+          <RestartIcon
+            width="1.25rem"
+            height="1.25rem"
+          />
+        </button>
 
-      <button
-        class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-        @click="displaySettings = true"
-      >
-        <SettingsIcon
-          width="1.25rem"
-          height="1.25rem"
-        />
-      </button>
+        <button
+          class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+          @click="displaySettings = true"
+        >
+          <SettingsIcon
+            width="1.25rem"
+            height="1.25rem"
+          />
+        </button>
+      </div>
+      <div class="flex">
+        <p class="ml-4 mb-4 text-white">
+          Count: {{ nodes?.length }}
+        </p>
+      </div>
 
       <!-- Settings Popup -->
       <div
@@ -104,11 +111,13 @@
     </div>
 
     <!-- Depth Slider -->
-    <Slider
+    <SliderRow
       id="nodeDepth"
+      label="Node Depth"
       class="mt-2"
       :value="nodeDepth"
       :min="0"
+      :max="maxNodeDepth"
       @input="(event) => {
         nodeDepth = event.target.value
         updateNodeSettings()
@@ -238,6 +247,7 @@ import PickColors from 'vue-pick-colors'
 
 import { drawD3Graph, updateD3Graph } from '../utils/d3'
 import { colorSchemes } from '../utils/d3ColorSchemes'
+import { findMaxDepth } from '../utils/depth'
 import { getGraphData } from '../utils/graphMessanger'
 import { parseExtensions } from '../utils/parseExtensions'
 import { tableHeaders } from '../utils/tableHeaders'
@@ -270,6 +280,7 @@ let selectedD3Color: Ref<string> = ref('Sinebow')
 
 // D3 Settings
 let nodeDepth: Ref<number> = ref(0)
+let maxNodeDepth: Ref<number> = ref(0)
 let centerForce: Ref<number> = ref(0)
 let chargeForce: Ref<number> = ref(-100)
 let linkForce: Ref<number> = ref(0)
@@ -284,6 +295,10 @@ window.addEventListener('message', (event) => {
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
 		currentOpenFile.value = message.text.currentOpenFile
+
+		if (maxNodeDepth.value === 0) {
+			maxNodeDepth.value = findMaxDepth(connections.value)
+		}
 
 		extensionList.value = parseExtensions(nodes.value, { useRandomColor: false, d3Color: selectedD3Color.value })
 		drawD3Graph(nodes.value, connections.value, extensionList.value, currentOpenFile.value)

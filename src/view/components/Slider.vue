@@ -4,7 +4,7 @@
     v-model="value"
     type="range"
     :min="props.min ?? 0"
-    :max="props.max ?? 5"
+    :max="props.max ?? 100"
     :step="props.step"
     class="mr-2"
   >
