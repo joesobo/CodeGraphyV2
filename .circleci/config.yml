@@ -4,6 +4,8 @@ jobs:
   setup:
     docker:
       - image: cimg/node:16.16.0
+    resource_class: large
+    parallelism: 10
 
     steps:
       - checkout
