@@ -255,7 +255,6 @@ import type { Connection, Extension, Node } from '../utils/types'
 
 import Disclosure from './components/Disclosure.vue'
 import Dropdown from './components/Dropdown.vue'
-import Slider from './components/Slider.vue'
 import SliderRow from './components/SliderRow.vue'
 import SwitchButton from './components/SwitchButton.vue'
 import ToggleSwitch from './components/ToggleSwitch.vue'
