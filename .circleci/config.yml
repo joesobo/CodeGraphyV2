@@ -9,14 +9,21 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: yarn-cache-v1-{{ checksum "yarn.lock" }}
+          keys:
+            - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+
+      - run:
+          name: Install pnpm package manager
+          command: |
+            corepack enable
+            corepack prepare pnpm@latest-7 --activate
 
       - run:
           name: 'Install dependencies'
-          command: yarn install --frozen-lockfile
+          command: pnpm install
 
       - save_cache:
-          key: yarn-cache-v1-{{ checksum "yarn.lock" }}
+          key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
           paths:
             - node_modules
 
@@ -37,7 +44,7 @@ jobs:
 
       - run:
           name: 'Build packages'
-          command: yarn compile
+          command: pnpm compile
       - persist_to_workspace:
           root: .
           paths:
@@ -55,7 +62,7 @@ jobs:
 
       - run:
           name: 'Verify code quality and formatting'
-          command: yarn lint
+          command: pnpm lint
 
   test:
     docker:
@@ -69,7 +76,7 @@ jobs:
 
       - run:
           name: 'Run unit tests'
-          command: yarn test
+          command: pnpm test
 
   typecheck:
     docker:
@@ -83,7 +90,7 @@ jobs:
 
       - run:
           name: 'Run typechecks'
-          command: yarn typecheck
+          command: pnpm typecheck
 
   prettier:
     docker:
@@ -97,7 +104,7 @@ jobs:
 
       - run:
           name: 'Run prettier'
-          command: npx prettier --check .
+          command: pnpm prettier --check .
 
 workflows:
   test-and-build:
