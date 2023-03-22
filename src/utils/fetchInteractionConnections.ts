@@ -73,7 +73,7 @@ const findImportPath = (line: string) => {
   const lineArr = line.split(' ')
 
   const index = lineArr.findIndex(
-    (el) => el.startsWith('"') || el.startsWith("'"),
+    (el) => el.startsWith('"') || el.startsWith(`'`),
   )
 
   return lineArr[index]
