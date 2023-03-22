@@ -5,7 +5,7 @@ declare module '*.vue' {
 }
 
 declare module '~icons/*' {
-	import { FunctionalComponent, SVGAttributes } from 'vue'
-	const component: FunctionalComponent<SVGAttributes>
-	export default component
+  import { FunctionalComponent, SVGAttributes } from 'vue'
+  const component: FunctionalComponent<SVGAttributes>
+  export default component
 }

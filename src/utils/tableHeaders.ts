@@ -1,8 +1,8 @@
 export const tableHeaders = [
-	'Language',
-	'Extension',
-	'Files',
-	'Lines',
-	'Color',
-	'Remove'
+  'Language',
+  'Extension',
+  'Files',
+  'Lines',
+  'Color',
+  'Remove',
 ]

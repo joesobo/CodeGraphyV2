@@ -1,8 +1,5 @@
 <template>
-  <details
-    :open="state"
-    @toggle="toggleState"
-  >
+  <details :open="state" @toggle="toggleState">
     <summary
       :tabindex="disabled ? -1 : 0"
       class="flex cursor-pointer items-center justify-between"
@@ -10,14 +7,8 @@
       <span class="text-sm font-medium text-gray-300">
         {{ title }}
       </span>
-      <ChevronDown
-        v-if="state"
-        class="text-base"
-      />
-      <ChevronRight
-        v-else
-        class="text-base"
-      />
+      <ChevronDown v-if="state" class="text-base" />
+      <ChevronRight v-else class="text-base" />
     </summary>
     <!-- @slot Use this slot to render disclosure content when expanded. -->
     <slot />
@@ -30,24 +21,27 @@ import { ref } from 'vue'
 import ChevronDown from '~icons/mdi/chevron-down'
 import ChevronRight from '~icons/mdi/chevron-right'
 
-const props = withDefaults(defineProps<{
-	title: string,
-	open?: boolean,
-  disabled?: boolean,
-}>(), {
-	open: false,
-	disabled: false,
-})
+const props = withDefaults(
+  defineProps<{
+    title: string
+    open?: boolean
+    disabled?: boolean
+  }>(),
+  {
+    open: false,
+    disabled: false,
+  },
+)
 
 let state = ref(props.open)
 
 const toggleState = () => {
-	state.value = !state.value
+  state.value = !state.value
 }
 </script>
 
 <style scoped>
 details summary::-webkit-details-marker {
-  display:none;
+  display: none;
 }
 </style>

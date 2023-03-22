@@ -85,8 +85,21 @@ jobs:
           name: 'Run typechecks'
           command: yarn typecheck
 
+  prettier:
+    docker:
+      - image: cimg/node:16.16.0
+
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: 'Run prettier'
+          command: npx prettier --check .
+
 workflows:
-  version: 2
   test-and-build:
     jobs:
       - setup:
@@ -105,5 +118,9 @@ workflows:
             - build
 
       - typecheck:
+          requires:
+            - build
+
+      - prettier:
           requires:
             - build

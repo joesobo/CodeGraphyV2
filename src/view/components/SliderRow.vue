@@ -1,6 +1,8 @@
 <template>
   <div class="mt-2 flex flex-col justify-between">
-    <label class="w-full text-sm font-light text-gray-300">{{ props.label }}</label>
+    <label class="w-full text-sm font-light text-gray-300">
+      {{ props.label }}
+    </label>
 
     <div class="flex w-full items-center">
       <input
@@ -11,7 +13,7 @@
         :max="props.max ?? 100"
         :step="props.step ?? 1"
         class="mr-2"
-      >
+      />
       <p class="w-8 text-sm font-medium text-gray-300">
         {{ value }}
       </p>
@@ -23,12 +25,12 @@
 import { ref } from 'vue'
 
 const props = defineProps<{
-	id?: string
-	value: string | number | boolean
-	label: string
-	min?: number
-	max?: number
-	step?: number
+  id?: string
+  value: string | number | boolean
+  label: string
+  min?: number
+  max?: number
+  step?: number
 }>()
 
 const value = ref(props.value)
