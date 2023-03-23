@@ -35,6 +35,7 @@ CodeGraphyV2 is coming soon...
 
 ## Upcoming in V2
 
+- [ ] Collapsible nodes
 - [ ] Displays connections to external packages
 - [x] Ability to switch between files through graph nodes
 - [x] Switch between different connection display (interactions vs classic directory)

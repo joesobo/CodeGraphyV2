@@ -3,8 +3,6 @@ import type { Connection, File } from './types'
 import fs from 'fs'
 import readline from 'readline'
 
-import { replaceAll } from './basic'
-
 let globalFiles: File[] = []
 let globalPath = ''
 
@@ -91,7 +89,6 @@ const findConnectionIndex = (file: string, importPath: string) => {
 	} else {
 		path = handleDirectPath(importPath)
 	}
-	// path = replaceAll(path, '/', '\\')
 
 	foundIndex = indexOfPath(path)
 
