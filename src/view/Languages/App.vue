@@ -60,7 +60,7 @@ let connections: Ref<Connection[] | undefined> = ref()
 let extensionList: Ref<Extension[]> = ref([])
 
 // Display Settings
-let connectionType: Ref<string> = ref('Interaction')
+let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
 let nodeSize: Ref<string> = ref('Connections')
 let selectedD3Color: Ref<string> = ref('Sinebow')
 

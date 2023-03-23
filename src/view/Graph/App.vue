@@ -148,7 +148,7 @@
             :selected="connectionType"
             @update="
               (value: string) => {
-                connectionType = value
+                connectionType = value as 'Interaction' | 'Directory'
                 updateNodeSettings()
               }
             "
@@ -228,7 +228,7 @@ let currentOpenFile: Ref<string> = ref('')
 let displaySettings: Ref<boolean> = ref(false)
 
 // Display Settings
-let connectionType: Ref<string> = ref('Interaction')
+let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
 let nodeSize: Ref<string> = ref('Connections')
 let nodeColor: Ref<string> = ref('D3')
 let selectedD3Color: Ref<string> = ref('Sinebow')
