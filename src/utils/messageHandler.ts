@@ -54,7 +54,7 @@ const getGraphData = async (
 		: ''
 	const currentOpenFile =
     vscode.window.activeTextEditor?.document.fileName || null
-	const { files, dirs } = await fetchFiles(currentPath, blacklist, true)
+	const { files, dirs } = fetchFiles(currentPath, blacklist, true)
 
 	saveNodeSize = message.nodeSize
 	saveInteractionConnections = message.interactionConnections

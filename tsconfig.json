@@ -23,6 +23,7 @@
       "vitest",
       "vite/client",
       "unplugin-icons/types/vue",
+      "@types/mock-fs",
       "@types/d3",
       "@types/randomcolor",
       "@types/random-seed"

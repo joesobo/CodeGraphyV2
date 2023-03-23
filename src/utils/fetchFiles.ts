@@ -2,7 +2,6 @@ import type { Directory, File } from './types'
 
 import fs from 'fs'
 import path from 'path'
-import readline from 'readline'
 
 import { containsBlacklist } from './blacklist'
 
@@ -11,7 +10,7 @@ let saveFiles: File[] = []
 let saveDirs: Directory[] = []
 
 // returns a full list of files in a dir and its subdirs
-export const fetchFiles = async (
+export const fetchFiles = (
 	directory: string,
 	blacklist: string[] = [],
 	init?: boolean,
@@ -31,15 +30,12 @@ export const fetchFiles = async (
 			if (containsBlacklist(filePath, blacklist)) continue
 
 			if (fs.statSync(filePath).isFile()) {
-				const lineReader = readline.createInterface({
-					input: fs.createReadStream(filePath),
-				})
-
-				lineReader.close()
+				const fileContents = fs.readFileSync(filePath, 'utf8')
+				const lines = fileContents.split('\n').length
 
 				saveFiles.push({
 					name: filePath,
-					lines: fs.readFileSync(filePath, 'utf8').split('\n').length,
+					lines: lines,
 				})
 			} else {
 				dirs.push(filePath)
@@ -48,7 +44,7 @@ export const fetchFiles = async (
 		}
 
 		if (dirs.length !== 0) {
-			await fetchFiles(dirs.pop() || '', blacklist)
+			fetchFiles(dirs.pop() || '', blacklist)
 		}
 
 		saveDirs.push({ name: directory })
@@ -61,7 +57,7 @@ export const fetchFiles = async (
 
 		return { files: saveFiles, dirs: saveDirs }
 	} catch (ex) {
-		console.log(ex)
+		console.log('Error fetching: ', ex)
 		return { files: [], dirs: [] }
 	}
 }
