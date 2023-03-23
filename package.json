@@ -25,20 +25,25 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "base-view",
+          "id": "codegraphy-view",
           "title": "Code Graphy V2",
           "icon": "src/assets/img/default.png"
         }
       ]
     },
     "views": {
-      "base-view": [
+      "codegraphy-view": [
         {
-          "type": "webview",
-          "id": "base-view-sidebar",
-          "name": "Code Graphy V2",
-          "icon": "src/assets/img/default.png",
-          "contextualTitle": "Code Graphy V2"
+          "id": "codegraphy-view-graph",
+          "name": "Graph",
+          "contextualTitle": "CodeGraphy V2 Graph",
+          "type": "webview"
+        },
+        {
+          "id": "codegraphy-view-languages",
+          "name": "Languages",
+          "contextualTitle": "Languages",
+          "type": "webview"
         }
       ]
     },

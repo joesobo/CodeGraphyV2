@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 
-import App from './App.vue'
+import GraphApp from './Graph/App.vue'
+import LanguageApp from './Languages/App.vue'
 import { messages } from '../locales'
 
 const i18n = createI18n({
@@ -10,5 +11,9 @@ const i18n = createI18n({
   messages,
 })
 
-const app = createApp(App)
-app.use(i18n).mount('#app')
+const graphApp = createApp(GraphApp)
+graphApp.use(i18n).mount('#graph-app')
+
+const languageApp = createApp(LanguageApp)
+languageApp.use(i18n).mount('#language-app')
+

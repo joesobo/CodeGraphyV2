@@ -50,7 +50,7 @@
               :value="linkForce"
               label="Link Force"
               :min="-100"
-              @input="(event) => (linkForce = event.target.value)"
+              @input="(event: SliderInputEvent) => (linkForce = event.target.value)"
             />
             <SliderRow
               id="linkDistance"
@@ -58,14 +58,14 @@
               label="Link Distance"
               :max="1000"
               :step="10"
-              @input="(event) => (linkDistance = event.target.value)"
+              @input="(event: SliderInputEvent) => (linkDistance = event.target.value)"
             />
             <SliderRow
               id="chargeForce"
               :value="chargeForce"
               label="Charge Force"
               :min="-100"
-              @input="(event) => (chargeForce = event.target.value)"
+              @input="(event: SliderInputEvent) => (chargeForce = event.target.value)"
             />
             <SliderRow
               id="centerForce"
@@ -73,7 +73,7 @@
               label="Center Force"
               :max="1"
               :step="0.01"
-              @input="(event) => (centerForce = event.target.value)"
+              @input="(event: SliderInputEvent) => (centerForce = event.target.value)"
             />
           </div>
         </Disclosure>
@@ -100,63 +100,15 @@
       :min="0"
       :max="maxNodeDepth"
       @input="
-        (event) => {
+        (event: SliderInputEvent) => {
           nodeDepth = event.target.value
           updateNodeSettings()
         }
       "
     />
 
-    <!-- Tab Switch -->
-    <div class="mt-4 flex">
-      <SwitchButton
-        :options="['Languages', 'Settings']"
-        :selected="activeTab"
-        @update="(value) => (activeTab = value)"
-      />
-    </div>
-
-    <!-- Language Tab Content -->
-    <table v-show="activeTab === 'Languages'" class="mt-4 w-full table-auto">
-      <thead class="bg-zinc-700">
-        <tr class="py-1 pl-2">
-          <th v-for="header in tableHeaders" :key="header" class="text-start">
-            {{ header }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="extension in extensionList"
-          :key="extension.extension"
-          class="border border-zinc-700 bg-zinc-800"
-        >
-          <td class="pl-2">
-            {{ extension.language }}
-          </td>
-          <td>.{{ extension.extension }}</td>
-          <td>{{ extension.count }}</td>
-          <td>{{ extension.lines }}</td>
-          <td>
-            <PickColors
-              v-model:value="extension.color"
-              class="cursor-pointer"
-              @change="updateD3Graph(nodes, extensionList)"
-            />
-          </td>
-          <td>
-            <button class="h-4 w-4 bg-transparent hover:bg-transparent">
-              <CloseIcon
-                class="h-4 w-4 rounded-full text-red-500 hover:bg-white"
-              />
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
     <!-- Settings Tab Content -->
-    <div v-show="activeTab === 'Settings'" class="mt-4 flex flex-col">
+    <div class="mt-4 flex flex-col">
       <!-- Node Connection Switch -->
       <div class="mt-4 flex items-center">
         <label class="w-1/3 text-sm font-medium text-gray-300">
@@ -167,7 +119,7 @@
             :options="['Interaction', 'Directory']"
             :selected="connectionType"
             @update="
-              (value) => {
+              (value: string) => {
                 connectionType = value
                 updateNodeSettings()
               }
@@ -183,7 +135,7 @@
             :options="['Connections', 'Lines']"
             :selected="nodeSize"
             @update="
-              (value) => {
+              (value: string) => {
                 nodeSize = value
                 updateNodeSettings()
               }
@@ -201,7 +153,7 @@
             :options="['D3', 'Random']"
             :selected="nodeColor"
             @update="
-              (value) => {
+              (value: string) => {
                 nodeColor = value
                 updateGraph()
               }
@@ -217,7 +169,7 @@
         :initialActive="selectedD3Color"
         class="mt-4"
         @update="
-          (value) => {
+          (value: string) => {
             selectedD3Color = value
             updateGraph()
           }
@@ -229,22 +181,20 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import PickColors from 'vue-pick-colors'
 
-import type { Connection, Extension, Node } from '../utils/types'
+import type { Connection, Extension, Node, SliderInputEvent } from '../../utils/types'
 import type { Ref } from 'vue'
 
-import Disclosure from './components/Disclosure.vue'
-import Dropdown from './components/Dropdown.vue'
-import SliderRow from './components/SliderRow.vue'
-import SwitchButton from './components/SwitchButton.vue'
-import ToggleSwitch from './components/ToggleSwitch.vue'
-import { drawD3Graph, updateD3Graph } from '../utils/d3'
-import { colorSchemes } from '../utils/d3ColorSchemes'
-import { findMaxDepth } from '../utils/depth'
-import { getGraphData } from '../utils/graphMessanger'
-import { parseExtensions } from '../utils/parseExtensions'
-import { tableHeaders } from '../utils/tableHeaders'
+import Disclosure from '../../components/Disclosure.vue'
+import Dropdown from '../../components/Dropdown.vue'
+import SliderRow from '../../components/SliderRow.vue'
+import SwitchButton from '../../components/SwitchButton.vue'
+import ToggleSwitch from '../../components/ToggleSwitch.vue'
+import { drawD3Graph, updateD3Graph } from '../../utils/d3'
+import { colorSchemes } from '../../utils/d3ColorSchemes'
+import { findMaxDepth } from '../../utils/depth'
+import { getGraphData } from '../../utils/graphMessanger'
+import { parseExtensions } from '../../utils/parseExtensions'
 
 import SettingsIcon from '~icons/ant-design/setting-filled'
 import CloseIcon from '~icons/mdi/close-circle'
@@ -258,7 +208,6 @@ let currentOpenFile: Ref<string> = ref('')
 let displaySettings: Ref<boolean> = ref(false)
 
 // Display Settings
-let activeTab: Ref<string> = ref('Settings')
 let connectionType: Ref<string> = ref('Interaction')
 let nodeSize: Ref<string> = ref('Connections')
 let nodeColor: Ref<string> = ref('D3')
