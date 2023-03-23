@@ -11,7 +11,12 @@
         <button
           class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
           @click="
-            drawD3Graph(nodes, connections, extensionList, currentOpenFile)
+            drawD3Graph({
+              nodes,
+              connections,
+              extensions: extensionList,
+              currentOpenFile,
+            })
           "
         >
           <RestartIcon width="1.25rem" height="1.25rem" />
@@ -258,12 +263,12 @@ window.addEventListener('message', (event) => {
 			useRandomColor: false,
 			d3Color: selectedD3Color.value,
 		})
-		drawD3Graph(
-			nodes.value,
-			connections.value,
-			extensionList.value,
-			currentOpenFile.value,
-		)
+		drawD3Graph({
+			nodes: nodes.value,
+			connections: connections.value,
+			extensions: extensionList.value,
+			currentOpenFile: currentOpenFile.value,
+		})
 		return
 	case 'setCurrentFile':
 		currentOpenFile.value = message.text

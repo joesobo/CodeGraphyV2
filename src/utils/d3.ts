@@ -6,27 +6,63 @@ import type {
 	CustomSubject,
 	Extension,
 	Node,
+	NodeSelection,
 	NodeSimulation,
 	SVGElement,
+	SVGSelection,
 } from './types'
 
 import { getRandomInt } from './basic'
 
-export const drawD3Graph = (
-	nodes: Node[] | undefined,
-	connections: Connection[] | undefined,
-	extensions: Extension[],
-	currentOpenFile?: string,
-) => {
+export const drawD3Graph = ({
+	nodes,
+	connections,
+	extensions,
+	currentOpenFile,
+}: {
+  nodes?: Node[]
+  connections?: Connection[]
+  extensions: Extension[]
+  currentOpenFile: string
+}) => {
 	if (!nodes || !connections) return
 
-	// Select svg
-	const svg: SVGElement = d3.select<SVGSVGElement, unknown>('svg')
+	const svg = setupSVG('svg')
+	const width = Number.parseInt(svg.attr('width'))
+	const height = Number.parseInt(svg.attr('height'))
+
+	const g = resetGraph(svg, nodes)
+
+	const forceSimulation = initForceSimulation(width, height)
+	addEventListeners(forceSimulation, width, height)
+
+	const gCircles = drawNodes(
+		forceSimulation,
+		g,
+		extensions,
+		nodes,
+		currentOpenFile,
+	)
+	drawLinks(forceSimulation, g, connections, nodes, gCircles)
+	gCircles.raise()
+
+	enableZoom(svg, g, width, height)
+
+	return forceSimulation
+}
+
+const setupSVG = (selector: string): SVGElement => {
+	const svg: SVGElement = d3.select<SVGSVGElement, unknown>(selector)
+
+	return svg
+}
+
+const resetGraph = (svg: SVGElement, nodes: Node[]): SVGSelection => {
+	document.querySelector('g')?.remove()
+
 	const width: number = Number.parseInt(svg.attr('width'))
 	const height: number = Number.parseInt(svg.attr('height'))
 
-	// Reset graph, node placement, and scale
-	document.querySelector('g')?.remove()
 	nodes.forEach((node) => {
 		node.x = getRandomInt(width)
 		node.y = getRandomInt(height)
@@ -34,21 +70,11 @@ export const drawD3Graph = (
 		node.vy = 0
 	})
 
-	// Setup
-	const g = svg.append<SVGGElement>('g')
+	return svg.append<SVGGElement>('g')
+}
 
-	// Draw links
-	const links = g
-		.append('g')
-		.selectAll('line')
-		.data(connections)
-		.enter()
-		.append('line')
-		.attr('stroke', '#666')
-		.attr('stroke-width', 1)
-
-	// Force simulation
-	const forceSimulation: NodeSimulation = d3
+const initForceSimulation = (width: number, height: number): NodeSimulation => {
+	return d3
 		.forceSimulation<Node, d3.SimulationLinkDatum<Node>>()
 		.force(
 			'link',
@@ -68,8 +94,13 @@ export const drawD3Graph = (
 				return d.radius
 			}),
 		)
+}
 
-	// Force Setting Listeners
+const addEventListeners = (
+	forceSimulation: NodeSimulation,
+	width: number,
+	height: number,
+): void => {
 	addForceChangeListener(forceSimulation, 'linkForce', d3.forceLink().strength)
 	addForceChangeListener(
 		forceSimulation,
@@ -85,55 +116,15 @@ export const drawD3Graph = (
 	addForceChangeListener(forceSimulation, 'centerForce', (value) =>
 		d3.forceCenter(width / 2, height / 2).strength(value),
 	)
+}
 
-	// Zoom
-	const zoom = d3
-		.zoom<SVGSVGElement, unknown>()
-		.scaleExtent([0.1, 10])
-		.translateExtent([
-			[-width * 15, -height * 15],
-			[width * 15, height * 15],
-		])
-		.on('zoom', (event) => {
-			g.attr('transform', event.transform)
-		})
-
-	svg.call(zoom).call(zoom.transform, d3.zoomIdentity)
-
-	// ticked
-	const ticked = () => {
-		links
-			.attr('x1', (d: any) => {
-				return d.source.x
-			})
-			.attr('y1', (d: any) => {
-				return d.source.y
-			})
-			.attr('x2', (d: any) => {
-				return d.target.x
-			})
-			.attr('y2', (d: any) => {
-				return d.target.y
-			})
-		gs.attr('transform', (d: Node) => {
-			return `translate(${d.x}, ${d.y})`
-		})
-	}
-
-	// Generate node data
-	forceSimulation.nodes(nodes).on('tick', ticked)
-
-	// Generate line data
-	forceSimulation
-		.force('link')
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- d3 forceLink is not typed
-	// @ts-ignore
-		?.links(connections)
-		.id((d: Connection) => {
-			return d.id
-		})
-
-	// Create group
+const drawNodes = (
+	forceSimulation: NodeSimulation,
+	g: SVGSelection,
+	extensions: Extension[],
+	nodes: Node[],
+	currentOpenFile: string,
+): NodeSelection => {
 	const gs = g
 		.selectAll('.circleText')
 		.data(nodes)
@@ -177,7 +168,80 @@ export const drawD3Graph = (
 		.text((d: Node) => {
 			return d.name
 		})
-	return forceSimulation
+
+	return gs
+}
+
+const drawLinks = (
+	forceSimulation: NodeSimulation,
+	g: SVGSelection,
+	connections: Connection[],
+	nodes: Node[],
+	gCircles: NodeSelection,
+) => {
+	const links = g
+		.append('g')
+		.selectAll('line')
+		.data(connections)
+		.enter()
+		.append('line')
+		.attr('stroke', '#666')
+		.attr('stroke-width', 1)
+
+	const isNode = (node: Node | string | number): node is Node => {
+		return typeof node !== 'string' && typeof node !== 'number'
+	}
+
+	const ticked = () => {
+		links
+			.attr('x1', (d: d3.SimulationLinkDatum<Node>) => {
+				return isNode(d.source) && d.source.x ? d.source.x : 0
+			})
+			.attr('y1', (d: d3.SimulationLinkDatum<Node>) => {
+				return isNode(d.source) && d.source.y ? d.source.y : 0
+			})
+			.attr('x2', (d: d3.SimulationLinkDatum<Node>) => {
+				return isNode(d.target) && d.target.x ? d.target.x : 0
+			})
+			.attr('y2', (d: d3.SimulationLinkDatum<Node>) => {
+				return isNode(d.target) && d.target.y ? d.target.y : 0
+			})
+		gCircles.attr('transform', (d: Node) => {
+			return `translate(${d.x}, ${d.y})`
+		})
+	}
+
+	// Generate node data
+	forceSimulation.nodes(nodes).on('tick', ticked)
+
+	// Generate line data
+	const linkForce = forceSimulation.force('link') as d3.ForceLink<
+    Node,
+    d3.SimulationLinkDatum<Node>
+  >
+	linkForce.links(connections).id((d: Node) => {
+		return d.id
+	})
+}
+
+const enableZoom = (
+	svg: SVGElement,
+	g: SVGSelection,
+	width: number,
+	height: number,
+) => {
+	const zoom = d3
+		.zoom<SVGSVGElement, unknown>()
+		.scaleExtent([0.1, 10])
+		.translateExtent([
+			[-width * 15, -height * 15],
+			[width * 15, height * 15],
+		])
+		.on('zoom', (event) => {
+			g.attr('transform', event.transform)
+		})
+
+	svg.call(zoom).call(zoom.transform, d3.zoomIdentity)
 }
 
 export const updateD3Graph = (

@@ -60,6 +60,20 @@ export type SVGElement = d3.Selection<
 
 export type NodeSimulation = d3.Simulation<Node, d3.SimulationLinkDatum<Node>>
 
+export type SVGSelection = d3.Selection<
+  SVGGElement,
+  unknown,
+  HTMLElement,
+  undefined
+>
+
+export type NodeSelection = d3.Selection<
+  SVGGElement,
+  Node,
+  SVGGElement,
+  unknown
+>
+
 export type SliderInputEvent = {
   target: {
     value: number
