@@ -48,7 +48,10 @@
         ],
         "alphabetize": { "order": "asc" }
       }
-    ]
+    ],
+    "indent": ["error", "tab"],
+    "semi": ["error", "never"],
+    "quotes": ["error", "single"]
   },
   "parser": "vue-eslint-parser",
   "parserOptions": {

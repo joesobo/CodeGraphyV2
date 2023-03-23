@@ -16,7 +16,7 @@
     "watch": "concurrently \"tsc -w -p ./tsconfig.extension.json --skipLibCheck\" \"vite build --watch\" \"tailwindcss -i ./src/assets/css/main.css -o ./dist/output.css --watch\"",
     "lint": "eslint \"src/**/*.{ts,vue}\"",
     "prettier": "prettier --write .",
-    "format": "pnpm run lint --fix && pnpm run prettier",
+    "format": "pnpm run prettier && pnpm run lint --fix",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
     "test": "vitest",
     "test:ui": "vitest --ui"

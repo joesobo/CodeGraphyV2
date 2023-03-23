@@ -69,27 +69,27 @@ let nodeDepth: Ref<number> = ref(0)
 let maxNodeDepth: Ref<number> = ref(0)
 
 getGraphData({
-  nodeSize: nodeSize.value,
-  interactionConnections: connectionType.value,
-  nodeDepth: nodeDepth.value,
+	nodeSize: nodeSize.value,
+	interactionConnections: connectionType.value,
+	nodeDepth: nodeDepth.value,
 })
 
 window.addEventListener('message', (event) => {
-  const message = event.data // The JSON data our extension sent
-  switch (message.command) {
-    case 'setGraphData':
-      nodes.value = message.text.nodes
-      connections.value = message.text.connections
+	const message = event.data // The JSON data our extension sent
+	switch (message.command) {
+	case 'setGraphData':
+		nodes.value = message.text.nodes
+		connections.value = message.text.connections
 
-      if (maxNodeDepth.value === 0) {
-        maxNodeDepth.value = findMaxDepth(connections.value)
-      }
+		if (maxNodeDepth.value === 0) {
+			maxNodeDepth.value = findMaxDepth(connections.value)
+		}
 
-      extensionList.value = parseExtensions(nodes.value, {
-        useRandomColor: false,
-        d3Color: selectedD3Color.value,
-      })
-      return
-  }
+		extensionList.value = parseExtensions(nodes.value, {
+			useRandomColor: false,
+			d3Color: selectedD3Color.value,
+		})
+		return
+	}
 })
 </script>

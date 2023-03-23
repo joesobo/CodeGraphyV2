@@ -26,8 +26,8 @@ const props = defineProps<{
 let currentOption = ref(props.selected ?? props.options[0])
 
 const handleClick = (event: MouseEvent) => {
-  const target = event.target as HTMLButtonElement
-  currentOption.value = target.innerText
-  emit('update', currentOption.value)
+	const target = event.target as HTMLButtonElement
+	currentOption.value = target.innerText
+	emit('update', currentOption.value)
 }
 </script>

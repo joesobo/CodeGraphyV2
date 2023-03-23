@@ -1,3 +1,2 @@
-export { GraphViewProvider } from './GraphViewProvider';
-export { LanguageViewProvider } from './LanguageViewProvider';
-
+export { GraphViewProvider } from './GraphViewProvider'
+export { LanguageViewProvider } from './LanguageViewProvider'

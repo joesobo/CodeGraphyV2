@@ -3,10 +3,10 @@ export const getGraphData = (graphData: {
   interactionConnections: string
   nodeDepth: number
 }) => {
-  vscode.postMessage({
-    command: 'getGraphData',
-    nodeSize: graphData.nodeSize,
-    interactionConnections: graphData.interactionConnections,
-    nodeDepth: graphData.nodeDepth,
-  })
+	vscode.postMessage({
+		command: 'getGraphData',
+		nodeSize: graphData.nodeSize,
+		interactionConnections: graphData.interactionConnections,
+		nodeDepth: graphData.nodeDepth,
+	})
 }

@@ -12,15 +12,15 @@
 import { ref } from 'vue'
 
 const props = withDefaults(
-  defineProps<{
+	defineProps<{
     id?: string
     value?: boolean
     label: string
   }>(),
-  {
-    id: undefined,
-    value: false,
-  },
+	{
+		id: undefined,
+		value: false,
+	},
 )
 
 const value = ref(props.value)

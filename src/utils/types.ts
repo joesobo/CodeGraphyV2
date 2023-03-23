@@ -61,7 +61,7 @@ export type SVGElement = d3.Selection<
 export type NodeSimulation = d3.Simulation<Node, d3.SimulationLinkDatum<Node>>
 
 export type SliderInputEvent = {
-	target: {
-		value: number
-	}
+  target: {
+    value: number
+  }
 }

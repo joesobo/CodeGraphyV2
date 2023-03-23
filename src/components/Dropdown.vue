@@ -56,7 +56,7 @@ const emit = defineEmits<(e: 'update', value: string) => void>()
 let active = ref(props.initialActive || '')
 
 const setActive = (value: string) => {
-  active.value = value
-  emit('update', value)
+	active.value = value
+	emit('update', value)
 }
 </script>

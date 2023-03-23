@@ -22,21 +22,21 @@ import ChevronDown from '~icons/mdi/chevron-down'
 import ChevronRight from '~icons/mdi/chevron-right'
 
 const props = withDefaults(
-  defineProps<{
+	defineProps<{
     title: string
     open?: boolean
     disabled?: boolean
   }>(),
-  {
-    open: false,
-    disabled: false,
-  },
+	{
+		open: false,
+		disabled: false,
+	},
 )
 
 let state = ref(props.open)
 
 const toggleState = () => {
-  state.value = !state.value
+	state.value = !state.value
 }
 </script>
 
