@@ -51,7 +51,6 @@ export const parseExtensions = (
 			}
 
 			extensions.push({
-				language: 'Test',
 				extension,
 				color,
 				count: 1,

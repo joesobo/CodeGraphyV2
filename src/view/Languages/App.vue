@@ -1,9 +1,9 @@
 <template>
-  <div class="flex max-w-[500px] flex-col">
-    <table class="mt-4 w-full table-auto">
+  <div class="inline-block">
+    <table class="mt-4">
       <thead class="bg-zinc-700">
-        <tr class="py-1 pl-2">
-          <th v-for="header in tableHeaders" :key="header" class="text-start">
+        <tr class="py-1">
+          <th v-for="header in tableHeaders" :key="header" class="pl-4 text-start first:pl-2 last:pr-2">
             {{ header }}
           </th>
         </tr>
@@ -14,20 +14,17 @@
           :key="extension.extension"
           class="border border-zinc-700 bg-zinc-800"
         >
-          <td class="pl-2">
-            {{ extension.language }}
-          </td>
-          <td>.{{ extension.extension }}</td>
-          <td>{{ extension.count }}</td>
-          <td>{{ extension.lines }}</td>
-          <td>
+          <td class="pl-2">.{{ extension.extension }}</td>
+          <td class="pl-4">{{ extension.count }}</td>
+          <td class="pl-4">{{ extension.lines }}</td>
+          <td class="pl-4">
             <PickColors
               v-model:value="extension.color"
               class="cursor-pointer"
               @change="updateD3Graph(nodes, extensionList)"
             />
           </td>
-          <td>
+          <td class="pl-4">
             <button class="h-4 w-4 bg-transparent hover:bg-transparent">
               <CloseIcon
                 class="h-4 w-4 rounded-full text-red-500 hover:bg-white"

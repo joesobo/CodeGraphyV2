@@ -25,7 +25,6 @@ export interface CustomSubject {
 }
 
 export interface Extension {
-  language: string
   extension: string
   color: string
   count: number
