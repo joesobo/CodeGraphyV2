@@ -1,15 +1,14 @@
 import * as vscode from 'vscode'
 
-import { fetchDirectoryConnections } from './fetchDirectoryConnections'
+import { fetchConnections } from './fetchConnections'
 import { fetchFiles } from './fetchFiles'
-import { fetchInteractionConnections } from './fetchInteractionConnections'
 import { processData } from './processData'
 
 const codeGraphyConfiguration = vscode.workspace.getConfiguration().codegraphy
 const blacklist = codeGraphyConfiguration.blacklist
 
 let saveNodeSize: string
-let saveInteractionConnections: string
+let saveInteractionConnections: 'Interaction' | 'Directory'
 let saveNodeDepth: number
 
 export const handleMessages = (webview: vscode.Webview) => {
@@ -19,9 +18,6 @@ export const handleMessages = (webview: vscode.Webview) => {
 }
 
 const receiveMessages = async (webview: vscode.Webview) => {
-	// currentPath = currentPath.startsWith('/') ? currentPath.substring(1) : currentPath
-	// currentPath = replaceAll(currentPath, '/', '\\')
-
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
 		case 'openFile':
@@ -49,7 +45,7 @@ const getGraphData = async (
 	webview: vscode.Webview,
 	message: {
     nodeSize: string
-    interactionConnections: string
+    interactionConnections: 'Interaction' | 'Directory'
     nodeDepth: number
   },
 ) => {
@@ -64,30 +60,19 @@ const getGraphData = async (
 	saveInteractionConnections = message.interactionConnections
 	saveNodeDepth = message.nodeDepth
 
-	let processedData
-	let connections
-
-	if (message.interactionConnections === 'Interaction') {
-		connections = await fetchInteractionConnections(files, currentPath)
-		processedData = processData(
-			files,
-			message.nodeSize,
-			connections,
-			currentOpenFile,
-			message.nodeDepth,
-		)
-	} else {
-		connections = fetchDirectoryConnections(files, dirs)
-		processedData = processData(
-			files,
-			message.nodeSize,
-			connections,
-			currentOpenFile,
-			message.nodeDepth,
-			dirs,
-		)
-	}
-
+	let connections = await fetchConnections({
+		files,
+		dirs,
+		path: currentPath,
+		mode: message.interactionConnections,
+	})
+	const processedData = processData(
+		files,
+		message.nodeSize,
+		connections,
+		currentOpenFile,
+		message.nodeDepth,
+	)
 	const nodes = processedData.nodes
 	connections = processedData.connections
 

@@ -1,23 +1,43 @@
-import type { Connection, File } from './types'
+import type { Connection, Directory, File } from './types'
 
 import fs from 'fs'
 import readline from 'readline'
 
 let globalFiles: File[] = []
+let globalDirs: Directory[] = []
 let globalPath = ''
 
-// Finds all connections for each file
-export const fetchInteractionConnections = async (
-	files: File[],
-	path: string,
-) => {
+export const fetchConnections = async ({
+	files,
+	dirs,
+	path,
+	mode,
+}: {
+  files: File[]
+  path: string
+  dirs: Directory[]
+  mode: 'Interaction' | 'Directory'
+}): Promise<Connection[]> => {
 	let connections: Connection[] = []
 	globalFiles = files
+	globalDirs = dirs
 	globalPath = path
 
-	// find connections for each file
-	for (let index = 0; index < files.length; index++) {
-		// finds the connections for the current file
+	if (mode === 'Interaction') {
+		connections = await fetchInteractionConnections()
+	} else if (mode === 'Directory') {
+		connections = fetchDirectoryConnections()
+	}
+
+	return connections
+}
+
+// Finds all connections for each file based on their contents
+const fetchInteractionConnections = async () => {
+	let connections: Connection[] = []
+
+	// Find connections for each file
+	for (let index = 0; index < globalFiles.length; index++) {
 		const fileConnections = await findFileConnections(index)
 
 		if (fileConnections) {
@@ -28,7 +48,43 @@ export const fetchInteractionConnections = async (
 	return connections
 }
 
-// finds the connections for a single file
+const fetchDirectoryConnections = () => {
+	const connections: Connection[] = []
+
+	// Find connections between files and directories
+	globalFiles.forEach((file, fileIndex) => {
+		const filePathArray = file.name.split('/')
+		filePathArray.pop()
+		const fileDirectory = filePathArray.join('/')
+
+		globalDirs.forEach((dir, dirIndex) => {
+			if (fileDirectory === dir.name) {
+				connections.push({
+					id: `${dirIndex}-${fileIndex + globalDirs.length}`,
+					source: dirIndex,
+					target: fileIndex + globalDirs.length,
+				})
+			}
+		})
+	})
+
+	// Find connections between directories
+	globalDirs.forEach((dir, dirIndex) => {
+		globalDirs.forEach((testDir, testDirIndex) => {
+			if (dir.name.includes(testDir.name) && dir.name !== testDir.name) {
+				connections.push({
+					id: `${dirIndex}-${testDirIndex}`,
+					source: dirIndex,
+					target: testDirIndex,
+				})
+			}
+		})
+	})
+
+	return connections
+}
+
+// Finds the connections for a single file based on its contents
 const findFileConnections = async (startIndex: number) => {
 	const file = globalFiles[startIndex].name
 	const lineReader = readline.createInterface({
@@ -37,15 +93,16 @@ const findFileConnections = async (startIndex: number) => {
 
 	const currentFileConnections: Connection[] = []
 
+	// Read each line of the file
 	for await (let line of lineReader) {
 		if (findConnection(line.trim()) === -1) continue
 
-		// cleans up connection line
+		// Clean up connection line
 		line = line.trim().replace('(', ' ').replace(')', '').replace(';', '')
 
-		// find the path of the file connected to
+		// Find the path of the file connected to
 		const importPath = findImportPath(line)
-		// find the index of that file in the files array
+		// Find the index of that file in the files array
 		const connectionIndex = findConnectionIndex(file, importPath)
 
 		if (connectionIndex !== -1) {
@@ -60,7 +117,7 @@ const findFileConnections = async (startIndex: number) => {
 	return currentFileConnections
 }
 
-// returns the index of the connection if found, -1 if not
+// Returns the index of the connection if found, -1 if not
 const findConnection = (line: string) => {
 	return line.search(
 		/^(import|export).*from\s+(['"]).*\2|.*require\s*\(\s*(['"]).*\3|.*CodeGraphy\s+connect:\s+(['"]).*\4/,

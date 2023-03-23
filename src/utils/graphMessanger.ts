@@ -1,6 +1,6 @@
 export const getGraphData = (graphData: {
   nodeSize: string
-  interactionConnections: string
+  interactionConnections: 'Interaction' | 'Directory'
   nodeDepth: number
 }) => {
 	vscode.postMessage({
