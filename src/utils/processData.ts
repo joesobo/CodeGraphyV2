@@ -1,18 +1,44 @@
-import type { Connection, Directory, File, Node } from './types'
+import type { Connection, File, Node } from './types'
 
 import { getRandomInt } from './basic'
+import { fetchConnections } from './fetchConnections'
+import { fetchFiles } from './fetchFiles'
 
 const MIN_RADIUS = 10
 const MAX_RADIUS = 25
 
-export const processData = (
-	files: File[],
-	nodeSize: string,
-	connections: Connection[],
-	openFile: string | null,
-	nodeDepth: number,
-	dirs?: Directory[],
-): { nodes: Node[]; connections: Connection[] } => {
+export const processData = async ({
+	openFile,
+	path,
+	nodeSize,
+	nodeDepth,
+	blacklist,
+	connectionMode,
+	displayPackages,
+}: {
+  openFile: string | null
+  path: string
+  nodeSize: 'Lines' | 'Connections'
+  nodeDepth: number
+  blacklist: string[]
+  connectionMode: 'Interaction' | 'Directory'
+  displayPackages: boolean
+}): Promise<{ nodes: Node[]; connections: Connection[] }> => {
+	// get files and directories
+	const fetchResult = fetchFiles(path, blacklist, true)
+	const dirs = fetchResult.dirs
+	let files = fetchResult.files
+
+	// get connections
+	const connectionResult = await fetchConnections({
+		files,
+		dirs,
+		mode: connectionMode,
+		displayPackages,
+	})
+	const connections = connectionResult.connections
+	files = connectionResult.files
+
 	const nodes: Node[] = []
 
 	// local graph
@@ -90,7 +116,7 @@ export const processData = (
 		let nodeIndex = 0
 
 		// push directory nodes
-		if (dirs) {
+		if (dirs && connectionMode === 'Directory') {
 			dirs.forEach((dir, dirIndex) => {
 				const dirPath = dir.name.replace(/\\/g, '/')
 				const dirName = dirPath.split('/').pop() || ''

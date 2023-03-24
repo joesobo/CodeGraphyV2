@@ -25,10 +25,9 @@ describe('fetchFiles', () => {
 	})
 
 	it('should return a list of files and directories without blacklisted files', () => {
-		const directory = '/project'
 		const blacklist = ['blacklisted.ts']
 
-		const result = fetchFiles(directory, blacklist, true)
+		const result = fetchFiles('/project', blacklist, true)
 
 		const expectedFiles: File[] = [
 			{ name: '/project/file1.ts', lines: 1 },
@@ -46,9 +45,7 @@ describe('fetchFiles', () => {
 	})
 
 	it('should return a list of files and directories including blacklisted files when no blacklist is provided', () => {
-		const directory = '/project'
-
-		const result = fetchFiles(directory, [], true)
+		const result = fetchFiles('/project', [], true)
 
 		const expectedFiles: File[] = [
 			{ name: '/project/blacklisted.ts', lines: 1 },

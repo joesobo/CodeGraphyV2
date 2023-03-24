@@ -1,13 +1,11 @@
 import * as vscode from 'vscode'
 
-import { fetchConnections } from './fetchConnections'
-import { fetchFiles } from './fetchFiles'
 import { processData } from './processData'
 
 const codeGraphyConfiguration = vscode.workspace.getConfiguration().codegraphy
 const blacklist = codeGraphyConfiguration.blacklist
 
-let saveNodeSize: string
+let saveNodeSize: 'Lines' | 'Connections'
 let saveInteractionConnections: 'Interaction' | 'Directory'
 let saveNodeDepth: number
 
@@ -44,37 +42,33 @@ const receiveMessages = async (webview: vscode.Webview) => {
 const getGraphData = async (
 	webview: vscode.Webview,
 	message: {
-    nodeSize: string
+    nodeSize: 'Lines' | 'Connections'
     interactionConnections: 'Interaction' | 'Directory'
     nodeDepth: number
   },
 ) => {
+	// setup
+	saveNodeSize = message.nodeSize
+	saveInteractionConnections = message.interactionConnections
+	saveNodeDepth = message.nodeDepth
+
+	// vscode data
 	const currentPath = vscode.workspace.workspaceFolders
 		? vscode.workspace.workspaceFolders[0].uri.path
 		: ''
 	const currentOpenFile =
     vscode.window.activeTextEditor?.document.fileName || null
-	const { files, dirs } = fetchFiles(currentPath, blacklist, true)
 
-	saveNodeSize = message.nodeSize
-	saveInteractionConnections = message.interactionConnections
-	saveNodeDepth = message.nodeDepth
-
-	let connections = await fetchConnections({
-		files,
-		dirs,
+	const processedData = await processData({
+		openFile: currentOpenFile,
 		path: currentPath,
-		mode: message.interactionConnections,
+		nodeSize: message.nodeSize,
+		nodeDepth: message.nodeDepth,
+		blacklist,
+		connectionMode: message.interactionConnections,
+		displayPackages: true,
 	})
-	const processedData = processData(
-		files,
-		message.nodeSize,
-		connections,
-		currentOpenFile,
-		message.nodeDepth,
-	)
-	const nodes = processedData.nodes
-	connections = processedData.connections
+	const { nodes, connections } = processedData
 
 	await webview.postMessage({
 		command: 'setGraphData',

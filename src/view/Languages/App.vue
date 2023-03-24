@@ -3,7 +3,11 @@
     <table class="mt-4">
       <thead class="bg-zinc-700">
         <tr class="py-1">
-          <th v-for="header in tableHeaders" :key="header" class="pl-4 text-start first:pl-2 last:pr-2">
+          <th
+            v-for="header in tableHeaders"
+            :key="header"
+            class="pl-4 text-start first:pl-2 last:pr-2"
+          >
             {{ header }}
           </th>
         </tr>

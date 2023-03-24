@@ -1,27 +1,28 @@
 import type { Connection, Directory, File } from './types'
 
 import fs from 'fs'
+import path from 'path'
 import readline from 'readline'
 
 let globalFiles: File[] = []
 let globalDirs: Directory[] = []
-let globalPath = ''
+let shouldDisplayPackages = false
 
 export const fetchConnections = async ({
 	files,
 	dirs,
-	path,
 	mode,
+	displayPackages,
 }: {
   files: File[]
-  path: string
   dirs: Directory[]
   mode: 'Interaction' | 'Directory'
-}): Promise<Connection[]> => {
+  displayPackages: boolean
+}) => {
 	let connections: Connection[] = []
 	globalFiles = files
 	globalDirs = dirs
-	globalPath = path
+	shouldDisplayPackages = displayPackages
 
 	if (mode === 'Interaction') {
 		connections = await fetchInteractionConnections()
@@ -29,7 +30,7 @@ export const fetchConnections = async ({
 		connections = fetchDirectoryConnections()
 	}
 
-	return connections
+	return { connections, files: globalFiles }
 }
 
 // Finds all connections for each file based on their contents
@@ -38,6 +39,8 @@ const fetchInteractionConnections = async () => {
 
 	// Find connections for each file
 	for (let index = 0; index < globalFiles.length; index++) {
+		if (globalFiles[index].lines === -1) continue
+
 		const fileConnections = await findFileConnections(index)
 
 		if (fileConnections) {
@@ -87,6 +90,7 @@ const fetchDirectoryConnections = () => {
 // Finds the connections for a single file based on its contents
 const findFileConnections = async (startIndex: number) => {
 	const file = globalFiles[startIndex].name
+
 	const lineReader = readline.createInterface({
 		input: fs.createReadStream(file),
 	})
@@ -143,11 +147,13 @@ const findConnectionIndex = (file: string, importPath: string) => {
 	importPath = importPath.replace(/["']/g, '')
 	if (importPath.startsWith('.')) {
 		path = handleRelativePath(importPath, file)
+		foundIndex = indexOfPath(path)
+	} else if (shouldDisplayPackages) {
+		path = handleDirectPath(importPath, file)
+		foundIndex = indexOfPath(path)
 	} else {
-		path = handleDirectPath(importPath)
+		foundIndex = -1
 	}
-
-	foundIndex = indexOfPath(path)
 
 	return foundIndex
 }
@@ -172,13 +178,54 @@ const handleRelativePath = (importPath: string, filePath: string) => {
 	return tempPath.join('/')
 }
 
-// if a direct path, add the global path to the beginning
-const handleDirectPath = (importPath: string) => {
-	return `${globalPath}\\${importPath}`
+// if a direct path, find the nearest node_modules and look for a package within
+const handleDirectPath = (importPath: string, file: string) => {
+	const dirPath = file.split('/').slice(0, -1).join('/')
+
+	return findNodeModules(importPath, dirPath)
+}
+
+// finds the nearest node_modules folder
+const findNodeModules = (importPath: string, dirPath: string) => {
+	let result = 'No node_modules found in path'
+	let found = false
+
+	while (dirPath !== '' && !found) {
+		const files = fs.readdirSync(dirPath)
+
+		files.forEach((file) => {
+			const filePath = path.join(dirPath, file)
+			const stats = fs.statSync(filePath)
+
+			if (stats.isDirectory() && file === 'node_modules') {
+				const packagePath = path.join(dirPath, 'node_modules')
+				const moduleFiles = fs.readdirSync(packagePath)
+
+				moduleFiles.forEach((module) => {
+					if (module !== importPath) return
+
+					const modulePath = path.join(packagePath, module)
+					const stats = fs.statSync(modulePath)
+
+					if (stats.isDirectory()) {
+						result = modulePath
+						found = true
+						return
+					}
+				})
+			}
+		})
+
+		dirPath = dirPath.split('/').slice(0, -1).join('/')
+	}
+
+	return result
 }
 
 // finds the index of the path in the global files array
 const indexOfPath = (testPath: string) => {
+	if (testPath === 'No node_modules found in path') return -1
+
 	const potentialIndices = []
 
 	for (let index = 0; index < globalFiles.length; index++) {
@@ -196,6 +243,11 @@ const indexOfPath = (testPath: string) => {
 			bestIndex = index
 		}
 	})
+
+	if (testPath.includes('node_modules') && bestIndex === -1) {
+		globalFiles.push({ name: testPath, lines: -1 })
+		return globalFiles.length - 1
+	}
 
 	return bestIndex
 }
