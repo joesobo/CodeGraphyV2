@@ -81,8 +81,6 @@ window.addEventListener('message', (event) => {
 		nodeDepth.value = message.text.nodeDepth
 		maxNodeDepth.value = message.text.maxNodeDepth
 
-		console.log('TEST', selectedD3Color.value)
-
 		getGraphData({
 			nodeSize: nodeSize.value,
 			interactionConnections: connectionType.value,

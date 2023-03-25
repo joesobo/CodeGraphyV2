@@ -61,13 +61,12 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				for (const key in message.text) {
 					returnSettings[key] = message.text[key]
 				}
-				console.log('TEST', message.text, returnSettings)
 			}
 
 			views.forEach(async (webview) => {
 				await webview.view.postMessage({
 					command: 'setSettings',
-					text: returnSettings
+					text: returnSettings,
 				})
 			})
 
