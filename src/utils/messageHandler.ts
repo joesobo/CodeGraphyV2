@@ -8,6 +8,7 @@ const blacklist = codeGraphyConfiguration.blacklist
 let saveNodeSize: 'Lines' | 'Connections'
 let saveInteractionConnections: 'Interaction' | 'Directory'
 let saveNodeDepth: number
+let saveShowNodeModules: boolean
 
 export const handleMessages = (webview: vscode.Webview) => {
 	receiveMessages(webview)
@@ -29,6 +30,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				nodeSize: saveNodeSize,
 				interactionConnections: saveInteractionConnections,
 				nodeDepth: saveNodeDepth,
+				showNodeModules: saveShowNodeModules,
 			})
 
 			return
@@ -45,12 +47,14 @@ const getGraphData = async (
     nodeSize: 'Lines' | 'Connections'
     interactionConnections: 'Interaction' | 'Directory'
     nodeDepth: number
+    showNodeModules: boolean
   },
 ) => {
 	// setup
 	saveNodeSize = message.nodeSize
 	saveInteractionConnections = message.interactionConnections
 	saveNodeDepth = message.nodeDepth
+	saveShowNodeModules = message.showNodeModules
 
 	// vscode data
 	const currentPath = vscode.workspace.workspaceFolders
@@ -66,7 +70,7 @@ const getGraphData = async (
 		nodeDepth: message.nodeDepth,
 		blacklist,
 		connectionMode: message.interactionConnections,
-		displayPackages: true,
+		displayPackages: message.showNodeModules,
 	})
 	const { nodes, connections } = processedData
 

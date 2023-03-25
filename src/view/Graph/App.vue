@@ -108,12 +108,35 @@
         <!-- Extra Settings -->
         <Disclosure title="Extra" class="border-t border-border p-2">
           <div class="mt-2 flex flex-col">
-            <ToggleSwitch label="Hide Orphans" />
-            <ToggleSwitch label="Hide Labels" />
-            <div>Line width:</div>
-            <div>Line color:</div>
+            <ToggleSwitch
+              label="Node Modules"
+              :value="showNodeModules"
+              @input="
+                (e) => {
+                  showNodeModules = e.target.checked
+                  updateNodeSettings()
+                }
+              "
+            />
+            <ToggleSwitch label="Orphans" :value="true" />
+            <ToggleSwitch label="Labels" :value="true" />
             <ToggleSwitch label="Outlines" />
-            <ToggleSwitch label="Collions" />
+            <ToggleSwitch label="Collisions" />
+            <div class="mb-4 flex items-center">
+              <PickColors v-model:value="lineColor" class="cursor-pointer" />
+              <p class="ml-3 text-sm font-medium text-gray-300">Line Color</p>
+            </div>
+            <div class="mb-4 flex items-center">
+              <SliderRow
+                id="lineColor"
+                label=""
+                class="mt-0"
+                :value="1"
+                :min="0"
+                :max="10"
+              />
+              <p class="ml-3 text-sm font-medium text-gray-300">Width</p>
+            </div>
           </div>
         </Disclosure>
       </div>
@@ -196,6 +219,7 @@
 <script setup lang="ts">
 import * as d3 from 'd3'
 import { ref } from 'vue'
+import PickColors from 'vue-pick-colors'
 
 import type {
 	Connection,
@@ -241,10 +265,15 @@ let chargeForce: Ref<number> = ref(-100)
 let linkForce: Ref<number> = ref(0)
 let linkDistance: Ref<number> = ref(100)
 
+// Extra Settings
+let showNodeModules: Ref<boolean> = ref(false)
+let lineColor: Ref<string> = ref('#ff0000')
+
 getGraphData({
 	nodeSize: nodeSize.value,
 	interactionConnections: connectionType.value,
 	nodeDepth: nodeDepth.value,
+	showNodeModules: showNodeModules.value,
 })
 
 window.addEventListener('message', (event) => {
@@ -254,6 +283,7 @@ window.addEventListener('message', (event) => {
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
 		currentOpenFile.value = message.text.currentOpenFile
+		showNodeModules.value = message.text.showNodeModules
 
 		if (maxNodeDepth.value === 0) {
 			maxNodeDepth.value = findMaxDepth(connections.value)
@@ -283,6 +313,7 @@ const updateNodeSettings = () => {
 		nodeSize: nodeSize.value,
 		interactionConnections: connectionType.value,
 		nodeDepth: nodeDepth.value,
+		showNodeModules: showNodeModules.value,
 	})
 }
 

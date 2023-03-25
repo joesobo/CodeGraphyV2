@@ -2,11 +2,13 @@ export const getGraphData = (graphData: {
   nodeSize: string
   interactionConnections: 'Interaction' | 'Directory'
   nodeDepth: number
+  showNodeModules: boolean
 }) => {
 	vscode.postMessage({
 		command: 'getGraphData',
 		nodeSize: graphData.nodeSize,
 		interactionConnections: graphData.interactionConnections,
 		nodeDepth: graphData.nodeDepth,
+		showNodeModules: graphData.showNodeModules,
 	})
 }

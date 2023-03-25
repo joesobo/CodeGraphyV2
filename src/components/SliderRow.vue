@@ -1,13 +1,13 @@
 <template>
   <div class="mt-2 flex flex-col justify-between">
     <label class="w-full text-sm font-light text-gray-300">
-      {{ props.label }}
+      {{ label }}
     </label>
 
     <div class="flex w-full items-center">
       <input
         :id="props.id"
-        v-model="value"
+        v-model="sliderValue"
         type="range"
         :min="props.min ?? 0"
         :max="props.max ?? 100"
@@ -33,5 +33,5 @@ const props = defineProps<{
   step?: number
 }>()
 
-const value = ref(props.value)
+const sliderValue = ref(props.value)
 </script>

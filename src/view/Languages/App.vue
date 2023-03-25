@@ -73,6 +73,7 @@ getGraphData({
 	nodeSize: nodeSize.value,
 	interactionConnections: connectionType.value,
 	nodeDepth: nodeDepth.value,
+	showNodeModules: true,
 })
 
 window.addEventListener('message', (event) => {
