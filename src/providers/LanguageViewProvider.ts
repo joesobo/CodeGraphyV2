@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-import { handleMessages } from '../utils/messageHandler'
+import { handleMessages, registerView } from '../utils/messageHandler'
 
 export class LanguageViewProvider implements vscode.WebviewViewProvider {
 	private _view?: vscode.WebviewView
@@ -34,6 +34,7 @@ export class LanguageViewProvider implements vscode.WebviewViewProvider {
 			vscode.Uri.joinPath(this._extensionUri, 'dist', 'output.css'),
 		)
 
+		registerView(webview, 'Languages View')
 		handleMessages(webview)
 
 		return `

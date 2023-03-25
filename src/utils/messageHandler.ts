@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 
+import { settings } from './graphSettings'
 import { processData } from './processData'
 
 const codeGraphyConfiguration = vscode.workspace.getConfiguration().codegraphy
@@ -9,6 +10,20 @@ let saveNodeSize: 'Lines' | 'Connections'
 let saveInteractionConnections: 'Interaction' | 'Directory'
 let saveNodeDepth: number
 let saveShowNodeModules: boolean
+
+type View = {
+  view: vscode.Webview
+  title: string
+}
+
+export const views: View[] = []
+
+export const registerView = (view: vscode.Webview, title: string) => {
+	views.push({
+		view,
+		title,
+	})
+}
 
 export const handleMessages = (webview: vscode.Webview) => {
 	receiveMessages(webview)
@@ -36,6 +51,27 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			return
 		case 'getGraphData': {
 			await getGraphData(webview, message)
+			return
+		}
+		case 'fetchSettings': {
+			const returnSettings: Record<string, unknown> = settings
+
+			if (message.text) {
+				// loop over every key in text object
+				for (const key in message.text) {
+					returnSettings[key] = message.text[key]
+				}
+				console.log('TEST', message.text, returnSettings)
+			}
+
+			views.forEach(async (webview) => {
+				await webview.view.postMessage({
+					command: 'setSettings',
+					text: returnSettings
+				})
+			})
+
+			return
 		}
 		}
 	})

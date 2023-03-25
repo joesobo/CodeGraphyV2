@@ -42,11 +42,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Ref, ref } from 'vue'
 import PickColors from 'vue-pick-colors'
 
 import type { Connection, Extension, Node } from '../../utils/types'
-import type { Ref } from 'vue'
 
 import { updateD3Graph } from '../../utils/d3'
 import { findMaxDepth } from '../../utils/depth'
@@ -69,16 +68,28 @@ let selectedD3Color: Ref<string> = ref('Sinebow')
 let nodeDepth: Ref<number> = ref(0)
 let maxNodeDepth: Ref<number> = ref(0)
 
-getGraphData({
-	nodeSize: nodeSize.value,
-	interactionConnections: connectionType.value,
-	nodeDepth: nodeDepth.value,
-	showNodeModules: true,
-})
+// Extra Settings
+let showNodeModules: Ref<boolean> = ref(false)
 
 window.addEventListener('message', (event) => {
 	const message = event.data // The JSON data our extension sent
 	switch (message.command) {
+	case 'setSettings':
+		connectionType.value = message.text.connectionType
+		nodeSize.value = message.text.nodeSize
+		selectedD3Color.value = message.text.selectedD3Color
+		nodeDepth.value = message.text.nodeDepth
+		maxNodeDepth.value = message.text.maxNodeDepth
+
+		console.log('TEST', selectedD3Color.value)
+
+		getGraphData({
+			nodeSize: nodeSize.value,
+			interactionConnections: connectionType.value,
+			nodeDepth: nodeDepth.value,
+			showNodeModules: showNodeModules.value,
+		})
+		return
 	case 'setGraphData':
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections

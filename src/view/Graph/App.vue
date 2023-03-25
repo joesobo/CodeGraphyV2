@@ -24,7 +24,7 @@
 
         <button
           class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-          @click="displaySettings = true"
+          @click="displaySettingsPopup = true"
         >
           <SettingsIcon width="1.25rem" height="1.25rem" />
         </button>
@@ -35,14 +35,14 @@
 
       <!-- Settings Popup -->
       <div
-        v-show="displaySettings"
+        v-show="displaySettingsPopup"
         class="pointer-events-auto absolute top-0 right-0 mr-2 mt-2 flex max-h-96 w-full max-w-[200px] flex-col overflow-y-scroll rounded-md bg-dropdown pt-2 shadow-lg scrollbar-hide"
       >
         <div class="flex items-center justify-between px-2 text-lg">
           <h1 class="m-0 p-0 font-bold text-white">Settings</h1>
           <button
             class="flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-            @click="displaySettings = false"
+            @click="displaySettingsPopup = false"
           >
             <CloseIcon width="1.25rem" height="1.25rem" />
           </button>
@@ -237,7 +237,7 @@ import ToggleSwitch from '../../components/ToggleSwitch.vue'
 import { drawD3Graph, updateD3Graph } from '../../utils/d3'
 import { colorSchemes, d3ColorSchemes } from '../../utils/d3ColorSchemes'
 import { findMaxDepth } from '../../utils/depth'
-import { getGraphData } from '../../utils/graphMessanger'
+import { fetchSettings, getGraphData } from '../../utils/graphMessanger'
 import { parseExtensions } from '../../utils/parseExtensions'
 
 import SettingsIcon from '~icons/ant-design/setting-filled'
@@ -249,36 +249,52 @@ let connections: Ref<Connection[] | undefined> = ref()
 let extensionList: Ref<Extension[]> = ref([])
 let currentOpenFile: Ref<string> = ref('')
 
-let displaySettings: Ref<boolean> = ref(false)
+let displaySettingsPopup: Ref<boolean> = ref(false)
 
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
-let nodeSize: Ref<string> = ref('Connections')
-let nodeColor: Ref<string> = ref('D3')
-let selectedD3Color: Ref<string> = ref('Sinebow')
+let nodeSize: Ref<string> = ref('')
+let nodeColor: Ref<string> = ref('')
+let selectedD3Color: Ref<string> = ref('')
 
 // D3 Settings
 let nodeDepth: Ref<number> = ref(0)
 let maxNodeDepth: Ref<number> = ref(0)
 let centerForce: Ref<number> = ref(0)
-let chargeForce: Ref<number> = ref(-100)
+let chargeForce: Ref<number> = ref(0)
 let linkForce: Ref<number> = ref(0)
-let linkDistance: Ref<number> = ref(100)
+let linkDistance: Ref<number> = ref(0)
 
 // Extra Settings
 let showNodeModules: Ref<boolean> = ref(false)
-let lineColor: Ref<string> = ref('#ff0000')
+let lineColor: Ref<string> = ref('#000000')
 
-getGraphData({
-	nodeSize: nodeSize.value,
-	interactionConnections: connectionType.value,
-	nodeDepth: nodeDepth.value,
-	showNodeModules: showNodeModules.value,
-})
+fetchSettings()
 
 window.addEventListener('message', (event) => {
 	const message = event.data // The JSON data our extension sent
 	switch (message.command) {
+	case 'setSettings':
+		connectionType.value = message.text.connectionType
+		nodeSize.value = message.text.nodeSize
+		nodeColor.value = message.text.nodeColor
+		selectedD3Color.value = message.text.selectedD3Color
+		nodeDepth.value = message.text.nodeDepth
+		maxNodeDepth.value = message.text.maxNodeDepth
+		centerForce.value = message.text.centerForce
+		chargeForce.value = message.text.chargeForce
+		linkForce.value = message.text.linkForce
+		linkDistance.value = message.text.linkDistance
+		showNodeModules.value = message.text.showNodeModules
+		lineColor.value = message.text.lineColor
+
+		getGraphData({
+			nodeSize: nodeSize.value,
+			interactionConnections: connectionType.value,
+			nodeDepth: nodeDepth.value,
+			showNodeModules: showNodeModules.value,
+		})
+		return
 	case 'setGraphData':
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
@@ -319,6 +335,8 @@ const updateNodeSettings = () => {
 
 // Update the graph without regenerating the nodes / connections
 const updateGraph = () => {
+	fetchSettings({ selectedD3Color: selectedD3Color.value })
+
 	extensionList.value = parseExtensions(nodes.value, {
 		useRandomColor: nodeColor.value === 'Random',
 		d3Color: selectedD3Color.value,

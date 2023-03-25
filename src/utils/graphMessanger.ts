@@ -1,3 +1,10 @@
+export const fetchSettings = (settings?: Record<string, unknown>) => {
+	vscode.postMessage({
+		command: 'fetchSettings',
+		text: settings,
+	})
+}
+
 export const getGraphData = (graphData: {
   nodeSize: string
   interactionConnections: 'Interaction' | 'Directory'
