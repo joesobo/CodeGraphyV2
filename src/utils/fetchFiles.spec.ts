@@ -36,8 +36,8 @@ describe('fetchFiles', () => {
 		]
 
 		const expectedDirs: Directory[] = [
-			{ name: '/project/subdir' },
-			{ name: '/project' },
+			{ name: '/project/subdir', lines: 0 },
+			{ name: '/project', lines: 0 },
 		]
 
 		expect(result.files).toEqual(expectedFiles)
@@ -55,8 +55,8 @@ describe('fetchFiles', () => {
 		]
 
 		const expectedDirs: Directory[] = [
-			{ name: '/project/subdir' },
-			{ name: '/project' },
+			{ name: '/project/subdir', lines: 0 },
+			{ name: '/project', lines: 0 },
 		]
 
 		expect(result.files).toEqual(expectedFiles)

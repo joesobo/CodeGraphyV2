@@ -11,7 +11,7 @@ describe('fetchConnections', () => {
 		{ name: '/project/subdir/file3.ts', lines: 2 },
 	]
 
-	const dirs: Directory[] = [{ name: '/project' }, { name: '/project/subdir' }]
+	const dirs: Directory[] = [{ name: '/project', lines: 0 }, { name: '/project/subdir', lines: 0 }]
 
 	beforeEach(() => {
 		// Mock file system
@@ -99,8 +99,8 @@ describe('fetchConnections with node_modules', () => {
 	]
 
 	const dirs: Directory[] = [
-		{ name: '/root/project' },
-		{ name: '/root/project/subdir' },
+		{ name: '/root/project', lines: 0 },
+		{ name: '/root/project/subdir', lines: 0 },
 	]
 
 	beforeEach(() => {
@@ -157,6 +157,30 @@ describe('fetchConnections with node_modules', () => {
 				source: 2,
 				target: 3,
 			},
+		]
+
+		expect(connectionResult).toEqual(expectedConnections)
+	})
+
+	it('should return directory connections with node_modules', async () => {
+		const result = await fetchConnections({
+			files,
+			dirs,
+			mode: 'Directory',
+			displayPackages: true,
+		})
+		const connectionResult = result.connections
+
+		// Replace the expected connections array with the expected output.
+		const expectedConnections: Connection[] = [
+			// /root/project -> file1.ts
+			{ id: '0-2', source: 0, target: 2 },
+			// /root/project -> file2.ts
+			{ id: '0-3', source: 0, target: 3 },
+			// /root/project/subdir -> file3.ts
+			{ id: '1-4', source: 1, target: 4 },
+			// /root/project/subdir -> /root/project
+			{ id: '1-0', source: 1, target: 0 }
 		]
 
 		expect(connectionResult).toEqual(expectedConnections)

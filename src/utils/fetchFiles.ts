@@ -39,7 +39,7 @@ export const fetchFiles = (
 				})
 			} else {
 				dirs.push(filePath)
-				saveDirs.push({ name: filePath })
+				saveDirs.push({ name: filePath, lines: 0 })
 			}
 		}
 
@@ -47,7 +47,7 @@ export const fetchFiles = (
 			fetchFiles(dirs.pop() || '', blacklist)
 		}
 
-		saveDirs.push({ name: directory })
+		saveDirs.push({ name: directory, lines: 0 })
 
 		if (init) {
 			saveDirs = saveDirs.filter((dir, index, self) => {

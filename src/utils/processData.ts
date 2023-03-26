@@ -1,4 +1,4 @@
-import type { Connection, File, Node } from './types'
+import type { Connection, Directory, File, Node } from './types'
 
 import { getRandomInt } from './basic'
 import { fetchConnections } from './fetchConnections'
@@ -39,6 +39,11 @@ export const processData = async ({
 	const connections = connectionResult.connections
 	files = connectionResult.files
 
+	let searchNodes: (File | Directory)[] = files
+	if (connectionMode === 'Directory') {
+		searchNodes = [...dirs, ...files]
+	}
+
 	const nodes: Node[] = []
 
 	// local graph
@@ -52,12 +57,12 @@ export const processData = async ({
 
 		while (queue.length > 0) {
 			const current = queue.shift()!
-			const currentFile = files.find((file) => file.name === current.file)
+			const currentFile = searchNodes.find((file) => file.name === current.file)
 
 			if (currentFile) {
 				const currentFilePath = currentFile.name.replace(/\\/g, '/')
 				const currentFileName = currentFilePath.split('/').pop() || ''
-				const fileIndex = files.findIndex(
+				const fileIndex = searchNodes.findIndex(
 					(file) => file.name === currentFile.name,
 				)
 
@@ -65,7 +70,7 @@ export const processData = async ({
 					id: fileIndex,
 					name: currentFileName,
 					fullPath: currentFile.name,
-					radius: getNodeSize(nodeSize, fileIndex, files, connections),
+					radius: getNodeSize(nodeSize, fileIndex, searchNodes, connections),
 					lines: currentFile.lines,
 				})
 				touchedIndices.push(fileIndex)
@@ -83,12 +88,13 @@ export const processData = async ({
 						}
 
 						// push to queue if not already touched && depth is less than nodeDepth
+						// Todo: if directory need to - dirs length?
 						if (
 							!touchedIndices.includes(nonSelectedIndex) &&
               current.depth < nodeDepth
 						) {
 							queue.push({
-								file: files[nonSelectedIndex].name,
+								file: searchNodes[nonSelectedIndex].name,
 								depth: current.depth + 1,
 							})
 

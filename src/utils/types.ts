@@ -48,6 +48,7 @@ export interface File {
 
 export interface Directory {
   name: string
+	lines: 0
 }
 
 export type SVGElement = d3.Selection<
