@@ -1,13 +1,10 @@
 import * as vscode from 'vscode'
 
 import { settings } from './graphSettings'
-import { processData } from './processData'
-
-const codeGraphyConfiguration = vscode.workspace.getConfiguration().codegraphy
-const blacklist = codeGraphyConfiguration.blacklist
+import { processGraphInfo } from './processGraphInfo'
 
 let saveNodeSize: 'Lines' | 'Connections'
-let saveInteractionConnections: 'Interaction' | 'Directory'
+let saveMode: 'Interaction' | 'Directory'
 let saveNodeDepth: number
 let saveShowNodeModules: boolean
 
@@ -42,8 +39,8 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				})
 
 			await getGraphData(webview, {
+				mode: saveMode,
 				nodeSize: saveNodeSize,
-				interactionConnections: saveInteractionConnections,
 				nodeDepth: saveNodeDepth,
 				showNodeModules: saveShowNodeModules,
 			})
@@ -79,42 +76,30 @@ const receiveMessages = async (webview: vscode.Webview) => {
 const getGraphData = async (
 	webview: vscode.Webview,
 	message: {
+    mode: 'Interaction' | 'Directory'
     nodeSize: 'Lines' | 'Connections'
-    interactionConnections: 'Interaction' | 'Directory'
     nodeDepth: number
     showNodeModules: boolean
   },
 ) => {
 	// setup
+	saveMode = message.mode
 	saveNodeSize = message.nodeSize
-	saveInteractionConnections = message.interactionConnections
 	saveNodeDepth = message.nodeDepth
 	saveShowNodeModules = message.showNodeModules
 
-	// vscode data
-	const currentPath = vscode.workspace.workspaceFolders
-		? vscode.workspace.workspaceFolders[0].uri.path
-		: ''
-	const currentOpenFile =
-    vscode.window.activeTextEditor?.document.fileName || null
-
-	const processedData = await processData({
-		openFile: currentOpenFile,
-		path: currentPath,
-		nodeSize: message.nodeSize,
-		nodeDepth: message.nodeDepth,
-		blacklist,
-		connectionMode: message.interactionConnections,
-		displayPackages: message.showNodeModules,
-	})
-	const { nodes, connections } = processedData
+	const { nodes, connections } = processGraphInfo(
+		message.mode,
+		message.nodeSize,
+	)
 
 	await webview.postMessage({
 		command: 'setGraphData',
 		text: {
 			connections: connections,
 			nodes: nodes,
-			currentOpenFile: currentOpenFile,
+			currentOpenFile:
+        vscode.window.activeTextEditor?.document.fileName || null,
 		},
 	})
 	return

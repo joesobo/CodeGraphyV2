@@ -1,6 +1,6 @@
 // Display Settings
 export const connectionType: 'Interaction' | 'Directory' = 'Interaction'
-export const nodeSize = 'Connections'
+export const nodeSize = 'Lines'
 export const nodeColor = 'D3'
 export const selectedD3Color = 'Spectral'
 

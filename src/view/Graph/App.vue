@@ -187,7 +187,7 @@
             :selected="nodeSize"
             @update="
               (value: string) => {
-                nodeSize = value
+                nodeSize = value as 'Connections' | 'Lines'
                 updateNodeSettings()
               }
             "
@@ -253,7 +253,7 @@ let displaySettingsPopup: Ref<boolean> = ref(false)
 
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
-let nodeSize: Ref<string> = ref('')
+let nodeSize: Ref<'Connections' | 'Lines'> = ref('Lines')
 let nodeColor: Ref<string> = ref('')
 let selectedD3Color: Ref<string> = ref('')
 
@@ -289,8 +289,8 @@ window.addEventListener('message', (event) => {
 		lineColor.value = message.text.lineColor
 
 		getGraphData({
+			mode: connectionType.value,
 			nodeSize: nodeSize.value,
-			interactionConnections: connectionType.value,
 			nodeDepth: nodeDepth.value,
 			showNodeModules: showNodeModules.value,
 		})
@@ -326,8 +326,8 @@ window.addEventListener('message', (event) => {
 // Update the graph with new settings
 const updateNodeSettings = () => {
 	getGraphData({
+		mode: connectionType.value,
 		nodeSize: nodeSize.value,
-		interactionConnections: connectionType.value,
 		nodeDepth: nodeDepth.value,
 		showNodeModules: showNodeModules.value,
 	})

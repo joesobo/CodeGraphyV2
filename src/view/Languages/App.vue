@@ -82,8 +82,8 @@ window.addEventListener('message', (event) => {
 		maxNodeDepth.value = message.text.maxNodeDepth
 
 		getGraphData({
+			mode: connectionType.value,
 			nodeSize: nodeSize.value,
-			interactionConnections: connectionType.value,
 			nodeDepth: nodeDepth.value,
 			showNodeModules: showNodeModules.value,
 		})

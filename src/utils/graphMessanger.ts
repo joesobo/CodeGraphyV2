@@ -7,14 +7,14 @@ export const fetchSettings = (settings?: Record<string, unknown>) => {
 
 export const getGraphData = (graphData: {
   nodeSize: string
-  interactionConnections: 'Interaction' | 'Directory'
+  mode: 'Interaction' | 'Directory'
   nodeDepth: number
   showNodeModules: boolean
 }) => {
 	vscode.postMessage({
 		command: 'getGraphData',
+		mode: graphData.mode,
 		nodeSize: graphData.nodeSize,
-		interactionConnections: graphData.interactionConnections,
 		nodeDepth: graphData.nodeDepth,
 		showNodeModules: graphData.showNodeModules,
 	})

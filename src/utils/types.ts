@@ -48,7 +48,15 @@ export interface File {
 
 export interface Directory {
   name: string
-	lines: 0
+}
+
+export interface Package {
+  name: string
+}
+
+export interface UnprocessedNode {
+  type: 'File' | 'Directory' | 'Package'
+  data: File | Directory | Package
 }
 
 export type SVGElement = d3.Selection<
