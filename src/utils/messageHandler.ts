@@ -91,6 +91,7 @@ const getGraphData = async (
 	const { nodes, connections } = processGraphInfo(
 		message.mode,
 		message.nodeSize,
+		message.showNodeModules,
 	)
 
 	await webview.postMessage({

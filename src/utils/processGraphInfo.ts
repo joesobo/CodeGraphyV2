@@ -9,9 +9,10 @@ import { getUnprocessedNodes } from './getUnprocessedNodes'
 export const processGraphInfo = (
 	mode: 'Interaction' | 'Directory',
 	nodeSize: 'Lines' | 'Connections',
+	showNodeModules: boolean
 ) => {
 	const { files, dirs } = getDirectoryInfo(mode)
-	const packages = getNodeModules(files, mode)
+	const packages = getNodeModules({ files, mode, showNodeModules })
 
 	const unprocessedNodes: UnprocessedNode[] = getUnprocessedNodes(
 		files,
