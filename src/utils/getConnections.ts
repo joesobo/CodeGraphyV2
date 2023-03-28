@@ -35,7 +35,12 @@ const fetchInteractionConnections = (unprocessedNodes: UnprocessedNode[]) => {
 			const fullPath = getFullPath(file.name, importPath)
 			const connectionIndex = findConnectionIndex(unprocessedNodes, fullPath)
 
-			if (connectionIndex !== -1) {
+			if (
+				connectionIndex !== -1 &&
+        !connections.find(
+        	(connection) => connection.id === index + '-' + connectionIndex,
+        )
+			) {
 				connections.push({
 					id: index + '-' + connectionIndex,
 					source: index,

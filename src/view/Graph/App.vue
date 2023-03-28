@@ -236,7 +236,7 @@ import SwitchButton from '../../components/SwitchButton.vue'
 import ToggleSwitch from '../../components/ToggleSwitch.vue'
 import { drawD3Graph, updateD3Graph } from '../../utils/d3'
 import { colorSchemes, d3ColorSchemes } from '../../utils/d3ColorSchemes'
-import { findMaxDepth } from '../../utils/depth'
+import { findMaxDepth } from '../../utils/findMaxDepth'
 import { fetchSettings, getGraphData } from '../../utils/graphMessanger'
 import { parseExtensions } from '../../utils/parseExtensions'
 
@@ -244,8 +244,8 @@ import SettingsIcon from '~icons/ant-design/setting-filled'
 import CloseIcon from '~icons/mdi/close-circle'
 import RestartIcon from '~icons/mdi/restart'
 
-let nodes: Ref<Node[] | undefined> = ref()
-let connections: Ref<Connection[] | undefined> = ref()
+let nodes: Ref<Node[]> = ref([])
+let connections: Ref<Connection[]> = ref([])
 let extensionList: Ref<Extension[]> = ref([])
 let currentOpenFile: Ref<string> = ref('')
 
@@ -309,6 +309,9 @@ window.addEventListener('message', (event) => {
 			useRandomColor: false,
 			d3Color: selectedD3Color.value,
 		})
+
+		console.log('TEST', nodes.value, connections.value)
+
 		drawD3Graph({
 			nodes: nodes.value,
 			connections: connections.value,

@@ -33,7 +33,11 @@ describe('getNodeModules', () => {
 			{ name: '/project/subdir/file3.ts', lines: 1 },
 		]
 
-		const result = getNodeModules({ files, mode: 'Interaction', showNodeModules: true })
+		const result = getNodeModules({
+			files,
+			mode: 'Interaction',
+			showNodeModules: true,
+		})
 
 		const expectedPackages: Package[] = [{ name: '/project/node_modules/vue' }]
 
@@ -71,7 +75,11 @@ describe('getNodeModules complex', () => {
 			{ name: '/project/subdir/file3.ts', lines: 1 },
 		]
 
-		const result = getNodeModules({ files, mode: 'Interaction', showNodeModules: true })
+		const result = getNodeModules({
+			files,
+			mode: 'Interaction',
+			showNodeModules: true,
+		})
 
 		const expectedPackages: Package[] = [{ name: '/project/node_modules/vue' }]
 

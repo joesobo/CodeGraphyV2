@@ -5,6 +5,7 @@ export interface Node extends SimulationNodeDatum {
   name: string
   fullPath: string
   radius: number
+  depth: number
   lines?: number
 }
 

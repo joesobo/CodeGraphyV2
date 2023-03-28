@@ -48,15 +48,15 @@ import PickColors from 'vue-pick-colors'
 import type { Connection, Extension, Node } from '../../utils/types'
 
 import { updateD3Graph } from '../../utils/d3'
-import { findMaxDepth } from '../../utils/depth'
+import { findMaxDepth } from '../../utils/findMaxDepth'
 import { getGraphData } from '../../utils/graphMessanger'
 import { parseExtensions } from '../../utils/parseExtensions'
 import { tableHeaders } from '../../utils/tableHeaders'
 
 import CloseIcon from '~icons/mdi/close-circle'
 
-let nodes: Ref<Node[] | undefined> = ref()
-let connections: Ref<Connection[] | undefined> = ref()
+let nodes: Ref<Node[]> = ref([])
+let connections: Ref<Connection[]> = ref([])
 let extensionList: Ref<Extension[]> = ref([])
 
 // Display Settings

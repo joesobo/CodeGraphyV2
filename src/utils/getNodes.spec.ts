@@ -48,24 +48,28 @@ describe('getNodes', () => {
 				name: 'file1.ts',
 				fullPath: '/project/file1.ts',
 				radius: 25,
+				depth: -1,
 			},
 			{
 				id: 1,
 				name: 'file2.ts',
 				fullPath: '/project/file2.ts',
 				radius: 25,
+				depth: -1,
 			},
 			{
 				id: 2,
 				name: 'file3.ts',
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
+				depth: -1,
 			},
 			{
 				id: 3,
 				name: 'vue',
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
+				depth: -1,
 			},
 		]
 
@@ -94,24 +98,28 @@ describe('getNodes', () => {
 				name: 'file1.ts',
 				fullPath: '/project/file1.ts',
 				radius: 17.5,
+				depth: -1,
 			},
 			{
 				id: 1,
 				name: 'file2.ts',
 				fullPath: '/project/file2.ts',
 				radius: 25,
+				depth: -1,
 			},
 			{
 				id: 2,
 				name: 'file3.ts',
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
+				depth: -1,
 			},
 			{
 				id: 3,
 				name: 'vue',
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
+				depth: -1,
 			},
 		]
 

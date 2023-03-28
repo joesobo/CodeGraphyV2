@@ -20,12 +20,12 @@ export const drawD3Graph = ({
 	extensions,
 	currentOpenFile,
 }: {
-  nodes?: Node[]
-  connections?: Connection[]
+  nodes: Node[]
+  connections: Connection[]
   extensions: Extension[]
   currentOpenFile: string
 }) => {
-	if (!nodes || !connections) return
+	if (nodes.length === 0 || connections.length === 0) return
 
 	const svg = setupSVG('svg')
 	const width = Number.parseInt(svg.attr('width'))
@@ -43,6 +43,9 @@ export const drawD3Graph = ({
 		nodes,
 		currentOpenFile,
 	)
+	gCircles.attr('transform', (d: Node) => {
+		return `translate(${d.x}, ${d.y})`
+	})
 	drawLinks(forceSimulation, g, connections, nodes, gCircles)
 	gCircles.raise()
 
@@ -245,11 +248,11 @@ const enableZoom = (
 }
 
 export const updateD3Graph = (
-	nodes: Node[] | undefined,
+	nodes: Node[],
 	extensions: Extension[],
 	currentOpenFile?: string,
 ) => {
-	if (!nodes) return
+	if (nodes.length === 0) return
 
 	const svg = d3.select('svg')
 	const circles = svg

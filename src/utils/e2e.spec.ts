@@ -3,11 +3,14 @@ import { vi } from 'vitest'
 
 import type { Connection, Node, UnprocessedNode } from './types'
 
+import { assignNodeDepth } from './assignNodeDepth'
+import { filterNodesAndConnections } from './filterNodesAndConnections'
 import { getConnections } from './getConnections'
 import { getDirectoryInfo } from './getDirectoryInfo'
 import { getNodeModules } from './getNodeModules'
 import { getNodes } from './getNodes'
 import { getUnprocessedNodes } from './getUnprocessedNodes'
+import { processGraphInfo } from './processGraphInfo'
 
 vi.mock('vscode', () => {
 	const workspace = {
@@ -31,6 +34,11 @@ vi.mock('vscode', () => {
 	const window = {
 		showInformationMessage: vi.fn(),
 		showErrorMessage: vi.fn(),
+		activeTextEditor: {
+			document: {
+				fileName: '/project/file1.ts',
+			},
+		},
 	}
 
 	return {
@@ -73,9 +81,11 @@ describe('getNodes', () => {
 	it('should return the proper nodes and connections', () => {
 		const mode: 'Interaction' | 'Directory' = 'Interaction'
 		const nodeSize: 'Lines' | 'Connections' = 'Lines'
+		const nodeDepth = 0
+		const showNodeModules = true
 
 		const { files, dirs } = getDirectoryInfo(mode)
-		const packages = getNodeModules(files, mode)
+		const packages = getNodeModules({ files, mode, showNodeModules })
 
 		const unprocessedNodes: UnprocessedNode[] = getUnprocessedNodes(
 			files,
@@ -84,7 +94,15 @@ describe('getNodes', () => {
 		)
 
 		const connections = getConnections(unprocessedNodes, mode)
-		const nodes = getNodes(unprocessedNodes, connections, nodeSize)
+		let nodes = getNodes(unprocessedNodes, connections, nodeSize)
+
+		nodes = assignNodeDepth(nodes, connections)
+
+		const { filteredNodes, filteredConnections } = filterNodesAndConnections({
+			nodes,
+			connections,
+			nodeDepth,
+		})
 
 		const expectedConnections: Connection[] = [
 			{ id: '0-1', source: 0, target: 1 },
@@ -97,28 +115,38 @@ describe('getNodes', () => {
 				name: 'file1.ts',
 				fullPath: '/project/file1.ts',
 				radius: 25,
+				depth: 0,
 			},
 			{
 				id: 1,
 				name: 'file2.ts',
 				fullPath: '/project/file2.ts',
 				radius: 25,
+				depth: 1,
 			},
 			{
 				id: 2,
 				name: 'file3.ts',
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
+				depth: 2,
 			},
 			{
 				id: 3,
 				name: 'vue',
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
+				depth: 3,
 			},
 		]
 
-		expect(connections).toEqual(expectedConnections)
-		expect(nodes).toEqual(expectedNodes)
+		expect(filteredConnections).toEqual(expectedConnections)
+		expect(filteredNodes).toEqual(expectedNodes)
+
+		const { nodes: processedNodes, connections: processedConnections } =
+      processGraphInfo({ mode, nodeSize, nodeDepth, showNodeModules })
+
+		expect(processedConnections).toEqual(filteredConnections)
+		expect(processedNodes).toEqual(filteredNodes)
 	})
 })

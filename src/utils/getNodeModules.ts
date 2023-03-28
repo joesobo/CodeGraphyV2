@@ -1,13 +1,16 @@
-
 import fs from 'fs'
 import path from 'path'
 
 import { File, Package } from './types'
 
-export const getNodeModules = ({files, mode, showNodeModules} : {
-	files: File[],
-	mode: 'Interaction' | 'Directory',
-	showNodeModules: boolean,
+export const getNodeModules = ({
+	files,
+	mode,
+	showNodeModules,
+}: {
+  files: File[]
+  mode: 'Interaction' | 'Directory'
+  showNodeModules: boolean
 }) => {
 	if (!showNodeModules) return []
 	if (mode === 'Directory') return []
@@ -26,7 +29,10 @@ export const getNodeModules = ({files, mode, showNodeModules} : {
 			if (!isDirectPath(importPath)) continue
 
 			const packagePath = findNearestNodeModules(fileDirectory, importPath)
-			if (packagePath === '' || packages.find((pkg) => pkg.name === packagePath))
+			if (
+				packagePath === '' ||
+        packages.find((pkg) => pkg.name === packagePath)
+			)
 				continue
 
 			packages.push({

@@ -88,11 +88,12 @@ const getGraphData = async (
 	saveNodeDepth = message.nodeDepth
 	saveShowNodeModules = message.showNodeModules
 
-	const { nodes, connections } = processGraphInfo(
-		message.mode,
-		message.nodeSize,
-		message.showNodeModules,
-	)
+	const { nodes, connections } = processGraphInfo({
+		mode: message.mode,
+		nodeSize: message.nodeSize,
+		nodeDepth: message.nodeDepth,
+		showNodeModules: message.showNodeModules,
+	})
 
 	await webview.postMessage({
 		command: 'setGraphData',
