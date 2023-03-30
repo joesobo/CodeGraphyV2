@@ -1,6 +1,6 @@
 import { Connection, Node } from './types'
 
-export const filterNodesAndConnections = ({
+export const filterDepth = ({
 	nodes,
 	connections,
 	nodeDepth,
@@ -43,8 +43,6 @@ export const filterNodesAndConnections = ({
 		const connectionTargetNode = nodes.find(
 			(node) => node.id === connection.target,
 		)
-
-		console.log(connectionSourceNode, connectionTargetNode)
 
 		// find the corresponding nodes in the filtered nodes array
 		const filteredSourceNode = filteredNodes.find(

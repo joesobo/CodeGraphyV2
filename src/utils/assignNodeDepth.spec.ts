@@ -57,6 +57,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 1,
@@ -64,6 +66,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 2,
@@ -71,6 +75,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 3,
@@ -78,6 +84,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 		]
 
@@ -96,6 +104,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: 0,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 1,
@@ -103,6 +113,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: 1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 2,
@@ -110,6 +122,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: 2,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 3,
@@ -117,6 +131,8 @@ describe('assignNodeDepth', () => {
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
 				depth: 3,
+				collapsed: false,
+				hidden: false,
 			},
 		]
 

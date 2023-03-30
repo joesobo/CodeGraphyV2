@@ -8,6 +8,7 @@ export const fetchSettings = (settings?: Record<string, unknown>) => {
 export const getGraphData = (graphData: {
   nodeSize: string
   mode: 'Interaction' | 'Directory'
+  collapseIds: number[]
   nodeDepth: number
   showNodeModules: boolean
 }) => {
@@ -15,6 +16,7 @@ export const getGraphData = (graphData: {
 		command: 'getGraphData',
 		mode: graphData.mode,
 		nodeSize: graphData.nodeSize,
+		collapseIds: graphData.collapseIds.slice(),
 		nodeDepth: graphData.nodeDepth,
 		showNodeModules: graphData.showNodeModules,
 	})

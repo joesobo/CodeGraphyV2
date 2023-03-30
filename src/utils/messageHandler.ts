@@ -5,6 +5,7 @@ import { processGraphInfo } from './processGraphInfo'
 
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
+let saveCollapseIds: number[]
 let saveNodeDepth: number
 let saveShowNodeModules: boolean
 
@@ -31,7 +32,7 @@ export const handleMessages = (webview: vscode.Webview) => {
 const receiveMessages = async (webview: vscode.Webview) => {
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
-		case 'openFile':
+		case 'openFile': {
 			await vscode.workspace
 				.openTextDocument(vscode.Uri.file(message.text))
 				.then(async (doc) => {
@@ -41,11 +42,20 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			await getGraphData(webview, {
 				mode: saveMode,
 				nodeSize: saveNodeSize,
+				collapseIds: saveCollapseIds,
 				nodeDepth: saveNodeDepth,
 				showNodeModules: saveShowNodeModules,
 			})
 
 			return
+		}
+		case 'collapseNode': {
+			await webview.postMessage({
+				command: 'collapseNode',
+				id: message.text,
+			})
+			return
+		}
 		case 'getGraphData': {
 			await getGraphData(webview, message)
 			return
@@ -78,6 +88,7 @@ const getGraphData = async (
 	message: {
     mode: 'Interaction' | 'Directory'
     nodeSize: 'Lines' | 'Connections'
+    collapseIds: number[]
     nodeDepth: number
     showNodeModules: boolean
   },
@@ -85,12 +96,14 @@ const getGraphData = async (
 	// setup
 	saveMode = message.mode
 	saveNodeSize = message.nodeSize
+	saveCollapseIds = message.collapseIds
 	saveNodeDepth = message.nodeDepth
 	saveShowNodeModules = message.showNodeModules
 
 	const { nodes, connections } = processGraphInfo({
 		mode: message.mode,
 		nodeSize: message.nodeSize,
+		collapseIds: message.collapseIds,
 		nodeDepth: message.nodeDepth,
 		showNodeModules: message.showNodeModules,
 	})

@@ -254,6 +254,7 @@ let displaySettingsPopup: Ref<boolean> = ref(false)
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
 let nodeSize: Ref<'Connections' | 'Lines'> = ref('Lines')
+let collapseIds: Ref<number[]> = ref([])
 let nodeColor: Ref<string> = ref('')
 let selectedD3Color: Ref<string> = ref('')
 
@@ -291,6 +292,7 @@ window.addEventListener('message', (event) => {
 		getGraphData({
 			mode: connectionType.value,
 			nodeSize: nodeSize.value,
+			collapseIds: collapseIds.value,
 			nodeDepth: nodeDepth.value,
 			showNodeModules: showNodeModules.value,
 		})
@@ -310,8 +312,6 @@ window.addEventListener('message', (event) => {
 			d3Color: selectedD3Color.value,
 		})
 
-		console.log('TEST', nodes.value, connections.value)
-
 		drawD3Graph({
 			nodes: nodes.value,
 			connections: connections.value,
@@ -323,6 +323,20 @@ window.addEventListener('message', (event) => {
 		currentOpenFile.value = message.text
 		updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
 		return
+	case 'collapseNode':
+		if (collapseIds.value.indexOf(message.id) !== -1) {
+			collapseIds.value.splice(collapseIds.value.indexOf(message.id), 1)
+		} else {
+			collapseIds.value.push(message.id)
+		}
+
+		getGraphData({
+			mode: connectionType.value,
+			nodeSize: nodeSize.value,
+			collapseIds: collapseIds.value,
+			nodeDepth: nodeDepth.value,
+			showNodeModules: showNodeModules.value,
+		})
 	}
 })
 
@@ -331,6 +345,7 @@ const updateNodeSettings = () => {
 	getGraphData({
 		mode: connectionType.value,
 		nodeSize: nodeSize.value,
+		collapseIds: collapseIds.value,
 		nodeDepth: nodeDepth.value,
 		showNodeModules: showNodeModules.value,
 	})

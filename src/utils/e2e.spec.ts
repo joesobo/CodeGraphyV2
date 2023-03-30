@@ -4,7 +4,9 @@ import { vi } from 'vitest'
 import type { Connection, Node, UnprocessedNode } from './types'
 
 import { assignNodeDepth } from './assignNodeDepth'
-import { filterNodesAndConnections } from './filterNodesAndConnections'
+import { collapseNodes } from './collapseNodes'
+import { filterCollapsed } from './filterCollapsed'
+import { filterDepth } from './filterDepth'
 import { getConnections } from './getConnections'
 import { getDirectoryInfo } from './getDirectoryInfo'
 import { getNodeModules } from './getNodeModules'
@@ -81,6 +83,8 @@ describe('getNodes', () => {
 	it('should return the proper nodes and connections', () => {
 		const mode: 'Interaction' | 'Directory' = 'Interaction'
 		const nodeSize: 'Lines' | 'Connections' = 'Lines'
+		const currentOpenFile = '/project/file1.ts'
+		const collapseIds: number[] = []
 		const nodeDepth = 0
 		const showNodeModules = true
 
@@ -98,11 +102,22 @@ describe('getNodes', () => {
 
 		nodes = assignNodeDepth(nodes, connections)
 
-		const { filteredNodes, filteredConnections } = filterNodesAndConnections({
+		const { filteredNodes, filteredConnections } = filterDepth({
 			nodes,
 			connections,
 			nodeDepth,
 		})
+
+		nodes = collapseNodes({
+			activeId:
+        filteredNodes.find((node) => node.fullPath === currentOpenFile)?.id ??
+        -1,
+			collapseIds,
+			nodes: filteredNodes,
+			connections: filteredConnections,
+		})
+
+		const result = filterCollapsed(nodes, filteredConnections)
 
 		const expectedConnections: Connection[] = [
 			{ id: '0-1', source: 0, target: 1 },
@@ -116,6 +131,8 @@ describe('getNodes', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: 0,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 1,
@@ -123,6 +140,8 @@ describe('getNodes', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: 1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 2,
@@ -130,6 +149,8 @@ describe('getNodes', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: 2,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 3,
@@ -137,16 +158,24 @@ describe('getNodes', () => {
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
 				depth: 3,
+				collapsed: false,
+				hidden: false,
 			},
 		]
 
-		expect(filteredConnections).toEqual(expectedConnections)
-		expect(filteredNodes).toEqual(expectedNodes)
+		expect(result.nodes).toEqual(expectedNodes)
+		expect(result.connections).toEqual(expectedConnections)
 
 		const { nodes: processedNodes, connections: processedConnections } =
-      processGraphInfo({ mode, nodeSize, nodeDepth, showNodeModules })
+      processGraphInfo({
+      	mode,
+      	nodeSize,
+      	collapseIds,
+      	nodeDepth,
+      	showNodeModules,
+      })
 
-		expect(processedConnections).toEqual(filteredConnections)
 		expect(processedNodes).toEqual(filteredNodes)
+		expect(processedConnections).toEqual(filteredConnections)
 	})
 })

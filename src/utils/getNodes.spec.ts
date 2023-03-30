@@ -49,6 +49,8 @@ describe('getNodes', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 1,
@@ -56,6 +58,8 @@ describe('getNodes', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 2,
@@ -63,6 +67,8 @@ describe('getNodes', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 3,
@@ -70,6 +76,8 @@ describe('getNodes', () => {
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 		]
 
@@ -99,6 +107,8 @@ describe('getNodes', () => {
 				fullPath: '/project/file1.ts',
 				radius: 17.5,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 1,
@@ -106,6 +116,8 @@ describe('getNodes', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 2,
@@ -113,6 +125,8 @@ describe('getNodes', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 3,
@@ -120,6 +134,8 @@ describe('getNodes', () => {
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 		]
 

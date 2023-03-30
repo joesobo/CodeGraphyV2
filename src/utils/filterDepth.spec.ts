@@ -1,8 +1,8 @@
 import type { Connection, Node } from './types'
 
-import { filterNodesAndConnections } from './filterNodesAndConnections'
+import { filterDepth } from './filterDepth'
 
-describe('filterNodesAndConnections', () => {
+describe('filterDepth', () => {
 	// it('should return all nodes and connections when depth is 0', () => {
 	// 	const nodes: Node[] = [
 	// 		{
@@ -127,6 +127,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/filex.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 1,
@@ -134,6 +136,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 2,
@@ -141,6 +145,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 3,
@@ -148,6 +154,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/subdir/file4.ts',
 				radius: 25,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 4,
@@ -155,6 +163,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: 0,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 5,
@@ -162,6 +172,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/file10.ts',
 				radius: 25,
 				depth: 1,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 6,
@@ -169,6 +181,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/node_modules/vue',
 				radius: 10,
 				depth: -1,
+				collapsed: false,
+				hidden: false,
 			},
 		]
 
@@ -179,7 +193,7 @@ describe('filterNodesAndConnections', () => {
 			{ id: '2-6', source: 2, target: 6 },
 		]
 
-		const result = filterNodesAndConnections({
+		const result = filterDepth({
 			nodes,
 			connections,
 			nodeDepth: 1,
@@ -192,6 +206,8 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: 0,
+				collapsed: false,
+				hidden: false,
 			},
 			{
 				id: 1,
@@ -199,14 +215,14 @@ describe('filterNodesAndConnections', () => {
 				fullPath: '/project/file10.ts',
 				radius: 25,
 				depth: 1,
+				collapsed: false,
+				hidden: false,
 			},
 		]
 
 		const expectedConnections: Connection[] = [
 			{ id: '0-1', source: 0, target: 1 },
 		]
-
-		console.log(result)
 
 		expect(result.filteredNodes).toEqual(expectedNodes)
 		expect(result.filteredConnections).toEqual(expectedConnections)

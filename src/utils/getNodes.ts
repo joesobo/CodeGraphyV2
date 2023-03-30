@@ -22,6 +22,8 @@ export const getNodes = (
 			fullPath: unprocessedNode.data.name,
 			radius: getNodeSize(unprocessedNodes, connections, nodeSize, index),
 			depth: -1,
+			collapsed: false,
+			hidden: false,
 		})
 	})
 

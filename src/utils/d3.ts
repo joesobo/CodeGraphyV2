@@ -160,8 +160,8 @@ const drawNodes = (
 				})?.color ?? '#000'
 			)
 		})
-
 		.on('click', click)
+		.on('dblclick', doubleClick)
 
 	// Draw text
 	gs.append('text')
@@ -327,6 +327,16 @@ const drag = (
 }
 
 const click = (
+	_event: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+	d: Node,
+) => {
+	vscode.postMessage({
+		command: 'collapseNode',
+		text: d.id,
+	})
+}
+
+const doubleClick = (
 	_event: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
 	d: Node,
 ) => {
