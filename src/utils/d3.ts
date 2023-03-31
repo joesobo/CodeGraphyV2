@@ -139,59 +139,15 @@ const drawNodes = (
 		.attr('class', 'fill-white')
 		.call(drag(forceSimulation))
 
-	const handleMouseOver = (event: MouseEvent, d: Node) => {
-		if (event.shiftKey) {
-			const activeNode = gs
-				.filter((node) => node.fullPath === currentOpenFile)
-				.datum() as Node
-			const collapsedNodes = collapseNodes({
-				activeId: activeNode.id,
-				collapseIds: [d.id],
-				nodes,
-				connections,
-			})
-
-			const collapsedIds = collapsedNodes
-				.filter((node) => node.hidden || node.collapsed)
-				.map((node) => node.id)
-
-			gs.filter((node) => collapsedIds.includes(node.id)).attr('opacity', '0.3')
-		}
-	}
-
-	const handleMouseOut = (event: MouseEvent, _d: Node) => {
-		gs.attr('opacity', 1)
-	}
-
 	// Draw node
 	gs.append('circle')
-		.attr('r', (d: Node) => {
-			return d.radius
-		})
-		.attr('fill', (d: Node) => {
-			// find extension color to match nodes extension
-			let nodeExt = ''
-			if (d.name.startsWith('.')) {
-				nodeExt = d.name.substring(1).split('.').slice(1).join('.')
-			} else {
-				nodeExt = d.name.split('.').slice(1).join('.')
-			}
-
-			if (d.fullPath === currentOpenFile) {
-				return '#fff'
-			}
-
-			return (
-				extensions.find((ext) => {
-					return ext.extension === nodeExt
-				})?.color ?? '#000'
-			)
-		})
+		.attr('r', (d: Node) => d.radius)
+		.attr('fill', (d: Node) => getNodeColor(d, extensions, currentOpenFile))
 		.attr('stroke', (d) => (d.collapsed ? '#ffd700' : ''))
 		.attr('stroke-width', (d) => (d.collapsed ? 4 : 0))
 		.on('click', click)
-		.on('mouseover', handleMouseOver)
-		.on('mouseout', handleMouseOut)
+		.on('mouseover', handleMouseOver(gs, currentOpenFile, nodes, connections))
+		.on('mouseout', handleMouseOut(gs))
 
 	// Draw text
 	gs.append('text')
@@ -369,4 +325,52 @@ const click = (event: MouseEvent, d: Node) => {
 			text: path,
 		})
 	}
+}
+
+const handleMouseOver =
+  (
+  	gs: NodeSelection,
+  	currentOpenFile: string,
+  	nodes: Node[],
+  	connections: Connection[],
+  ) =>
+  	(event: MouseEvent, d: Node) => {
+  		if (event.shiftKey) {
+  			const activeNode = gs
+  				.filter((node) => node.fullPath === currentOpenFile)
+  				.datum() as Node
+  			const collapsedNodes = collapseNodes({
+  				activeId: activeNode.id,
+  				collapseIds: [d.id],
+  				nodes,
+  				connections,
+  			})
+
+  			const collapsedIds = collapsedNodes
+  				.filter((node) => node.hidden || node.collapsed)
+  				.map((node) => node.id)
+
+  			gs.filter((node) => collapsedIds.includes(node.id)).attr('opacity', '0.3')
+  		}
+  	}
+
+const handleMouseOut =
+  (gs: NodeSelection) => (_event: MouseEvent, _d: Node) => {
+  	gs.attr('opacity', 1)
+  }
+
+const getNodeColor = (
+	node: Node,
+	extensions: Extension[],
+	currentOpenFile: string,
+): string => {
+	if (node.fullPath === currentOpenFile) {
+		return '#fff'
+	}
+
+	const nodeExt = node.name.startsWith('.')
+		? node.name.substring(1).split('.').slice(1).join('.')
+		: node.name.split('.').slice(1).join('.')
+
+	return extensions.find((ext) => ext.extension === nodeExt)?.color ?? '#000'
 }
