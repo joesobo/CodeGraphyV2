@@ -13,6 +13,7 @@ import type {
 import type { D3DragEvent, DragBehavior, Simulation } from 'd3'
 
 import { getRandomIntSeed } from './basic'
+import { collapseNodes } from './collapseNodes'
 
 export const drawD3Graph = ({
 	nodes,
@@ -41,6 +42,7 @@ export const drawD3Graph = ({
 		g,
 		extensions,
 		nodes,
+		connections,
 		currentOpenFile,
 	)
 	gCircles.attr('transform', (d: Node) => {
@@ -126,6 +128,7 @@ const drawNodes = (
 	g: SVGSelection,
 	extensions: Extension[],
 	nodes: Node[],
+	connections: Connection[],
 	currentOpenFile: string,
 ): NodeSelection => {
 	const gs = g
@@ -135,6 +138,30 @@ const drawNodes = (
 		.append('g')
 		.attr('class', 'fill-white')
 		.call(drag(forceSimulation))
+
+	const handleMouseOver = (event: MouseEvent, d: Node) => {
+		if (event.shiftKey) {
+			const activeNode = gs
+				.filter((node) => node.fullPath === currentOpenFile)
+				.datum() as Node
+			const collapsedNodes = collapseNodes({
+				activeId: activeNode.id,
+				collapseIds: [d.id],
+				nodes,
+				connections,
+			})
+
+			const collapsedIds = collapsedNodes
+				.filter((node) => node.hidden || node.collapsed)
+				.map((node) => node.id)
+
+			gs.filter((node) => collapsedIds.includes(node.id)).attr('opacity', '0.3')
+		}
+	}
+
+	const handleMouseOut = (event: MouseEvent, _d: Node) => {
+		gs.attr('opacity', 1)
+	}
 
 	// Draw node
 	gs.append('circle')
@@ -160,7 +187,11 @@ const drawNodes = (
 				})?.color ?? '#000'
 			)
 		})
+		.attr('stroke', (d) => (d.collapsed ? '#ffd700' : ''))
+		.attr('stroke-width', (d) => (d.collapsed ? 4 : 0))
 		.on('click', click)
+		.on('mouseover', handleMouseOver)
+		.on('mouseout', handleMouseOut)
 
 	// Draw text
 	gs.append('text')
@@ -325,10 +356,7 @@ const drag = (
 		.on('end', dragended)
 }
 
-const click = (
-	event: MouseEvent,
-	d: Node,
-) => {
+const click = (event: MouseEvent, d: Node) => {
 	if (event.shiftKey) {
 		vscode.postMessage({
 			command: 'collapseNode',
