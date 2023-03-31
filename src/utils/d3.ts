@@ -161,7 +161,6 @@ const drawNodes = (
 			)
 		})
 		.on('click', click)
-		.on('dblclick', doubleClick)
 
 	// Draw text
 	gs.append('text')
@@ -327,22 +326,19 @@ const drag = (
 }
 
 const click = (
-	_event: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+	event: MouseEvent,
 	d: Node,
 ) => {
-	vscode.postMessage({
-		command: 'collapseNode',
-		text: d.id,
-	})
-}
-
-const doubleClick = (
-	_event: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-	d: Node,
-) => {
-	const path = d.fullPath
-	vscode.postMessage({
-		command: 'openFile',
-		text: path,
-	})
+	if (event.shiftKey) {
+		vscode.postMessage({
+			command: 'collapseNode',
+			text: d.id,
+		})
+	} else {
+		const path = d.fullPath
+		vscode.postMessage({
+			command: 'openFile',
+			text: path,
+		})
+	}
 }
