@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import { D3DragEvent, DragBehavior, Simulation } from 'd3'
 
 import type {
 	Connection,
@@ -11,8 +10,9 @@ import type {
 	SVGElement,
 	SVGSelection,
 } from './types'
+import type { D3DragEvent, DragBehavior, Simulation } from 'd3'
 
-import { getRandomInt } from './basic'
+import { getRandomIntSeed } from './basic'
 
 export const drawD3Graph = ({
 	nodes,
@@ -67,8 +67,8 @@ const resetGraph = (svg: SVGElement, nodes: Node[]): SVGSelection => {
 	const height: number = Number.parseInt(svg.attr('height'))
 
 	nodes.forEach((node) => {
-		node.x = getRandomInt(width)
-		node.y = getRandomInt(height)
+		node.x = getRandomIntSeed(node.fullPath, width)
+		node.y = getRandomIntSeed(node.fullPath + node.name, height)
 		node.vx = 0
 		node.vy = 0
 	})
