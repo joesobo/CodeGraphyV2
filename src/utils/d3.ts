@@ -26,7 +26,7 @@ export const drawD3Graph = ({
   extensions: Extension[]
   currentOpenFile: string
 }) => {
-	if (nodes.length === 0 || connections.length === 0) return
+	if (nodes.length === 0) return
 
 	const svg = setupSVG('svg')
 	const width = Number.parseInt(svg.attr('width'))
@@ -342,12 +342,12 @@ const handleMouseOver =
   			const collapsedNodes = collapseNodes({
   				activeId: activeNode.id,
   				collapseIds: [d.id],
-  				nodes,
+  				nodes: nodes.map((node) => ({ ...node, hidden: false, collapsed: false })),
   				connections,
   			})
 
   			const collapsedIds = collapsedNodes
-  				.filter((node) => node.hidden || node.collapsed)
+  				.filter((node) => node.hidden)
   				.map((node) => node.id)
 
   			gs.filter((node) => collapsedIds.includes(node.id)).attr('opacity', '0.3')

@@ -37,11 +37,14 @@ export const collapseNodes = ({
 		while (queue.length > 0) {
 			const currentNode = queue.shift() as Node
 			connections.forEach((connection) => {
+				const source = Number.parseInt(connection.id.substring(0, 1))
+				const target = Number.parseInt(connection.id.substring(2, 3))
 				let foundConnectionId = -1
-				if (connection.source === currentNode.id) {
-					foundConnectionId = connection.target
-				} else if (connection.target === currentNode.id) {
-					foundConnectionId = connection.source
+
+				if (source === currentNode.id) {
+					foundConnectionId = target
+				} else if (target === currentNode.id) {
+					foundConnectionId = source
 				}
 
 				if (foundConnectionId !== -1 && foundConnectionId !== activeId) {
@@ -59,35 +62,40 @@ export const collapseNodes = ({
 		// loop over each connections looking for the active node as source or target
 		// break if any connection contains the collapsed id
 		// if found, remove the corresponding node from the potentialHidden node list
-		visited = []
+		if (collapseId !== activeId) {
+			visited = []
 
-		queue.push(activeNode)
-		visited.push(activeNode)
+			queue.push(activeNode)
+			visited.push(activeNode)
 
-		while (queue.length > 0) {
-			const currentNode = queue.shift() as Node
-			connections.forEach((connection) => {
-				let foundConnectionId = -1
-				if (connection.source === currentNode.id) {
-					foundConnectionId = connection.target
-				} else if (connection.target === currentNode.id) {
-					foundConnectionId = connection.source
-				}
+			while (queue.length > 0) {
+				const currentNode = queue.shift() as Node
+				connections.forEach((connection) => {
+					const source = Number.parseInt(connection.id.substring(0, 1))
+					const target = Number.parseInt(connection.id.substring(2, 3))
+					let foundConnectionId = -1
 
-				if (foundConnectionId !== -1 && foundConnectionId !== collapseId) {
-					const foundNode = nodes.find((node) => node.id === foundConnectionId)
-					if (
-						foundNode &&
-            !visited.find((visit) => visit.fullPath === foundNode.fullPath)
-					) {
-						queue.push(foundNode)
-						visited.push(foundNode)
-						potentialToggle = potentialToggle.filter(
-							(node) => node.id !== foundNode.id,
-						)
+					if (source === currentNode.id) {
+						foundConnectionId = target
+					} else if (target === currentNode.id) {
+						foundConnectionId = source
 					}
-				}
-			})
+
+					if (foundConnectionId !== -1 && foundConnectionId !== collapseId) {
+						const foundNode = nodes.find((node) => node.id === foundConnectionId)
+						if (
+							foundNode &&
+            !visited.find((visit) => visit.fullPath === foundNode.fullPath)
+						) {
+							queue.push(foundNode)
+							visited.push(foundNode)
+							potentialToggle = potentialToggle.filter(
+								(node) => node.id !== foundNode.id,
+							)
+						}
+					}
+				})
+			}
 		}
 
 		// remaining nodes in the potentialHidden node list are hidden

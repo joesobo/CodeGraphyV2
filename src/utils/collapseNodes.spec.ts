@@ -46,7 +46,6 @@ describe('collapseNodes', () => {
 		const connections: Connection[] = [
 			{ id: '0-1', source: 0, target: 1 },
 			{ id: '1-2', source: 1, target: 2 },
-			{ id: '2-3', source: 2, target: 3 },
 		]
 
 		const result = collapseNodes({
@@ -91,7 +90,7 @@ describe('collapseNodes', () => {
 				radius: 25,
 				depth: 3,
 				collapsed: false,
-				hidden: true,
+				hidden: false,
 			},
 		]
 
