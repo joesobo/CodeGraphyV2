@@ -82,10 +82,12 @@ export const collapseNodes = ({
 					}
 
 					if (foundConnectionId !== -1 && foundConnectionId !== collapseId) {
-						const foundNode = nodes.find((node) => node.id === foundConnectionId)
+						const foundNode = nodes.find(
+							(node) => node.id === foundConnectionId,
+						)
 						if (
 							foundNode &&
-            !visited.find((visit) => visit.fullPath === foundNode.fullPath)
+              !visited.find((visit) => visit.fullPath === foundNode.fullPath)
 						) {
 							queue.push(foundNode)
 							visited.push(foundNode)

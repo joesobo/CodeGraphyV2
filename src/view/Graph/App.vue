@@ -330,13 +330,7 @@ window.addEventListener('message', (event) => {
 			collapseIds.value.push(message.id)
 		}
 
-		getGraphData({
-			mode: connectionType.value,
-			nodeSize: nodeSize.value,
-			collapseIds: collapseIds.value,
-			nodeDepth: nodeDepth.value,
-			showNodeModules: showNodeModules.value,
-		})
+		updateNodeSettings()
 	}
 })
 

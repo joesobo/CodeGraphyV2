@@ -115,6 +115,7 @@ const getGraphData = async (
 			nodes: nodes,
 			currentOpenFile:
         vscode.window.activeTextEditor?.document.fileName || null,
+			showNodeModules: message.showNodeModules,
 		},
 	})
 	return

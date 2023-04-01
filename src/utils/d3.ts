@@ -342,7 +342,11 @@ const handleMouseOver =
   			const collapsedNodes = collapseNodes({
   				activeId: activeNode.id,
   				collapseIds: [d.id],
-  				nodes: nodes.map((node) => ({ ...node, hidden: false, collapsed: false })),
+  				nodes: nodes.map((node) => ({
+  					...node,
+  					hidden: false,
+  					collapsed: false,
+  				})),
   				connections,
   			})
 
