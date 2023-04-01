@@ -11,6 +11,7 @@ import { getDirectoryInfo } from './getDirectoryInfo'
 import { getNodeModules } from './getNodeModules'
 import { getNodes } from './getNodes'
 import { getUnprocessedNodes } from './getUnprocessedNodes'
+import { normalizeIds } from './normalizeIds'
 
 export const processGraphInfo = ({
 	mode,
@@ -56,7 +57,9 @@ export const processGraphInfo = ({
 		connections: filteredConnections,
 	})
 
-	const result = filterCollapsed(nodes, filteredConnections)
+	let result = filterCollapsed(nodes, filteredConnections)
+
+	result = normalizeIds(result.nodes, result.connections)
 
 	return result
 }
