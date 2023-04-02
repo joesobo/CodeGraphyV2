@@ -6,13 +6,20 @@ export const filterCollapsed = (nodes: Node[], connections: Connection[]) => {
 
 	// filter out any connections where either the source or target is hidden
 	const filteredConnections = connections.filter((connection) => {
-		const source = Number.parseInt(connection.id.substring(0, 1))
-		const target = Number.parseInt(connection.id.substring(2, 3))
+		const regex = /(\d+)-(\d+)/
+		const match = connection.id.match(regex)
 
-		const sourceNode = filteredNodes.find((node) => node.id === source)
-		const targetNode = filteredNodes.find((node) => node.id === target)
+		if (match) {
+			const sourceId = Number.parseInt(match[1])
+			const targetId = Number.parseInt(match[2])
 
-		return sourceNode && targetNode
+			const sourceNode = filteredNodes.find((node) => node.id === sourceId)
+			const targetNode = filteredNodes.find((node) => node.id === targetId)
+
+			return sourceNode && targetNode
+		}
+
+		return false
 	})
 
 	return { nodes: filteredNodes, connections: filteredConnections }

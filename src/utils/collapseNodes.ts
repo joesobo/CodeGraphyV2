@@ -37,22 +37,32 @@ export const collapseNodes = ({
 		while (queue.length > 0) {
 			const currentNode = queue.shift() as Node
 			connections.forEach((connection) => {
-				const source = Number.parseInt(connection.id.substring(0, 1))
-				const target = Number.parseInt(connection.id.substring(2, 3))
-				let foundConnectionId = -1
+				const regex = /(\d+)-(\d+)/
+				const match = connection.id.match(regex)
 
-				if (source === currentNode.id) {
-					foundConnectionId = target
-				} else if (target === currentNode.id) {
-					foundConnectionId = source
-				}
+				if (match) {
+					const sourceId = Number.parseInt(match[1])
+					const targetId = Number.parseInt(match[2])
+					let foundConnectionId = -1
 
-				if (foundConnectionId !== -1 && foundConnectionId !== activeId) {
-					const foundNode = nodes[foundConnectionId]
-					if (!visited.find((visit) => visit.fullPath === foundNode.fullPath)) {
-						queue.push(foundNode)
-						visited.push(foundNode)
-						potentialToggle.push(foundNode)
+					if (sourceId === currentNode.id) {
+						foundConnectionId = targetId
+					} else if (targetId === currentNode.id) {
+						foundConnectionId = sourceId
+					}
+
+					if (foundConnectionId !== -1 && foundConnectionId !== activeId) {
+						const foundNode = nodes.find(
+							(node) => node.id === foundConnectionId,
+						)
+						if (
+							foundNode &&
+              !visited.find((visit) => visit.fullPath === foundNode.fullPath)
+						) {
+							queue.push(foundNode)
+							visited.push(foundNode)
+							potentialToggle.push(foundNode)
+						}
 					}
 				}
 			})
@@ -71,29 +81,34 @@ export const collapseNodes = ({
 			while (queue.length > 0) {
 				const currentNode = queue.shift() as Node
 				connections.forEach((connection) => {
-					const source = Number.parseInt(connection.id.substring(0, 1))
-					const target = Number.parseInt(connection.id.substring(2, 3))
-					let foundConnectionId = -1
+					const regex = /(\d+)-(\d+)/
+					const match = connection.id.match(regex)
 
-					if (source === currentNode.id) {
-						foundConnectionId = target
-					} else if (target === currentNode.id) {
-						foundConnectionId = source
-					}
+					if (match) {
+						const sourceId = Number.parseInt(match[1])
+						const targetId = Number.parseInt(match[2])
+						let foundConnectionId = -1
 
-					if (foundConnectionId !== -1 && foundConnectionId !== collapseId) {
-						const foundNode = nodes.find(
-							(node) => node.id === foundConnectionId,
-						)
-						if (
-							foundNode &&
-              !visited.find((visit) => visit.fullPath === foundNode.fullPath)
-						) {
-							queue.push(foundNode)
-							visited.push(foundNode)
-							potentialToggle = potentialToggle.filter(
-								(node) => node.id !== foundNode.id,
+						if (sourceId === currentNode.id) {
+							foundConnectionId = targetId
+						} else if (targetId === currentNode.id) {
+							foundConnectionId = sourceId
+						}
+
+						if (foundConnectionId !== -1 && foundConnectionId !== collapseId) {
+							const foundNode = nodes.find(
+								(node) => node.id === foundConnectionId,
 							)
+							if (
+								foundNode &&
+                !visited.find((visit) => visit.fullPath === foundNode.fullPath)
+							) {
+								queue.push(foundNode)
+								visited.push(foundNode)
+								potentialToggle = potentialToggle.filter(
+									(node) => node.id !== foundNode.id,
+								)
+							}
 						}
 					}
 				})
