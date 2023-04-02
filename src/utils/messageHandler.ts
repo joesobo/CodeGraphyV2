@@ -5,7 +5,7 @@ import { processGraphInfo } from './processGraphInfo'
 
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
-let saveCollapseIds: number[]
+let saveCollapseFullPaths: string[]
 let saveNodeDepth: number
 let saveShowNodeModules: boolean
 
@@ -42,7 +42,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			await getGraphData(webview, {
 				mode: saveMode,
 				nodeSize: saveNodeSize,
-				collapseIds: saveCollapseIds,
+				collapseFullPaths: saveCollapseFullPaths,
 				nodeDepth: saveNodeDepth,
 				showNodeModules: saveShowNodeModules,
 			})
@@ -52,7 +52,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 		case 'collapseNode': {
 			await webview.postMessage({
 				command: 'collapseNode',
-				id: message.text,
+				fullPath: message.text,
 			})
 			return
 		}
@@ -88,7 +88,7 @@ const getGraphData = async (
 	message: {
     mode: 'Interaction' | 'Directory'
     nodeSize: 'Lines' | 'Connections'
-    collapseIds: number[]
+    collapseFullPaths: string[]
     nodeDepth: number
     showNodeModules: boolean
   },
@@ -96,14 +96,14 @@ const getGraphData = async (
 	// setup
 	saveMode = message.mode
 	saveNodeSize = message.nodeSize
-	saveCollapseIds = message.collapseIds
+	saveCollapseFullPaths = message.collapseFullPaths
 	saveNodeDepth = message.nodeDepth
 	saveShowNodeModules = message.showNodeModules
 
 	const { nodes, connections } = processGraphInfo({
 		mode: message.mode,
 		nodeSize: message.nodeSize,
-		collapseIds: message.collapseIds,
+		collapseFullPaths: message.collapseFullPaths,
 		nodeDepth: message.nodeDepth,
 		showNodeModules: message.showNodeModules,
 	})

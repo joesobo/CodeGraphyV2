@@ -670,7 +670,7 @@ describe('collapseNodes', () => {
 		expect(result).toEqual(expectedNodes)
 	})
 
-	it('should handle collapsing with an already collapsed branch', () => {
+	it('should handle collapsing multiple branches', () => {
 		const nodes: Node[] = [
 			{
 				id: 0,
@@ -709,7 +709,7 @@ describe('collapseNodes', () => {
 				hidden: false,
 			},
 			{
-				id: 3,
+				id: 4,
 				name: 'file5.ts',
 				fullPath: '/project/file5.ts',
 				radius: 25,
@@ -758,8 +758,8 @@ describe('collapseNodes', () => {
 				fullPath: '/project/file3.ts',
 				radius: 25,
 				depth: 2,
-				collapsed: true,
-				hidden: false,
+				collapsed: false,
+				hidden: true,
 			},
 			{
 				id: 3,
@@ -771,7 +771,7 @@ describe('collapseNodes', () => {
 				hidden: false,
 			},
 			{
-				id: 3,
+				id: 4,
 				name: 'file5.ts',
 				fullPath: '/project/file5.ts',
 				radius: 25,

@@ -316,7 +316,7 @@ const click = (event: MouseEvent, d: Node) => {
 	if (event.shiftKey) {
 		vscode.postMessage({
 			command: 'collapseNode',
-			text: d.id,
+			text: d.fullPath,
 		})
 	} else {
 		const path = d.fullPath

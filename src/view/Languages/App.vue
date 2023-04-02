@@ -84,7 +84,7 @@ window.addEventListener('message', (event) => {
 		getGraphData({
 			mode: connectionType.value,
 			nodeSize: nodeSize.value,
-			collapseIds: [],
+			collapseFullPaths: [],
 			nodeDepth: nodeDepth.value,
 			showNodeModules: showNodeModules.value,
 		})

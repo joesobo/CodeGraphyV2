@@ -16,13 +16,13 @@ import { normalizeIds } from './normalizeIds'
 export const processGraphInfo = ({
 	mode,
 	nodeSize,
-	collapseIds,
+	collapseFullPaths,
 	nodeDepth,
 	showNodeModules,
 }: {
   mode: 'Interaction' | 'Directory'
   nodeSize: 'Lines' | 'Connections'
-  collapseIds: number[]
+  collapseFullPaths: string[]
   nodeDepth: number
   showNodeModules: boolean
 }) => {
@@ -48,6 +48,9 @@ export const processGraphInfo = ({
 
 	const currentOpenFile =
     vscode.window.activeTextEditor?.document.fileName || null
+	const collapseIds = collapseFullPaths.map((path) =>
+		filteredNodes.find((node) => node.fullPath === path)?.id ?? -1,
+	)
 
 	nodes = collapseNodes({
 		activeId:

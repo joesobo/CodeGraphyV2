@@ -254,7 +254,7 @@ let displaySettingsPopup: Ref<boolean> = ref(false)
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
 let nodeSize: Ref<'Connections' | 'Lines'> = ref('Lines')
-let collapseIds: Ref<number[]> = ref([])
+let collapseFullPaths: Ref<string[]> = ref([])
 let nodeColor: Ref<string> = ref('')
 let selectedD3Color: Ref<string> = ref('')
 
@@ -292,7 +292,7 @@ window.addEventListener('message', (event) => {
 		getGraphData({
 			mode: connectionType.value,
 			nodeSize: nodeSize.value,
-			collapseIds: collapseIds.value,
+			collapseFullPaths: collapseFullPaths.value,
 			nodeDepth: nodeDepth.value,
 			showNodeModules: showNodeModules.value,
 		})
@@ -324,10 +324,10 @@ window.addEventListener('message', (event) => {
 		updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
 		return
 	case 'collapseNode':
-		if (collapseIds.value.indexOf(message.id) !== -1) {
-			collapseIds.value.splice(collapseIds.value.indexOf(message.id), 1)
+		if (collapseFullPaths.value.indexOf(message.fullPath) !== -1) {
+			collapseFullPaths.value.splice(collapseFullPaths.value.indexOf(message.fullPath), 1)
 		} else {
-			collapseIds.value.push(message.id)
+			collapseFullPaths.value.push(message.fullPath)
 		}
 
 		updateNodeSettings()
@@ -339,7 +339,7 @@ const updateNodeSettings = () => {
 	getGraphData({
 		mode: connectionType.value,
 		nodeSize: nodeSize.value,
-		collapseIds: collapseIds.value,
+		collapseFullPaths: collapseFullPaths.value,
 		nodeDepth: nodeDepth.value,
 		showNodeModules: showNodeModules.value,
 	})

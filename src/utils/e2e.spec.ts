@@ -14,6 +14,7 @@ import { getNodes } from './getNodes'
 import { getUnprocessedNodes } from './getUnprocessedNodes'
 import { processGraphInfo } from './processGraphInfo'
 
+
 vi.mock('vscode', () => {
 	const workspace = {
 		workspaceFolders: [
@@ -84,7 +85,7 @@ describe('getNodes', () => {
 		const mode: 'Interaction' | 'Directory' = 'Interaction'
 		const nodeSize: 'Lines' | 'Connections' = 'Lines'
 		const currentOpenFile = '/project/file1.ts'
-		const collapseIds: number[] = []
+		const collapseFullPaths: string[] = []
 		const nodeDepth = 0
 		const showNodeModules = true
 
@@ -107,6 +108,9 @@ describe('getNodes', () => {
 			connections,
 			nodeDepth,
 		})
+		const collapseIds = collapseFullPaths.map((path) =>
+			filteredNodes.find((node) => node.fullPath === path)?.id ?? -1,
+		)
 
 		nodes = collapseNodes({
 			activeId:
@@ -170,7 +174,7 @@ describe('getNodes', () => {
       processGraphInfo({
       	mode,
       	nodeSize,
-      	collapseIds,
+      	collapseFullPaths,
       	nodeDepth,
       	showNodeModules,
       })
