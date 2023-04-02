@@ -325,7 +325,10 @@ window.addEventListener('message', (event) => {
 		return
 	case 'collapseNode':
 		if (collapseFullPaths.value.indexOf(message.fullPath) !== -1) {
-			collapseFullPaths.value.splice(collapseFullPaths.value.indexOf(message.fullPath), 1)
+			collapseFullPaths.value.splice(
+				collapseFullPaths.value.indexOf(message.fullPath),
+				1,
+			)
 		} else {
 			collapseFullPaths.value.push(message.fullPath)
 		}

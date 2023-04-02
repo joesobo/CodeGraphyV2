@@ -48,8 +48,8 @@ export const processGraphInfo = ({
 
 	const currentOpenFile =
     vscode.window.activeTextEditor?.document.fileName || null
-	const collapseIds = collapseFullPaths.map((path) =>
-		filteredNodes.find((node) => node.fullPath === path)?.id ?? -1,
+	const collapseIds = collapseFullPaths.map(
+		(path) => filteredNodes.find((node) => node.fullPath === path)?.id ?? -1,
 	)
 
 	nodes = collapseNodes({
