@@ -35,18 +35,18 @@ CodeGraphyV2 is coming soon...
 
 ## Upcoming in V2
 
-- [ ] Collapsible nodes
-- [x] Displays connections to external packages
-- [x] Ability to switch between files through graph nodes
-- [x] Switch between different connection display (interactions vs classic directory)
-- [x] Switch between different level of view (entire graph vs local graph)
-- [x] Switch between different node size factors (connections vs lines)
-- [x] Switch between different base color palette (d3 vs random)
-- [x] Variety of d3 base palettes
-- [x] Variety of d3 force sliders to change graph physics
+- [x] Collapsible nodes
+- [x] Displays connections to external packages (node_modules)
+- [x] Switch between files through graph nodes
+- [x] Switch between different connection display modes (Interactions vs classic Directory)
+- [x] Slide to meet your desired node depth to display
+- [x] Switch between different node size factors (Connections vs Line count)
+- [x] Switch between different base color palette (D3 vs Random)
+- [x] Variety of D3 base palettes
+- [x] Variety of D3 force sliders to change graph physics
 - [x] Variety of options to hide / display different features within the graph
-- [x] Analyzed table view of directory contents
-- [x] Entirely built on Vite & D3 so its much faster
+- [x] Analyzed table view of directory contents with color overrides
+- [x] Entirely built on Vite & D3
 
 ### Node Graph
 
