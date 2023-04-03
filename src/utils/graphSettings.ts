@@ -14,13 +14,13 @@ export const linkDistance = 100
 
 // Extra Settings
 export const showNodeModules = false
-export const showOrphans = false
-export const showLabels = false
-export const showOutlines = false
-export const doCollisions = false
+export const showOrphans = true
+export const showLabels = true
+export const showOutlines = true
+export const doCollisions = true
 export const lineColor = '#ff0000'
 
-export const settings = {
+export const settings: Record<string, unknown> = {
 	connectionType,
 	nodeSize,
 	nodeColor,

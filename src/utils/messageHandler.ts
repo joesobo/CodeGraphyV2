@@ -79,6 +79,24 @@ const receiveMessages = async (webview: vscode.Webview) => {
 
 			return
 		}
+		case 'saveSettings': {
+			if (message.text) {
+				// loop over every key in text object
+				for (const key in message.text) {
+					settings[key] = message.text[key]
+				}
+			}
+
+			const languageView = views.find((view) => view.title === 'Languages View')
+			if (languageView) {
+				await languageView.view.postMessage({
+					command: 'setSettings',
+					text: settings,
+				})
+			}
+
+			return
+		}
 		}
 	})
 }

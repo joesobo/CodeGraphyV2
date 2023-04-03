@@ -11,12 +11,7 @@
         <button
           class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
           @click="
-            drawD3Graph({
-              nodes,
-              connections,
-              extensions: extensionList,
-              currentOpenFile,
-            })
+						drawGraph()
           "
         >
           <RestartIcon width="1.25rem" height="1.25rem" />
@@ -217,13 +212,11 @@
 </template>
 
 <script setup lang="ts">
-import * as d3 from 'd3'
 import { ref } from 'vue'
 import PickColors from 'vue-pick-colors'
 
 import type {
 	Connection,
-	D3Color,
 	Extension,
 	Node,
 	SliderInputEvent,
@@ -235,9 +228,9 @@ import SliderRow from '../../components/SliderRow.vue'
 import SwitchButton from '../../components/SwitchButton.vue'
 import ToggleSwitch from '../../components/ToggleSwitch.vue'
 import { drawD3Graph, updateD3Graph } from '../../utils/d3'
-import { colorSchemes, d3ColorSchemes } from '../../utils/d3ColorSchemes'
+import { colorSchemes, getD3BackgroundColor } from '../../utils/d3ColorSchemes'
 import { findMaxDepth } from '../../utils/findMaxDepth'
-import { fetchSettings, getGraphData } from '../../utils/graphMessanger'
+import { fetchSettings, getGraphData, saveSettings } from '../../utils/graphMessanger'
 import { parseExtensions } from '../../utils/parseExtensions'
 
 import SettingsIcon from '~icons/ant-design/setting-filled'
@@ -255,8 +248,8 @@ let displaySettingsPopup: Ref<boolean> = ref(false)
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
 let nodeSize: Ref<'Connections' | 'Lines'> = ref('Lines')
 let collapseFullPaths: Ref<string[]> = ref([])
-let nodeColor: Ref<string> = ref('')
-let selectedD3Color: Ref<string> = ref('')
+let nodeColor: Ref<string> = ref('D3')
+let selectedD3Color: Ref<string> = ref('Spectral')
 
 // D3 Settings
 let nodeDepth: Ref<number> = ref(0)
@@ -276,26 +269,20 @@ window.addEventListener('message', (event) => {
 	const message = event.data // The JSON data our extension sent
 	switch (message.command) {
 	case 'setSettings':
-		connectionType.value = message.text.connectionType
-		nodeSize.value = message.text.nodeSize
 		nodeColor.value = message.text.nodeColor
 		selectedD3Color.value = message.text.selectedD3Color
-		nodeDepth.value = message.text.nodeDepth
 		maxNodeDepth.value = message.text.maxNodeDepth
 		centerForce.value = message.text.centerForce
 		chargeForce.value = message.text.chargeForce
 		linkForce.value = message.text.linkForce
 		linkDistance.value = message.text.linkDistance
-		showNodeModules.value = message.text.showNodeModules
 		lineColor.value = message.text.lineColor
+		connectionType.value = message.text.connectionType
+		nodeSize.value = message.text.nodeSize
+		nodeDepth.value = message.text.nodeDepth
+		showNodeModules.value = message.text.showNodeModules
 
-		getGraphData({
-			mode: connectionType.value,
-			nodeSize: nodeSize.value,
-			collapseFullPaths: collapseFullPaths.value,
-			nodeDepth: nodeDepth.value,
-			showNodeModules: showNodeModules.value,
-		})
+		updateNodeSettings()
 		return
 	case 'setGraphData':
 		nodes.value = message.text.nodes
@@ -312,12 +299,7 @@ window.addEventListener('message', (event) => {
 			d3Color: selectedD3Color.value,
 		})
 
-		drawD3Graph({
-			nodes: nodes.value,
-			connections: connections.value,
-			extensions: extensionList.value,
-			currentOpenFile: currentOpenFile.value,
-		})
+		drawGraph()
 		return
 	case 'setCurrentFile':
 		currentOpenFile.value = message.text
@@ -348,29 +330,23 @@ const updateNodeSettings = () => {
 	})
 }
 
+const drawGraph = () => {
+	drawD3Graph({
+		nodes: nodes.value,
+		connections: connections.value,
+		extensions: extensionList.value,
+		currentOpenFile: currentOpenFile.value,
+	})
+}
+
 // Update the graph without regenerating the nodes / connections
 const updateGraph = () => {
-	fetchSettings({ selectedD3Color: selectedD3Color.value })
+	saveSettings({ nodeColor: nodeColor.value, selectedD3Color: selectedD3Color.value })
 
 	extensionList.value = parseExtensions(nodes.value, {
 		useRandomColor: nodeColor.value === 'Random',
 		d3Color: selectedD3Color.value,
 	})
 	updateD3Graph(nodes.value, extensionList.value)
-}
-
-const getD3BackgroundColor = (color: string) => {
-	const selectedThemeInterpolator: ((t: number) => string) | undefined =
-    d3ColorSchemes.find((theme: D3Color) => theme.name === color)?.interpolator
-	const d3Color = d3
-		.scaleSequential()
-		.domain([1, 10])
-		.interpolator(selectedThemeInterpolator ?? d3.interpolateRainbow)
-
-	const colors = Array.from({ length: 11 }, (_, i) => d3Color(i))
-	const gradient = `background-image: linear-gradient(to bottom right, ${colors.join(
-		', ',
-	)}); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);`
-	return gradient
 }
 </script>

@@ -52,3 +52,18 @@ export const colorSchemes = [
 	'Sinebow',
 	'Spectral',
 ]
+
+export const getD3BackgroundColor = (color: string) => {
+	const selectedThemeInterpolator: ((t: number) => string) | undefined =
+    d3ColorSchemes.find((theme: D3Color) => theme.name === color)?.interpolator
+	const d3Color = d3
+		.scaleSequential()
+		.domain([1, 10])
+		.interpolator(selectedThemeInterpolator ?? d3.interpolateRainbow)
+
+	const colors = Array.from({ length: 11 }, (_, i) => d3Color(i))
+	const gradient = `background-image: linear-gradient(to bottom right, ${colors.join(
+		', ',
+	)}); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);`
+	return gradient
+}

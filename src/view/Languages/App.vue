@@ -1,44 +1,35 @@
 <template>
-  <div class="inline-block">
-    <table class="mt-4">
-      <thead class="bg-zinc-700">
-        <tr class="py-1">
-          <th
-            v-for="header in tableHeaders"
-            :key="header"
-            class="pl-4 text-start first:pl-2 last:pr-2"
-          >
-            {{ header }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="extension in extensionList"
-          :key="extension.extension"
-          class="border border-zinc-700 bg-zinc-800"
-        >
-          <td class="pl-2">.{{ extension.extension }}</td>
-          <td class="pl-4">{{ extension.count }}</td>
-          <td class="pl-4">{{ extension.lines }}</td>
-          <td class="pl-4">
-            <PickColors
-              v-model:value="extension.color"
-              class="cursor-pointer"
-              @change="updateD3Graph(nodes, extensionList)"
-            />
-          </td>
-          <td class="pl-4">
-            <button class="h-4 w-4 bg-transparent hover:bg-transparent">
-              <CloseIcon
-                class="h-4 w-4 rounded-full text-red-500 hover:bg-white"
-              />
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+	<table class="mt-4 w-full">
+		<thead class="bg-zinc-700">
+			<tr class="py-1">
+				<th
+					v-for="header in tableHeaders"
+					:key="header"
+					class="pl-4 text-start first:pl-2 last:pr-2"
+				>
+					{{ header }}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr
+				v-for="extension in extensionList"
+				:key="extension.extension"
+				class="border border-zinc-700 bg-zinc-800"
+			>
+				<td class="pl-2">.{{ extension.extension }}</td>
+				<td class="pl-4">{{ extension.count }}</td>
+				<td class="pl-4">{{ extension.lines }}</td>
+				<td class="pl-4">
+					<PickColors
+						v-model:value="extension.color"
+						class="cursor-pointer"
+						@change="updateD3Graph(nodes, extensionList)"
+					/>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </template>
 
 <script setup lang="ts">
@@ -51,9 +42,8 @@ import { updateD3Graph } from '../../utils/d3'
 import { findMaxDepth } from '../../utils/findMaxDepth'
 import { getGraphData } from '../../utils/graphMessanger'
 import { parseExtensions } from '../../utils/parseExtensions'
-import { tableHeaders } from '../../utils/tableHeaders'
 
-import CloseIcon from '~icons/mdi/close-circle'
+const tableHeaders = ['Extension', 'Files', 'Lines', 'Color']
 
 let nodes: Ref<Node[]> = ref([])
 let connections: Ref<Connection[]> = ref([])
@@ -62,7 +52,8 @@ let extensionList: Ref<Extension[]> = ref([])
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
 let nodeSize: Ref<string> = ref('Connections')
-let selectedD3Color: Ref<string> = ref('Sinebow')
+let nodeColor: Ref<string> = ref('D3')
+let selectedD3Color: Ref<string> = ref('Spectral')
 
 // D3 Settings
 let nodeDepth: Ref<number> = ref(0)
@@ -77,6 +68,7 @@ window.addEventListener('message', (event) => {
 	case 'setSettings':
 		connectionType.value = message.text.connectionType
 		nodeSize.value = message.text.nodeSize
+		nodeColor.value = message.text.nodeColor
 		selectedD3Color.value = message.text.selectedD3Color
 		nodeDepth.value = message.text.nodeDepth
 		maxNodeDepth.value = message.text.maxNodeDepth
@@ -98,7 +90,7 @@ window.addEventListener('message', (event) => {
 		}
 
 		extensionList.value = parseExtensions(nodes.value, {
-			useRandomColor: false,
+			useRandomColor: nodeColor.value === 'Random',
 			d3Color: selectedD3Color.value,
 		})
 		return

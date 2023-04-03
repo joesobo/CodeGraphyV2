@@ -1,7 +1,13 @@
-export const fetchSettings = (settings?: Record<string, unknown>) => {
+export const saveSettings = (settings?: Record<string, unknown>) => {
+	vscode.postMessage({
+		command: 'saveSettings',
+		text: settings,
+	})
+}
+
+export const fetchSettings = () => {
 	vscode.postMessage({
 		command: 'fetchSettings',
-		text: settings,
 	})
 }
 
