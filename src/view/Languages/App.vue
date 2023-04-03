@@ -1,35 +1,37 @@
 <template>
-	<table class="mt-4 w-full">
-		<thead class="bg-zinc-700">
-			<tr class="py-1">
-				<th
-					v-for="header in tableHeaders"
-					:key="header"
-					class="pl-4 text-start first:pl-2 last:pr-2"
-				>
-					{{ header }}
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr
-				v-for="extension in extensionList"
-				:key="extension.extension"
-				class="border border-zinc-700 bg-zinc-800"
-			>
-				<td class="pl-2">.{{ extension.extension }}</td>
-				<td class="pl-4">{{ extension.count }}</td>
-				<td class="pl-4">{{ extension.lines }}</td>
-				<td class="pl-4">
-					<PickColors
-						v-model:value="extension.color"
-						class="cursor-pointer"
-						@change="updateD3Graph(nodes, extensionList)"
-					/>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+  <table class="mt-4 w-full">
+    <thead class="bg-zinc-700">
+      <tr class="py-1">
+        <th
+          v-for="header in tableHeaders"
+          :key="header"
+          class="pl-4 text-start first:pl-2 last:pr-2"
+        >
+          {{ header }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="extension in extensionList"
+        :key="extension.extension"
+        class="border border-zinc-700 bg-zinc-800"
+      >
+        <td class="pl-2">.{{ extension.extension }}</td>
+        <td class="pl-4">{{ extension.count }}</td>
+        <td class="pl-4">{{ extension.lines }}</td>
+        <td class="pl-4">
+          <PickColors
+            v-model:value="extension.color"
+            class="cursor-pointer"
+            @change="
+              overrideExtensionColor(extension.extension, extension.color)
+            "
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script setup lang="ts">
@@ -38,9 +40,11 @@ import PickColors from 'vue-pick-colors'
 
 import type { Connection, Extension, Node } from '../../utils/types'
 
-import { updateD3Graph } from '../../utils/d3'
 import { findMaxDepth } from '../../utils/findMaxDepth'
-import { getGraphData } from '../../utils/graphMessanger'
+import {
+	getGraphData,
+	overrideExtensionColor,
+} from '../../utils/graphMessenger'
 import { parseExtensions } from '../../utils/parseExtensions'
 
 const tableHeaders = ['Extension', 'Files', 'Lines', 'Color']
@@ -91,6 +95,12 @@ window.addEventListener('message', (event) => {
 
 		extensionList.value = parseExtensions(nodes.value, {
 			useRandomColor: nodeColor.value === 'Random',
+			overrideExtensionColors: extensionList.value.map((extension) => {
+				return {
+					extension: extension.extension,
+					color: extension.color,
+				}
+			}),
 			d3Color: selectedD3Color.value,
 		})
 		return

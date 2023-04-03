@@ -241,9 +241,7 @@ export const updateD3Graph = (
 	if (nodes.length === 0) return
 
 	const svg = d3.select('svg')
-	const circles = svg
-		.selectAll<SVGCircleElement, Node>('circle')
-		.data(nodes, (node: Node) => node.id)
+	const circles = svg.selectAll<SVGCircleElement, Node>('circle')
 
 	circles
 		.enter()

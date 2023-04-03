@@ -1,3 +1,13 @@
+export const overrideExtensionColor = (name: string, color: string) => {
+	vscode.postMessage({
+		command: 'overrideExtensionColor',
+		override: {
+			name,
+			color,
+		},
+	})
+}
+
 export const saveSettings = (settings?: Record<string, unknown>) => {
 	vscode.postMessage({
 		command: 'saveSettings',

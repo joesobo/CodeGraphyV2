@@ -62,6 +62,16 @@ export const parseExtensions = (
 		}
 	})
 
+	// Override Extension Colors
+	options.overrideExtensionColors.forEach((override) => {
+		const extensionIndex = extensions.findIndex(
+			(ext) => ext.extension === override.name,
+		)
+		if (extensionIndex !== -1) {
+			extensions[extensionIndex].color = override.color
+		}
+	})
+
 	extensions.sort((a, b) => {
 		return a.extension.length - b.extension.length
 	})

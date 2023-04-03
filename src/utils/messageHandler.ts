@@ -23,10 +23,12 @@ export const registerView = (view: vscode.Webview, title: string) => {
 	})
 }
 
-export const handleMessages = (webview: vscode.Webview) => {
-	receiveMessages(webview)
+export const handleMessages = () => {
+	views.forEach((webview) => {
+		receiveMessages(webview.view)
 
-	sendMessages(webview)
+		sendMessages(webview.view)
+	})
 }
 
 const receiveMessages = async (webview: vscode.Webview) => {
@@ -87,7 +89,9 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				}
 			}
 
-			const languageView = views.find((view) => view.title === 'Languages View')
+			const languageView = views.find(
+				(view) => view.title === 'Languages View',
+			)
 			if (languageView) {
 				await languageView.view.postMessage({
 					command: 'setSettings',
@@ -96,6 +100,15 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			}
 
 			return
+		}
+		case 'overrideExtensionColor': {
+			const graphView = views.find((view) => view.title === 'Graph View')
+			if (graphView) {
+				await graphView.view.postMessage({
+					command: 'overrideExtensionColor',
+					override: message.override,
+				})
+			}
 		}
 		}
 	})

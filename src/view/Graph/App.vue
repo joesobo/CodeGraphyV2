@@ -10,9 +10,7 @@
       <div class="flex justify-end">
         <button
           class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-          @click="
-						drawGraph()
-          "
+          @click="drawGraph()"
         >
           <RestartIcon width="1.25rem" height="1.25rem" />
         </button>
@@ -230,7 +228,11 @@ import ToggleSwitch from '../../components/ToggleSwitch.vue'
 import { drawD3Graph, updateD3Graph } from '../../utils/d3'
 import { colorSchemes, getD3BackgroundColor } from '../../utils/d3ColorSchemes'
 import { findMaxDepth } from '../../utils/findMaxDepth'
-import { fetchSettings, getGraphData, saveSettings } from '../../utils/graphMessanger'
+import {
+	fetchSettings,
+	getGraphData,
+	saveSettings,
+} from '../../utils/graphMessenger'
 import { parseExtensions } from '../../utils/parseExtensions'
 
 import SettingsIcon from '~icons/ant-design/setting-filled'
@@ -240,6 +242,7 @@ import RestartIcon from '~icons/mdi/restart'
 let nodes: Ref<Node[]> = ref([])
 let connections: Ref<Connection[]> = ref([])
 let extensionList: Ref<Extension[]> = ref([])
+let overrideExtensionColors: Ref<Record<string, string>[]> = ref([])
 let currentOpenFile: Ref<string> = ref('')
 
 let displaySettingsPopup: Ref<boolean> = ref(false)
@@ -296,6 +299,7 @@ window.addEventListener('message', (event) => {
 
 		extensionList.value = parseExtensions(nodes.value, {
 			useRandomColor: false,
+			overrideExtensionColors: overrideExtensionColors.value,
 			d3Color: selectedD3Color.value,
 		})
 
@@ -316,6 +320,29 @@ window.addEventListener('message', (event) => {
 		}
 
 		updateNodeSettings()
+		return
+	case 'overrideExtensionColor':
+		if (
+			overrideExtensionColors.value.findIndex(
+				(override) => override.name === message.override.extension,
+			) !== -1
+		) {
+			overrideExtensionColors.value[
+				overrideExtensionColors.value.findIndex(
+					(override) => override.name === message.override.extension,
+				)
+			] = message.override
+		} else {
+			overrideExtensionColors.value.push(message.override)
+		}
+
+		extensionList.value = parseExtensions(nodes.value, {
+			useRandomColor: nodeColor.value === 'Random',
+			overrideExtensionColors: overrideExtensionColors.value,
+			d3Color: selectedD3Color.value,
+		})
+
+		updateD3Graph(nodes.value, extensionList.value)
 	}
 })
 
@@ -341,11 +368,15 @@ const drawGraph = () => {
 
 // Update the graph without regenerating the nodes / connections
 const updateGraph = () => {
-	saveSettings({ nodeColor: nodeColor.value, selectedD3Color: selectedD3Color.value })
+	saveSettings({
+		nodeColor: nodeColor.value,
+		selectedD3Color: selectedD3Color.value,
+	})
 
 	extensionList.value = parseExtensions(nodes.value, {
 		useRandomColor: nodeColor.value === 'Random',
 		d3Color: selectedD3Color.value,
+		overrideExtensionColors: overrideExtensionColors.value,
 	})
 	updateD3Graph(nodes.value, extensionList.value)
 }

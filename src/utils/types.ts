@@ -36,6 +36,7 @@ export interface Extension {
 
 export interface ParseOptions {
   useRandomColor: boolean
+  overrideExtensionColors: Record<string, string>[]
   d3Color?: string
 }
 
