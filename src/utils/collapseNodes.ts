@@ -120,7 +120,7 @@ export const collapseNodes = ({
 			const foundNode = nodes.find((node) => node.id === hiddenNode.id)
 
 			if (foundNode) {
-				foundNode.hidden = !foundNode.hidden
+				foundNode.hidden = collapsedNode.collapsed
 			}
 		})
 	})
