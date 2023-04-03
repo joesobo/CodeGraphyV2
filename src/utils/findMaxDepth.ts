@@ -46,5 +46,5 @@ export const findMaxDepth = (connections: Connection[] | undefined) => {
 	})
 
 	// return the max depth + 1 because the depth is 0 indexed
-	return maxDepth + 1
+	return maxDepth
 }

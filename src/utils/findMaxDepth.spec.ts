@@ -10,7 +10,7 @@ describe('findMaxDepth', () => {
 	it('should return 1 if there is only 1 connection', () => {
 		const connections: Connection[] = [{ source: 0, target: 1, id: '0-1' }]
 
-		expect(findMaxDepth(connections)).toBe(1)
+		expect(findMaxDepth(connections)).toBe(0)
 	})
 
 	it('should return 2 if there are 2 connection', () => {
@@ -19,7 +19,7 @@ describe('findMaxDepth', () => {
 			{ source: 1, target: 2, id: '1-2' },
 		]
 
-		expect(findMaxDepth(connections)).toBe(2)
+		expect(findMaxDepth(connections)).toBe(1)
 	})
 
 	it('should return the depth of the connections', () => {
@@ -29,7 +29,7 @@ describe('findMaxDepth', () => {
 			{ source: 2, target: 3, id: '2-3' },
 		]
 
-		expect(findMaxDepth(connections)).toBe(3)
+		expect(findMaxDepth(connections)).toBe(2)
 	})
 
 	it('should return the longest depth count found', () => {
@@ -44,6 +44,6 @@ describe('findMaxDepth', () => {
 			{ source: 7, target: 8, id: '7-8' },
 		]
 
-		expect(findMaxDepth(connections)).toBe(4)
+		expect(findMaxDepth(connections)).toBe(3)
 	})
 })
