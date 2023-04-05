@@ -1,10 +1,11 @@
 <template>
-  <div class="mt-2 flex w-full flex-col justify-between">
-    <label class="text-sm font-light text-gray-300">
+  <div class="mt-2 mb-4 flex flex-col justify-between px-4">
+    <label class="text-white">
       {{ label }}
     </label>
 
-    <div class="flex items-center">
+    <div class="flex w-full items-center">
+      <slot />
       <input
         :id="props.id"
         v-model="sliderValue"

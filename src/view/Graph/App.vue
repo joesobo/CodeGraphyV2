@@ -7,38 +7,71 @@
     <div
       class="pointer-events-none absolute flex h-[500px] w-[500px] flex-col justify-between"
     >
-      <div class="flex justify-end">
-				<!-- Restart -->
-        <button
-          class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-          @click="drawGraph()"
-        >
-          <RestartIcon width="1.25rem" height="1.25rem" />
-        </button>
+      <!-- Top Row -->
+      <div class="flex justify-between">
+        <!-- Node Count -->
+        <p class="ml-4 mt-4 text-white">Count: {{ nodes?.length }}</p>
 
-				<!-- Connections -->
-				<button
-          class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-          @click="() => {
-						connectionType = connectionType === 'Interaction' ? 'Directory' : 'Interaction'
-						updateNodeSettings()
-					}"
-        >
-          <GraphIcon v-if="connectionType === 'Interaction'" width="1.25rem" height="1.25rem" />
-					<DirectoryIcon v-else width="1.25rem" height="1.25rem" />
-        </button>
+        <!-- Icons -->
+        <div class="flex">
+          <!-- Restart -->
+          <button
+            class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+            @click="drawGraph()"
+          >
+            <RestartIcon width="1.25rem" height="1.25rem" />
+          </button>
 
-				<!-- Settings -->
-        <button
-          class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-          @click="displaySettingsPopup = true"
-        >
-          <SettingsIcon width="1.25rem" height="1.25rem" />
-        </button>
+          <!-- Connections -->
+          <button
+            class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+            @click="
+              () => {
+                connectionType =
+                  connectionType === 'Interaction' ? 'Directory' : 'Interaction'
+                updateNodeSettings()
+              }
+            "
+          >
+            <GraphIcon
+              v-if="connectionType === 'Interaction'"
+              width="1.25rem"
+              height="1.25rem"
+            />
+            <DirectoryIcon v-else width="1.25rem" height="1.25rem" />
+          </button>
+
+          <!-- Settings -->
+          <button
+            class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+            @click="displaySettingsPopup = true"
+          >
+            <SettingsIcon width="1.25rem" height="1.25rem" />
+          </button>
+        </div>
       </div>
-      <div class="flex">
-        <p class="ml-4 mb-4 text-white">Count: {{ nodes?.length }}</p>
-      </div>
+
+      <!-- Bottom Row -->
+      <!-- Depth Slider -->
+      <SliderRowIcon
+        id="nodeDepth"
+        label="Node Depth"
+        :value="nodeDepth"
+        :min="0"
+        :max="maxNodeDepth"
+        @input="
+				(event: SliderInputEvent) => {
+					nodeDepth = event.target.value
+					updateNodeSettings()
+				}
+			"
+      >
+        <DepthGraphIcon
+          width="1.25rem"
+          height="1.25rem"
+          class="mr-2 text-white"
+        />
+      </SliderRowIcon>
 
       <!-- Settings Popup -->
       <div
@@ -90,71 +123,87 @@
           </div>
         </Disclosure>
 
-				<!-- Node Settings -->
-				<Disclosure title="Node" class="border-t border-border p-2">
-					<div class="mt-2 mb-4 flex flex-col">
-						<span class="text-sm font-light text-gray-300">Node Size</span>
-						<div
-							class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
-							@click="() => {
-								nodeSize = nodeSize === 'Connections' ? 'Lines' : 'Connections'
-      	        updateNodeSettings()
-							}"
-						>
-							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeSize === 'Connections' ? 'text-white bg-primary' : ''">
-								<ConnectionIcon width="1.25rem" height="1.25rem" />
-							</div>
-							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeSize === 'Lines' ? 'text-white bg-primary' : ''">
-								<LinesIcon width="1.25rem" height="1.25rem" />
-							</div>
-						</div>
-					</div>
-					<ToggleSwitch
-              label="Node Modules"
-              :value="showNodeModules"
-              @input="
-                (e) => {
-                  showNodeModules = e.target.checked
+        <!-- Node Settings -->
+        <Disclosure title="Node" class="border-t border-border p-2">
+          <div class="mt-2 mb-4 flex flex-col">
+            <span class="text-sm font-light text-gray-300">Node Size</span>
+            <div
+              class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
+              @click="
+                () => {
+                  nodeSize =
+                    nodeSize === 'Connections' ? 'Lines' : 'Connections'
                   updateNodeSettings()
                 }
               "
-            />
-            <ToggleSwitch label="Orphans" :value="true" />
-            <ToggleSwitch label="Labels" :value="true" />
-            <ToggleSwitch label="Outlines" />
-            <ToggleSwitch label="Collisions" />
-				</Disclosure>
+            >
+              <div
+                class="flex flex-1 justify-center py-1 px-2"
+                :class="
+                  nodeSize === 'Connections' ? 'text-white bg-primary' : ''
+                "
+              >
+                <ConnectionIcon width="1.25rem" height="1.25rem" />
+              </div>
+              <div
+                class="flex flex-1 justify-center py-1 px-2"
+                :class="nodeSize === 'Lines' ? 'text-white bg-primary' : ''"
+              >
+                <LinesIcon width="1.25rem" height="1.25rem" />
+              </div>
+            </div>
+          </div>
+          <ToggleSwitch
+            label="Node Modules"
+            :value="showNodeModules"
+            @input="
+              (e) => {
+                showNodeModules = e.target.checked
+                updateNodeSettings()
+              }
+            "
+          />
+          <ToggleSwitch label="Orphans" :value="true" />
+          <ToggleSwitch label="Labels" :value="true" />
+          <ToggleSwitch label="Outlines" />
+          <ToggleSwitch label="Collisions" />
+        </Disclosure>
 
         <!-- Color Settings -->
-        <Disclosure
-          title="Colors"
-          class="border-t border-border p-2"
-        >
-					<!-- Color Switch -->
-					<div class="mt-2 flex flex-col">
-						<div class="mb-4 flex items-center">
+        <Disclosure title="Colors" class="border-t border-border p-2">
+          <!-- Color Switch -->
+          <div class="mt-2 flex flex-col">
+            <div class="mb-4 flex items-center">
               <PickColors v-model:value="lineColor" class="cursor-pointer" />
               <p class="ml-3 text-sm font-light text-gray-300">Line Color</p>
             </div>
 
-						<span class="text-sm font-light text-gray-300">Node Color</span>
-						<div
-							class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
-							@click="() => {
-								nodeColor = nodeColor === 'D3' ? 'Random' : 'D3'
-      	        updateGraph()
-							}"
-						>
-							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeColor === 'D3' ? 'text-white bg-primary' : ''">
-								<LogoIcon width="1.25rem" height="1.25rem" />
-							</div>
-							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeColor === 'Random' ? 'text-white bg-primary' : ''">
-								<RandomIcon width="1.25rem" height="1.25rem" />
-							</div>
-						</div>
-					</div>
+            <span class="text-sm font-light text-gray-300">Node Color</span>
+            <div
+              class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
+              @click="
+                () => {
+                  nodeColor = nodeColor === 'D3' ? 'Random' : 'D3'
+                  updateGraph()
+                }
+              "
+            >
+              <div
+                class="flex flex-1 justify-center py-1 px-2"
+                :class="nodeColor === 'D3' ? 'text-white bg-primary' : ''"
+              >
+                <LogoIcon width="1.25rem" height="1.25rem" />
+              </div>
+              <div
+                class="flex flex-1 justify-center py-1 px-2"
+                :class="nodeColor === 'Random' ? 'text-white bg-primary' : ''"
+              >
+                <RandomIcon width="1.25rem" height="1.25rem" />
+              </div>
+            </div>
+          </div>
 
-					<!-- D3 Colors -->
+          <!-- D3 Colors -->
           <div v-if="nodeColor === 'D3'" class="mt-4 flex flex-col">
             <button
               v-for="color in colorSchemes"
@@ -174,22 +223,6 @@
         </Disclosure>
       </div>
     </div>
-
-    <!-- Depth Slider -->
-    <SliderRow
-      id="nodeDepth"
-      label="Node Depth"
-      class="mt-2"
-      :value="nodeDepth"
-      :min="0"
-      :max="maxNodeDepth"
-      @input="
-        (event: SliderInputEvent) => {
-          nodeDepth = event.target.value
-          updateNodeSettings()
-        }
-      "
-    />
   </div>
 </template>
 
@@ -207,6 +240,7 @@ import type { Ref } from 'vue'
 
 import Disclosure from '../../components/Disclosure.vue'
 import SliderRow from '../../components/SliderRow.vue'
+import SliderRowIcon from '../../components/SliderRowIcon.vue'
 import ToggleSwitch from '../../components/ToggleSwitch.vue'
 import { drawD3Graph, updateD3Graph } from '../../utils/d3'
 import { colorSchemes, getD3BackgroundColor } from '../../utils/d3ColorSchemes'
@@ -223,6 +257,7 @@ import LogoIcon from '~icons/logos/d3'
 import CloseIcon from '~icons/mdi/close-circle'
 import RandomIcon from '~icons/mdi/dice-multiple'
 import DirectoryIcon from '~icons/mdi/folder'
+import DepthGraphIcon from '~icons/mdi/graph'
 import RestartIcon from '~icons/mdi/restart'
 import LinesIcon from '~icons/mdi/text'
 import ConnectionIcon from '~icons/mdi/transit-connection-variant'
