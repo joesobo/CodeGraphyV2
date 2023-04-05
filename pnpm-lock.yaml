@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@headlessui/vue': ^1.7.12
   '@iconify-json/ant-design': ^1.1.5
+  '@iconify-json/logos': ^1.1.24
   '@iconify-json/mdi': ^1.1.39
   '@iconify-json/ph': ^1.1.5
   '@intlify/unplugin-vue-i18n': ^0.8.1
@@ -65,6 +66,7 @@ dependencies:
 
 devDependencies:
   '@iconify-json/ant-design': 1.1.5
+  '@iconify-json/logos': 1.1.24
   '@iconify-json/mdi': 1.1.49
   '@iconify-json/ph': 1.1.5
   '@mertasan/tailwindcss-variables': 2.6.0_j7yt3jd32cwenjqavrrga47yr4
@@ -427,6 +429,12 @@ packages:
 
   /@iconify-json/ant-design/1.1.5:
     resolution: {integrity: sha512-lNEC95u9QdmS3GfMLnbAjLZCfQ9i4xURyn7P4UVHa6ejjLjs5FVyi/J+itrmnBpwb36YZo4CT0GDIn2AgvkNng==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/logos/1.1.24:
+    resolution: {integrity: sha512-A93dQCvPlka1c5Mn52lQYW4kEQkd3+oXzYI9ju2n8xW2aBJOyAltyJYcYWeVhw7bofJ0bj66Cw/r9avBCiKH0Q==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

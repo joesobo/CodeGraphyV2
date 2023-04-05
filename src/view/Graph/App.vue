@@ -89,13 +89,73 @@
             />
           </div>
         </Disclosure>
+
+				<!-- Node Settings -->
+				<Disclosure title="Node" class="border-t border-border p-2">
+					<div class="mt-2 mb-4 flex flex-col">
+						<span class="text-sm font-light text-gray-300">Node Size</span>
+						<div
+							class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
+							@click="() => {
+								nodeSize = nodeSize === 'Connections' ? 'Lines' : 'Connections'
+      	        updateNodeSettings()
+							}"
+						>
+							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeSize === 'Connections' ? 'text-white bg-primary' : ''">
+								<ConnectionIcon width="1.25rem" height="1.25rem" />
+							</div>
+							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeSize === 'Lines' ? 'text-white bg-primary' : ''">
+								<LinesIcon width="1.25rem" height="1.25rem" />
+							</div>
+						</div>
+					</div>
+					<ToggleSwitch
+              label="Node Modules"
+              :value="showNodeModules"
+              @input="
+                (e) => {
+                  showNodeModules = e.target.checked
+                  updateNodeSettings()
+                }
+              "
+            />
+            <ToggleSwitch label="Orphans" :value="true" />
+            <ToggleSwitch label="Labels" :value="true" />
+            <ToggleSwitch label="Outlines" />
+            <ToggleSwitch label="Collisions" />
+				</Disclosure>
+
         <!-- Color Settings -->
         <Disclosure
-          v-if="nodeColor === 'D3'"
           title="Colors"
           class="border-t border-border p-2"
         >
-          <div class="mt-2 flex flex-col">
+					<!-- Color Switch -->
+					<div class="mt-2 flex flex-col">
+						<div class="mb-4 flex items-center">
+              <PickColors v-model:value="lineColor" class="cursor-pointer" />
+              <p class="ml-3 text-sm font-light text-gray-300">Line Color</p>
+            </div>
+
+						<span class="text-sm font-light text-gray-300">Node Color</span>
+						<div
+							class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
+							@click="() => {
+								nodeColor = nodeColor === 'D3' ? 'Random' : 'D3'
+      	        updateGraph()
+							}"
+						>
+							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeColor === 'D3' ? 'text-white bg-primary' : ''">
+								<LogoIcon width="1.25rem" height="1.25rem" />
+							</div>
+							<div class="flex flex-1 justify-center py-1 px-2" :class="nodeColor === 'Random' ? 'text-white bg-primary' : ''">
+								<RandomIcon width="1.25rem" height="1.25rem" />
+							</div>
+						</div>
+					</div>
+
+					<!-- D3 Colors -->
+          <div v-if="nodeColor === 'D3'" class="mt-4 flex flex-col">
             <button
               v-for="color in colorSchemes"
               :key="color"
@@ -110,40 +170,6 @@
             >
               {{ color }}
             </button>
-          </div>
-        </Disclosure>
-        <!-- Extra Settings -->
-        <Disclosure title="Extra" class="border-t border-border p-2">
-          <div class="mt-2 flex flex-col">
-            <ToggleSwitch
-              label="Node Modules"
-              :value="showNodeModules"
-              @input="
-                (e) => {
-                  showNodeModules = e.target.checked
-                  updateNodeSettings()
-                }
-              "
-            />
-            <ToggleSwitch label="Orphans" :value="true" />
-            <ToggleSwitch label="Labels" :value="true" />
-            <ToggleSwitch label="Outlines" />
-            <ToggleSwitch label="Collisions" />
-            <div class="mb-4 flex items-center">
-              <PickColors v-model:value="lineColor" class="cursor-pointer" />
-              <p class="ml-3 text-sm font-medium text-gray-300">Line Color</p>
-            </div>
-            <div class="mb-4 flex items-center">
-              <SliderRow
-                id="lineColor"
-                label=""
-                class="mt-0"
-                :value="1"
-                :min="0"
-                :max="10"
-              />
-              <p class="ml-3 text-sm font-medium text-gray-300">Width</p>
-            </div>
           </div>
         </Disclosure>
       </div>
@@ -164,44 +190,6 @@
         }
       "
     />
-
-    <!-- Settings Tab Content -->
-    <div class="mt-4 flex flex-col">
-      <!-- Node Size Switch -->
-      <div class="mt-4 flex items-center">
-        <label class="w-1/3 text-sm font-medium text-gray-300">Node Size</label>
-        <div class="flex w-2/3">
-          <SwitchButton
-            :options="['Connections', 'Lines']"
-            :selected="nodeSize"
-            @update="
-              (value: string) => {
-                nodeSize = value as 'Connections' | 'Lines'
-                updateNodeSettings()
-              }
-            "
-          />
-        </div>
-      </div>
-      <!-- Node Color Switch -->
-      <div class="mt-4 flex items-center">
-        <label class="w-1/3 text-sm font-medium text-gray-300">
-          Node Color
-        </label>
-        <div class="flex w-2/3">
-          <SwitchButton
-            :options="['D3', 'Random']"
-            :selected="nodeColor"
-            @update="
-              (value: string) => {
-                nodeColor = value
-                updateGraph()
-              }
-            "
-          />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -219,7 +207,6 @@ import type { Ref } from 'vue'
 
 import Disclosure from '../../components/Disclosure.vue'
 import SliderRow from '../../components/SliderRow.vue'
-import SwitchButton from '../../components/SwitchButton.vue'
 import ToggleSwitch from '../../components/ToggleSwitch.vue'
 import { drawD3Graph, updateD3Graph } from '../../utils/d3'
 import { colorSchemes, getD3BackgroundColor } from '../../utils/d3ColorSchemes'
@@ -232,9 +219,13 @@ import {
 import { parseExtensions } from '../../utils/parseExtensions'
 
 import SettingsIcon from '~icons/ant-design/setting-filled'
+import LogoIcon from '~icons/logos/d3'
 import CloseIcon from '~icons/mdi/close-circle'
+import RandomIcon from '~icons/mdi/dice-multiple'
 import DirectoryIcon from '~icons/mdi/folder'
 import RestartIcon from '~icons/mdi/restart'
+import LinesIcon from '~icons/mdi/text'
+import ConnectionIcon from '~icons/mdi/transit-connection-variant'
 import GraphIcon from '~icons/ph/graph'
 
 let nodes: Ref<Node[]> = ref([])
@@ -249,7 +240,7 @@ let displaySettingsPopup: Ref<boolean> = ref(false)
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
 let nodeSize: Ref<'Connections' | 'Lines'> = ref('Lines')
 let collapseFullPaths: Ref<string[]> = ref([])
-let nodeColor: Ref<string> = ref('D3')
+let nodeColor: Ref<'D3' | 'Random'> = ref('D3')
 let selectedD3Color: Ref<string> = ref('Spectral')
 
 // D3 Settings
