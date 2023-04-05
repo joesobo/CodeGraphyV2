@@ -56,6 +56,7 @@
       <SliderRowIcon
         id="nodeDepth"
         label="Node Depth"
+				class="pointer-events-auto"
         :value="nodeDepth"
         :min="0"
         :max="maxNodeDepth"
