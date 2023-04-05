@@ -8,6 +8,7 @@
       class="pointer-events-none absolute flex h-[500px] w-[500px] flex-col justify-between"
     >
       <div class="flex justify-end">
+				<!-- Restart -->
         <button
           class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
           @click="drawGraph()"
@@ -15,6 +16,19 @@
           <RestartIcon width="1.25rem" height="1.25rem" />
         </button>
 
+				<!-- Connections -->
+				<button
+          class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+          @click="() => {
+						connectionType = connectionType === 'Interaction' ? 'Directory' : 'Interaction'
+						updateNodeSettings()
+					}"
+        >
+          <GraphIcon v-if="connectionType === 'Interaction'" width="1.25rem" height="1.25rem" />
+					<DirectoryIcon v-else width="1.25rem" height="1.25rem" />
+        </button>
+
+				<!-- Settings -->
         <button
           class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
           @click="displaySettingsPopup = true"
@@ -153,24 +167,6 @@
 
     <!-- Settings Tab Content -->
     <div class="mt-4 flex flex-col">
-      <!-- Node Connection Switch -->
-      <div class="mt-4 flex items-center">
-        <label class="w-1/3 text-sm font-medium text-gray-300">
-          Connection
-        </label>
-        <div class="flex w-2/3">
-          <SwitchButton
-            :options="['Interaction', 'Directory']"
-            :selected="connectionType"
-            @update="
-              (value: string) => {
-                connectionType = value as 'Interaction' | 'Directory'
-                updateNodeSettings()
-              }
-            "
-          />
-        </div>
-      </div>
       <!-- Node Size Switch -->
       <div class="mt-4 flex items-center">
         <label class="w-1/3 text-sm font-medium text-gray-300">Node Size</label>
@@ -237,7 +233,9 @@ import { parseExtensions } from '../../utils/parseExtensions'
 
 import SettingsIcon from '~icons/ant-design/setting-filled'
 import CloseIcon from '~icons/mdi/close-circle'
+import DirectoryIcon from '~icons/mdi/folder'
 import RestartIcon from '~icons/mdi/restart'
+import GraphIcon from '~icons/ph/graph'
 
 let nodes: Ref<Node[]> = ref([])
 let connections: Ref<Connection[]> = ref([])
