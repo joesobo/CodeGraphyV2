@@ -22,26 +22,45 @@ export type Settings = {
 export const getWorkspaceSettings = () => {
 	const configuration = vscode.workspace.getConfiguration('codegraphy')
 
+	// Node Settings
+	const connectionType = configuration.connectionType
+	const nodeSize = configuration.nodeSize
+	const showNodeModules = configuration.showNodeModules
+	const showOrphans = configuration.showOrphans
+	const showLabels = configuration.showLabels
+	const showOutlines = configuration.showOutlines
+	const doCollisions = configuration.doCollisions
+
+	// D3 Settings
+	const nodeDepth = configuration.nodeDepth
+	const maxNodeDepth = configuration.maxNodeDepth
+	const centerForce = configuration.centerForce
+	const chargeForce = configuration.chargeForce
+	const linkForce = configuration.linkForce
+	const linkDistance = configuration.linkDistance
+
+	// Color Settings
+	const nodeColor = configuration.nodeColor
+	const selectedD3Color = configuration.selectedD3Color
+	const lineColor = configuration.lineColor
+
 	return {
-		// Node Settings
-		connectionType: configuration.get('connectionType'),
-		nodeSize: configuration.get('nodeSize'),
-		showNodeModules: configuration.get('showNodeModules'),
-		showOrphans: configuration.get('showOrphans'),
-		showLabels: configuration.get('showLabels'),
-		showOutlines: configuration.get('showOutlines'),
-		doCollisions: configuration.get('doCollisions'),
-		// D3 Settings
-		nodeDepth: configuration.get('nodeDepth'),
-		maxNodeDepth: configuration.get('maxNodeDepth'),
-		centerForce: configuration.get('centerForce'),
-		chargeForce: configuration.get('chargeForce'),
-		linkForce: configuration.get('linkForce'),
-		linkDistance: configuration.get('linkDistance'),
-		// Color Settings
-		nodeColor: configuration.get('nodeColor'),
-		selectedD3Color: configuration.get('selectedD3Color'),
-		lineColor: configuration.get('lineColor'),
+		connectionType,
+		nodeSize,
+		nodeColor,
+		selectedD3Color,
+		nodeDepth,
+		maxNodeDepth,
+		centerForce,
+		chargeForce,
+		linkForce,
+		linkDistance,
+		showNodeModules,
+		showOrphans,
+		showLabels,
+		showOutlines,
+		doCollisions,
+		lineColor,
 	}
 }
 
@@ -50,10 +69,6 @@ export const updateWorkspaceSettings = (newSettings: Settings) => {
 	const keys = Object.keys(newSettings) as (keyof Settings)[]
 
 	keys.forEach((key) => {
-		configuration.update(
-			key,
-			newSettings[key],
-			vscode.ConfigurationTarget.Workspace,
-		)
+		configuration.update(key, newSettings[key], vscode.ConfigurationTarget.Workspace)
 	})
 }

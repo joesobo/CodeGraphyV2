@@ -7,6 +7,7 @@ import {
 	updateWorkspaceSettings,
 } from './workspaceSettings'
 
+
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
 let saveCollapseFullPaths: string[]
