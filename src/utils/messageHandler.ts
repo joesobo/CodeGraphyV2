@@ -1,7 +1,11 @@
 import * as vscode from 'vscode'
 
-import { settings } from './graphSettings'
 import { processGraphInfo } from './processGraphInfo'
+import {
+	Settings,
+	getWorkspaceSettings,
+	updateWorkspaceSettings,
+} from './workspaceSettings'
 
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
@@ -63,14 +67,8 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			return
 		}
 		case 'fetchSettings': {
-			const returnSettings: Record<string, unknown> = settings
-
-			if (message.text) {
-				// loop over every key in text object
-				for (const key in message.text) {
-					returnSettings[key] = message.text[key]
-				}
-			}
+			const workspaceSettings = getWorkspaceSettings()
+			const returnSettings: Settings = { ...workspaceSettings }
 
 			views.forEach(async (webview) => {
 				await webview.view.postMessage({
@@ -81,13 +79,10 @@ const receiveMessages = async (webview: vscode.Webview) => {
 
 			return
 		}
-		case 'saveSettings': {
-			if (message.text) {
-				// loop over every key in text object
-				for (const key in message.text) {
-					settings[key] = message.text[key]
-				}
-			}
+		case 'setLanguageViewSettings': {
+			const workspaceSettings = getWorkspaceSettings()
+			workspaceSettings.nodeColor = message.text.nodeColor
+			workspaceSettings.selectedD3Color = message.text.selectedD3Color
 
 			const languageView = views.find(
 				(view) => view.title === 'Languages View',
@@ -95,7 +90,32 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			if (languageView) {
 				await languageView.view.postMessage({
 					command: 'setSettings',
-					text: settings,
+					text: workspaceSettings,
+				})
+			}
+
+			return
+		}
+		case 'setSettings': {
+			if (message.text) {
+				const messageSettings = message.text
+				updateWorkspaceSettings({
+					connectionType: messageSettings.connectionType,
+					nodeSize: messageSettings.nodeSize,
+					showNodeModules: messageSettings.showNodeModules,
+					showOrphans: messageSettings.showOrphans,
+					showLabels: messageSettings.showLabels,
+					showOutlines: messageSettings.showOutlines,
+					doCollisions: messageSettings.doCollisions,
+					nodeDepth: messageSettings.nodeDepth,
+					maxNodeDepth: messageSettings.maxNodeDepth,
+					centerForce: messageSettings.centerForce,
+					chargeForce: messageSettings.chargeForce,
+					linkForce: messageSettings.linkForce,
+					linkDistance: messageSettings.linkDistance,
+					nodeColor: messageSettings.nodeColor,
+					selectedD3Color: messageSettings.selectedD3Color,
+					lineColor: messageSettings.lineColor,
 				})
 			}
 

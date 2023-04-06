@@ -56,7 +56,7 @@
       <SliderRowIcon
         id="nodeDepth"
         label="Node Depth"
-				class="pointer-events-auto"
+        class="pointer-events-auto"
         :value="nodeDepth"
         :min="0"
         :max="maxNodeDepth"
@@ -164,10 +164,46 @@
               }
             "
           />
-          <ToggleSwitch label="Orphans" :value="true" />
-          <ToggleSwitch label="Labels" :value="true" />
-          <ToggleSwitch label="Outlines" />
-          <ToggleSwitch label="Collisions" />
+          <ToggleSwitch
+            label="Orphans"
+            :value="showOrphans"
+            @input="
+              (e) => {
+                showOrphans = e.target.checked
+                updateNodeSettings()
+              }
+            "
+          />
+          <ToggleSwitch
+            label="Labels"
+            :value="showLabels"
+            @input="
+              (e) => {
+                showLabels = e.target.checked
+                updateNodeSettings()
+              }
+            "
+          />
+          <ToggleSwitch
+            label="Outlines"
+            :value="showOutlines"
+            @input="
+              (e) => {
+                showOutlines = e.target.checked
+                updateNodeSettings()
+              }
+            "
+          />
+          <ToggleSwitch
+            label="Collisions"
+            :value="doCollisions"
+            @input="
+              (e) => {
+                doCollisions = e.target.checked
+                updateNodeSettings()
+              }
+            "
+          />
         </Disclosure>
 
         <!-- Color Settings -->
@@ -249,7 +285,8 @@ import { findMaxDepth } from '../../utils/findMaxDepth'
 import {
 	fetchSettings,
 	getGraphData,
-	saveSettings,
+	setLanguageViewSettings,
+	setSettings,
 } from '../../utils/graphMessenger'
 import { parseExtensions } from '../../utils/parseExtensions'
 
@@ -289,7 +326,11 @@ let linkDistance: Ref<number> = ref(0)
 
 // Extra Settings
 let showNodeModules: Ref<boolean> = ref(false)
-let lineColor: Ref<string> = ref('#000000')
+let showOrphans: Ref<boolean> = ref(true)
+let showLabels: Ref<boolean> = ref(true)
+let showOutlines: Ref<boolean> = ref(true)
+let doCollisions: Ref<boolean> = ref(true)
+let lineColor: Ref<string> = ref('#ff0000')
 
 fetchSettings()
 
@@ -373,6 +414,7 @@ window.addEventListener('message', (event) => {
 
 // Update the graph with new settings
 const updateNodeSettings = () => {
+	saveSettings()
 	getGraphData({
 		mode: connectionType.value,
 		nodeSize: nodeSize.value,
@@ -391,9 +433,31 @@ const drawGraph = () => {
 	})
 }
 
+const saveSettings = () => {
+	setSettings({
+		connectionType: connectionType.value,
+		nodeSize: nodeSize.value,
+		showNodeModules: showNodeModules.value,
+		showOrphans: showOrphans.value,
+		showLabels: showLabels.value,
+		showOutlines: showOutlines.value,
+		doCollisions: doCollisions.value,
+		nodeDepth: nodeDepth.value,
+		maxNodeDepth: maxNodeDepth.value,
+		centerForce: centerForce.value,
+		chargeForce: chargeForce.value,
+		linkForce: linkForce.value,
+		linkDistance: linkDistance.value,
+		nodeColor: nodeColor.value,
+		selectedD3Color: selectedD3Color.value,
+		lineColor: lineColor.value,
+	})
+}
+
 // Update the graph without regenerating the nodes / connections
 const updateGraph = () => {
-	saveSettings({
+	saveSettings()
+	setLanguageViewSettings({
 		nodeColor: nodeColor.value,
 		selectedD3Color: selectedD3Color.value,
 	})

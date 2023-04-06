@@ -59,6 +59,86 @@
             "node_modules"
           ],
           "description": "Blacklist folders and files"
+        },
+        "codegraphy.connectionType": {
+          "type": "string",
+          "default": "Interaction",
+          "description": "Method for connecting nodes"
+        },
+        "codegraphy.nodeSize": {
+          "type": "string",
+          "default": "Lines",
+          "description": "Method for sizing nodes"
+        },
+        "codegraphy.showNodeModules": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show package connections from the node_modules folder"
+        },
+        "codegraphy.showOrphans": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show nodes that are not connected to any other nodes"
+        },
+        "codegraphy.showLabels": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show labels on nodes"
+        },
+        "codegraphy.showOutlines": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show outlines on collapsed nodes"
+        },
+        "codegraphy.doCollisions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow nodes to collide with each other"
+        },
+        "codegraphy.nodeDepth": {
+          "type": "number",
+          "default": 0,
+          "description": "Depth of nodes to display around the selected node"
+        },
+        "codegraphy.maxNodeDepth": {
+          "type": "number",
+          "default": 0,
+          "description": "Maximum depth of nodes available to graph (do not edit)"
+        },
+        "codegraphy.centerForce": {
+          "type": "number",
+          "default": 0,
+          "description": "Force applied to nodes to center them in the graph"
+        },
+        "codegraphy.chargeForce": {
+          "type": "number",
+          "default": -100,
+          "description": "Force applied to nodes to repel them from neighbor nodes"
+        },
+        "codegraphy.linkForce": {
+          "type": "number",
+          "default": 0,
+          "description": "Force applied to links to keep nodes connected and close"
+        },
+        "codegraphy.linkDistance": {
+          "type": "number",
+          "default": 100,
+          "description": "Distance between nodes"
+        },
+        "codegraphy.selectedD3Color": {
+          "type": "string",
+          "default": "Spectral",
+          "description": "Color scheme for D3 node coloring"
+        },
+        "codegraphy.nodeColor": {
+          "type": "string",
+          "default": "D3",
+          "description": "Method for coloring nodes"
+        },
+        "codegraphy.lineColor": {
+          "type": "string",
+          "default": "#ff0000",
+          "description": "Color for lines between nodes"
         }
       }
     }

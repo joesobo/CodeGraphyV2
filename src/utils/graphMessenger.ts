@@ -1,3 +1,5 @@
+import type { Settings } from './workspaceSettings'
+
 export const overrideExtensionColor = (name: string, color: string) => {
 	vscode.postMessage({
 		command: 'overrideExtensionColor',
@@ -8,9 +10,16 @@ export const overrideExtensionColor = (name: string, color: string) => {
 	})
 }
 
-export const saveSettings = (settings?: Record<string, unknown>) => {
+export const setSettings = (settings: Settings) => {
 	vscode.postMessage({
-		command: 'saveSettings',
+		command: 'setSettings',
+		text: settings,
+	})
+}
+
+export const setLanguageViewSettings = (settings?: Record<string, unknown>) => {
+	vscode.postMessage({
+		command: 'setLanguageViewSettings',
 		text: settings,
 	})
 }
