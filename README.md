@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/26047842/177056994-e6be0cd0-6e18-40c1-a254-ae847c62ffaf.png" />
+  <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 256 256"><path fill="#fff" d="M200 152a31.84 31.84 0 0 0-19.53 6.68l-23.11-18A31.65 31.65 0 0 0 160 128c0-.74 0-1.48-.08-2.21l13.23-4.41A32 32 0 1 0 168 104c0 .74 0 1.48.08 2.21l-13.23 4.41A32 32 0 0 0 128 96a32.59 32.59 0 0 0-5.27.44L115.89 81A32 32 0 1 0 96 88a32.59 32.59 0 0 0 5.27-.44l6.84 15.4a31.92 31.92 0 0 0-8.57 39.64l-25.71 22.84a32.06 32.06 0 1 0 10.63 12l25.71-22.84a31.91 31.91 0 0 0 37.36-1.24l23.11 18A31.65 31.65 0 0 0 168 184a32 32 0 1 0 32-32Zm0-64a16 16 0 1 1-16 16a16 16 0 0 1 16-16ZM80 56a16 16 0 1 1 16 16a16 16 0 0 1-16-16ZM56 208a16 16 0 1 1 16-16a16 16 0 0 1-16 16Zm56-80a16 16 0 1 1 16 16a16 16 0 0 1-16-16Zm88 72a16 16 0 1 1 16-16a16 16 0 0 1-16 16Z"/></svg>
  </p>
 
  <p align="center">
@@ -10,11 +10,11 @@
 
 # CodeGraphy
 
-> CodeGraphy **enhances** files connections inside VSCode and allows for **birds eye views** of each repository. It helps you to **visualize code hierarchy** at a glance, **seamlessly navigate and explore** your file hierarchy, **gain valuable insights** via a force based node graph UI, and more.
+> CodeGraphy **enhances** files connections inside VSCode and allows for **birds eye views** of each repository. It helps you to **visualize code hierarchy** at a glance, **seamlessly navigate and explore** your files, **gain valuable insights** via a force based node graph, and more!
 
 CodeGraphy is an [open-source](https://github.com/joesobo/CodeGraphyV2 'Open CodeGraphyV2 on GitHub') extension for [Visual Studio Code](https://code.visualstudio.com).
 
-Simply CodeGraphy helps you **better understand file connections**. With its force-based graph you can get a completely different view of the architecture of your codebase and make quick informed decisions about where your code is "knotted" in the graph.
+Simply this extension helps you **better understand file connections**. With its force-based graph you can get a completely different perspective of the architecture of your codebase and make quick informed decisions about the entire repository.
 
 ## Install CodeGraphyV2
 
@@ -24,7 +24,7 @@ CodeGraphyV2 is coming soon...
 
 ## Features
 
-![screenshot](src/assets/img/screenshot1.png)
+![screenshot](src/assets/img/screenshot2.png)
 
 - D3 physics based graph
 - Color coding nodes
@@ -34,6 +34,8 @@ CodeGraphyV2 is coming soon...
 - and more!
 
 ## Upcoming in V2
+
+![Squid Gif](src/assets/img/squidgame.gif)
 
 - [x] Collapsible nodes
 - [x] Displays connections to external packages (node_modules)
@@ -48,19 +50,20 @@ CodeGraphyV2 is coming soon...
 - [x] Analyzed table view of directory contents with color overrides
 - [x] Entirely built on Vite & D3
 
+![Collapse Gif](src/assets/img/collapse.gif)
+
 ### Node Graph
 
-CodeGraphy's main feature is its ability to display the file hierarchy in a completely different way. Look within the current directory and the connections between the files of the directory.
+CodeGraphy's main feature is its ability to display the file hierarchy in a completely new perspective. Look within your current directory and visualize the connections between your files. Many of the commonly used features in a normal file hierarchy apply here too!
 
-- Ability to open files directly from nodes (Coming Soon)
-- Can change the style of the force-based graph
-- Displays connections between files
+- Ability to open files directly from nodes
+- See the what classic directory mode looks like when graphed
 
-![]()
+![Sliding Gif](src/assets/img/slide.gif)
 
 ### Settings
 
-You can also `blacklist` any files or folders you want ignored. Add this configuration to your vscode `settings.json`
+You can customize the `blacklist` of any files or folders you want ignored. Add this configuration to your vscode `settings.json`
 
 ```json
 "codegraphy.blacklist": [
@@ -74,7 +77,26 @@ You can also `blacklist` any files or folders you want ignored. Add this configu
 ],
 ```
 
-![]()
+All the customizable settings in Codegraphy can also be added into your workspace `settings.json` to save state in-between sessions.
+
+**Nodes**
+- connectionType: "Interaction" | "Directory"
+- nodeSize: "Lines" | "Connections"
+- showNodeModules: boolean
+- showOrphans: boolean
+- showLabels: boolean
+- showOutlines: boolean
+- doCollisions: boolean
+
+**D3 Forces**
+- centerForce: number
+- chargeForce: number
+- linkForce: number
+- linkDistance: number
+
+**Colors**
+- nodeColor: "D3" | "Random"
+- selectedD3Color: string
 
 ## Known Issues
 

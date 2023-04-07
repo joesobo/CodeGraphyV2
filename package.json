@@ -1,7 +1,7 @@
 {
   "name": "CodeGraphyV2",
   "displayName": "CodeGraphyV2",
-  "description": "",
+  "description": "Visualize your codebase and its connections as a physics-based graph",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.74.0"
@@ -27,7 +27,7 @@
         {
           "id": "codegraphy-view",
           "title": "Code Graphy V2",
-          "icon": "src/assets/img/default.png"
+          "icon": "src/assets/img/graph-dark.svg"
         }
       ]
     },
