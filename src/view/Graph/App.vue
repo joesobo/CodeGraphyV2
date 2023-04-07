@@ -343,7 +343,6 @@ window.addEventListener('message', (event) => {
 		linkDistance.value = message.text.linkDistance
 		connectionType.value = message.text.connectionType
 		nodeSize.value = message.text.nodeSize
-		nodeDepth.value = message.text.nodeDepth
 		showNodeModules.value = message.text.showNodeModules
 
 		updateNodeSettings()
@@ -437,7 +436,6 @@ const saveSettings = () => {
 		showLabels: showLabels.value,
 		showOutlines: showOutlines.value,
 		doCollisions: doCollisions.value,
-		nodeDepth: nodeDepth.value,
 		centerForce: centerForce.value,
 		chargeForce: chargeForce.value,
 		linkForce: linkForce.value,

@@ -8,7 +8,6 @@ export type Settings = {
   showLabels: boolean
   showOutlines: boolean
   doCollisions: boolean
-  nodeDepth: number
   centerForce: number
   chargeForce: number
   linkForce: number
@@ -30,7 +29,6 @@ export const getWorkspaceSettings = () => {
 	const doCollisions = configuration.doCollisions
 
 	// D3 Settings
-	const nodeDepth = configuration.nodeDepth
 	const centerForce = configuration.centerForce
 	const chargeForce = configuration.chargeForce
 	const linkForce = configuration.linkForce
@@ -45,7 +43,6 @@ export const getWorkspaceSettings = () => {
 		nodeSize,
 		nodeColor,
 		selectedD3Color,
-		nodeDepth,
 		centerForce,
 		chargeForce,
 		linkForce,

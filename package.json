@@ -95,11 +95,6 @@
           "default": true,
           "description": "Allow nodes to collide with each other"
         },
-        "codegraphy.nodeDepth": {
-          "type": "number",
-          "default": 0,
-          "description": "Depth of nodes to display around the selected node"
-        },
         "codegraphy.centerForce": {
           "type": "number",
           "default": 0,
