@@ -6,6 +6,7 @@ import { assignNodeDepth } from './assignNodeDepth'
 import { collapseNodes } from './collapseNodes'
 import { filterCollapsed } from './filterCollapsed'
 import { filterDepth } from './filterDepth'
+import { filterOrphans } from './filterOrphans'
 import { getConnections } from './getConnections'
 import { getDirectoryInfo } from './getDirectoryInfo'
 import { getNodeModules } from './getNodeModules'
@@ -19,12 +20,14 @@ export const processGraphInfo = ({
 	collapseFullPaths,
 	nodeDepth,
 	showNodeModules,
+	showOrphans,
 }: {
   mode: 'Interaction' | 'Directory'
   nodeSize: 'Lines' | 'Connections'
   collapseFullPaths: string[]
   nodeDepth: number
   showNodeModules: boolean
+  showOrphans: boolean
 }) => {
 	const { files, dirs } = getDirectoryInfo(mode)
 	const packages = getNodeModules({ files, mode, showNodeModules })
@@ -61,6 +64,10 @@ export const processGraphInfo = ({
 	})
 
 	let result = filterCollapsed(nodes, filteredConnections)
+
+	if (!showOrphans) {
+		result = filterOrphans(nodes, filteredConnections)
+	}
 
 	result = normalizeIds(result.nodes, result.connections)
 

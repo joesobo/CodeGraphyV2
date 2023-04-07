@@ -36,6 +36,7 @@ export const getGraphData = (graphData: {
   collapseFullPaths: string[]
   nodeDepth: number
   showNodeModules: boolean
+  showOrphans: boolean
 }) => {
 	vscode.postMessage({
 		command: 'getGraphData',
@@ -44,5 +45,6 @@ export const getGraphData = (graphData: {
 		collapseFullPaths: graphData.collapseFullPaths.slice(),
 		nodeDepth: graphData.nodeDepth,
 		showNodeModules: graphData.showNodeModules,
+		showOrphans: graphData.showOrphans,
 	})
 }

@@ -344,6 +344,10 @@ window.addEventListener('message', (event) => {
 		connectionType.value = message.text.connectionType
 		nodeSize.value = message.text.nodeSize
 		showNodeModules.value = message.text.showNodeModules
+		showOrphans.value = message.text.showOrphans
+		showLabels.value = message.text.showLabels
+		showOutlines.value = message.text.showOutlines
+		doCollisions.value = message.text.doCollisions
 
 		updateNodeSettings()
 		return
@@ -415,6 +419,7 @@ const updateNodeSettings = () => {
 		collapseFullPaths: collapseFullPaths.value,
 		nodeDepth: nodeDepth.value,
 		showNodeModules: showNodeModules.value,
+		showOrphans: showOrphans.value,
 	})
 }
 

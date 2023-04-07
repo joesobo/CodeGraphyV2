@@ -61,10 +61,10 @@ let selectedD3Color: Ref<string> = ref('Spectral')
 
 // D3 Settings
 let nodeDepth: Ref<number> = ref(0)
-let maxNodeDepth: Ref<number> = ref(0)
 
 // Extra Settings
 let showNodeModules: Ref<boolean> = ref(false)
+let showOrphans: Ref<boolean> = ref(false)
 
 window.addEventListener('message', (event) => {
 	const message = event.data // The JSON data our extension sent
@@ -74,8 +74,11 @@ window.addEventListener('message', (event) => {
 		nodeSize.value = message.text.nodeSize
 		nodeColor.value = message.text.nodeColor
 		selectedD3Color.value = message.text.selectedD3Color
-		nodeDepth.value = message.text.nodeDepth
-		maxNodeDepth.value = message.text.maxNodeDepth
+		showNodeModules.value = message.text.showNodeModules
+		showOrphans.value = message.text.showOrphans
+		// showLabels.value = message.text.showLabels
+		// showOutlines.value = message.text.showOutlines
+		// doCollisions.value = message.text.doCollisions
 
 		getGraphData({
 			mode: connectionType.value,
@@ -83,15 +86,12 @@ window.addEventListener('message', (event) => {
 			collapseFullPaths: [],
 			nodeDepth: nodeDepth.value,
 			showNodeModules: showNodeModules.value,
+			showOrphans: showOrphans.value,
 		})
 		return
 	case 'setGraphData':
 		nodes.value = message.text.nodes
 		connections.value = message.text.connections
-
-		if (maxNodeDepth.value === 0) {
-			maxNodeDepth.value = findMaxDepth(connections.value)
-		}
 
 		extensionList.value = parseExtensions(nodes.value, {
 			useRandomColor: nodeColor.value === 'Random',

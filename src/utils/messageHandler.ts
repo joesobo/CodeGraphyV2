@@ -12,6 +12,7 @@ let saveMode: 'Interaction' | 'Directory'
 let saveCollapseFullPaths: string[]
 let saveNodeDepth: number
 let saveShowNodeModules: boolean
+let saveShowOrphans: boolean
 
 type View = {
   view: vscode.Webview
@@ -51,6 +52,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				collapseFullPaths: saveCollapseFullPaths,
 				nodeDepth: saveNodeDepth,
 				showNodeModules: saveShowNodeModules,
+				showOrphans: saveShowOrphans,
 			})
 
 			return
@@ -125,6 +127,7 @@ const getGraphData = async (
     collapseFullPaths: string[]
     nodeDepth: number
     showNodeModules: boolean
+    showOrphans: boolean
   },
 ) => {
 	// setup
@@ -133,6 +136,7 @@ const getGraphData = async (
 	saveCollapseFullPaths = message.collapseFullPaths
 	saveNodeDepth = message.nodeDepth
 	saveShowNodeModules = message.showNodeModules
+	saveShowOrphans = message.showOrphans
 
 	const { nodes, connections } = processGraphInfo({
 		mode: message.mode,
@@ -140,6 +144,7 @@ const getGraphData = async (
 		collapseFullPaths: message.collapseFullPaths,
 		nodeDepth: message.nodeDepth,
 		showNodeModules: message.showNodeModules,
+		showOrphans: message.showOrphans,
 	})
 
 	await webview.postMessage({
