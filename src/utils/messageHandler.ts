@@ -7,7 +7,6 @@ import {
 	updateWorkspaceSettings,
 } from './workspaceSettings'
 
-
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
 let saveCollapseFullPaths: string[]
@@ -99,24 +98,8 @@ const receiveMessages = async (webview: vscode.Webview) => {
 		}
 		case 'setSettings': {
 			if (message.text) {
-				const messageSettings = message.text
-				updateWorkspaceSettings({
-					connectionType: messageSettings.connectionType,
-					nodeSize: messageSettings.nodeSize,
-					showNodeModules: messageSettings.showNodeModules,
-					showOrphans: messageSettings.showOrphans,
-					showLabels: messageSettings.showLabels,
-					showOutlines: messageSettings.showOutlines,
-					doCollisions: messageSettings.doCollisions,
-					nodeDepth: messageSettings.nodeDepth,
-					maxNodeDepth: messageSettings.maxNodeDepth,
-					centerForce: messageSettings.centerForce,
-					chargeForce: messageSettings.chargeForce,
-					linkForce: messageSettings.linkForce,
-					linkDistance: messageSettings.linkDistance,
-					nodeColor: messageSettings.nodeColor,
-					selectedD3Color: messageSettings.selectedD3Color,
-				})
+				const messageSettings = message.text as Settings
+				updateWorkspaceSettings(messageSettings)
 			}
 
 			return

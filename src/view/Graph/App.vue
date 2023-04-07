@@ -62,7 +62,7 @@
         :max="maxNodeDepth"
         @input="
 				(event: SliderInputEvent) => {
-					nodeDepth = event.target.value
+					nodeDepth = Number.parseInt(event.target.value.toString())
 					updateNodeSettings()
 				}
 			"
@@ -96,7 +96,8 @@
               :value="linkForce"
               label="Link Force"
               :min="-100"
-              @input="(event: SliderInputEvent) => (linkForce = event.target.value)"
+              @input="(event: SliderInputEvent) => linkForce = Number.parseInt(event.target.value.toString())"
+              @mouseup="() => saveSettings()"
             />
             <SliderRow
               id="linkDistance"
@@ -104,14 +105,16 @@
               label="Link Distance"
               :max="1000"
               :step="10"
-              @input="(event: SliderInputEvent) => (linkDistance = event.target.value)"
+              @input="(event: SliderInputEvent) => linkDistance = Number.parseInt(event.target.value.toString())"
+              @mouseup="() => saveSettings()"
             />
             <SliderRow
               id="chargeForce"
               :value="chargeForce"
               label="Charge Force"
               :min="-100"
-              @input="(event: SliderInputEvent) => (chargeForce = event.target.value)"
+              @input="(event: SliderInputEvent) => chargeForce = Number.parseInt(event.target.value.toString())"
+              @mouseup="() => saveSettings()"
             />
             <SliderRow
               id="centerForce"
@@ -119,7 +122,8 @@
               label="Center Force"
               :max="1"
               :step="0.01"
-              @input="(event: SliderInputEvent) => (centerForce = event.target.value)"
+              @input="(event: SliderInputEvent) => centerForce = Number.parseInt(event.target.value.toString())"
+              @mouseup="() => saveSettings()"
             />
           </div>
         </Disclosure>
@@ -260,7 +264,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import PickColors from 'vue-pick-colors'
 
 import type {
 	Connection,
@@ -315,9 +318,9 @@ let selectedD3Color: Ref<string> = ref('Spectral')
 let nodeDepth: Ref<number> = ref(0)
 let maxNodeDepth: Ref<number> = ref(0)
 let centerForce: Ref<number> = ref(0)
-let chargeForce: Ref<number> = ref(0)
+let chargeForce: Ref<number> = ref(-100)
 let linkForce: Ref<number> = ref(0)
-let linkDistance: Ref<number> = ref(0)
+let linkDistance: Ref<number> = ref(100)
 
 // Extra Settings
 let showNodeModules: Ref<boolean> = ref(false)
@@ -334,7 +337,6 @@ window.addEventListener('message', (event) => {
 	case 'setSettings':
 		nodeColor.value = message.text.nodeColor
 		selectedD3Color.value = message.text.selectedD3Color
-		maxNodeDepth.value = message.text.maxNodeDepth
 		centerForce.value = message.text.centerForce
 		chargeForce.value = message.text.chargeForce
 		linkForce.value = message.text.linkForce
@@ -436,7 +438,6 @@ const saveSettings = () => {
 		showOutlines: showOutlines.value,
 		doCollisions: doCollisions.value,
 		nodeDepth: nodeDepth.value,
-		maxNodeDepth: maxNodeDepth.value,
 		centerForce: centerForce.value,
 		chargeForce: chargeForce.value,
 		linkForce: linkForce.value,

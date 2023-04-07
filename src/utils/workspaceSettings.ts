@@ -9,7 +9,6 @@ export type Settings = {
   showOutlines: boolean
   doCollisions: boolean
   nodeDepth: number
-  maxNodeDepth: number
   centerForce: number
   chargeForce: number
   linkForce: number
@@ -32,7 +31,6 @@ export const getWorkspaceSettings = () => {
 
 	// D3 Settings
 	const nodeDepth = configuration.nodeDepth
-	const maxNodeDepth = configuration.maxNodeDepth
 	const centerForce = configuration.centerForce
 	const chargeForce = configuration.chargeForce
 	const linkForce = configuration.linkForce
@@ -48,7 +46,6 @@ export const getWorkspaceSettings = () => {
 		nodeColor,
 		selectedD3Color,
 		nodeDepth,
-		maxNodeDepth,
 		centerForce,
 		chargeForce,
 		linkForce,
@@ -66,6 +63,10 @@ export const updateWorkspaceSettings = (newSettings: Settings) => {
 	const keys = Object.keys(newSettings) as (keyof Settings)[]
 
 	keys.forEach((key) => {
-		configuration.update(key, newSettings[key], vscode.ConfigurationTarget.Workspace)
+		configuration.update(
+			key,
+			newSettings[key],
+			vscode.ConfigurationTarget.Workspace,
+		)
 	})
 }

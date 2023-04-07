@@ -100,11 +100,6 @@
           "default": 0,
           "description": "Depth of nodes to display around the selected node"
         },
-        "codegraphy.maxNodeDepth": {
-          "type": "number",
-          "default": 0,
-          "description": "Maximum depth of nodes available to graph (do not edit)"
-        },
         "codegraphy.centerForce": {
           "type": "number",
           "default": 0,
