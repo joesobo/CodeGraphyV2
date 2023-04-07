@@ -40,7 +40,6 @@ import PickColors from 'vue-pick-colors'
 
 import type { Connection, Extension, Node } from '../../utils/types'
 
-import { findMaxDepth } from '../../utils/findMaxDepth'
 import {
 	getGraphData,
 	overrideExtensionColor,
@@ -65,7 +64,6 @@ let nodeDepth: Ref<number> = ref(0)
 // Extra Settings
 let showNodeModules: Ref<boolean> = ref(false)
 let showOrphans: Ref<boolean> = ref(false)
-let showLabels: Ref<boolean> = ref(false)
 
 window.addEventListener('message', (event) => {
 	const message = event.data // The JSON data our extension sent
@@ -77,9 +75,6 @@ window.addEventListener('message', (event) => {
 		selectedD3Color.value = message.text.selectedD3Color
 		showNodeModules.value = message.text.showNodeModules
 		showOrphans.value = message.text.showOrphans
-		showLabels.value = message.text.showLabels
-		// showOutlines.value = message.text.showOutlines
-		// doCollisions.value = message.text.doCollisions
 
 		getGraphData({
 			mode: connectionType.value,
