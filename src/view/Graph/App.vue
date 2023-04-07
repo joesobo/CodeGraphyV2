@@ -159,54 +159,29 @@
             </div>
           </div>
           <ToggleSwitch
+            v-model="showNodeModules"
             label="Node Modules"
-            :value="showNodeModules"
-            @input="
-              (e) => {
-                showNodeModules = e.target.checked
-                updateNodeSettings()
-              }
-            "
+            @update:modelValue="() => updateNodeSettings()"
           />
           <ToggleSwitch
+            v-model="showOrphans"
             label="Orphans"
-            :value="showOrphans"
-            @input="
-              (e) => {
-                showOrphans = e.target.checked
-                updateNodeSettings()
-              }
-            "
+            @update:modelValue="() => updateNodeSettings()"
           />
           <ToggleSwitch
+            v-model="showLabels"
             label="Labels"
-            :value="showLabels"
-            @input="
-              (e) => {
-                showLabels = e.target.checked
-                updateNodeSettings()
-              }
-            "
+            @update:modelValue="() => updateNodeSettings()"
           />
           <ToggleSwitch
+            v-model="showOutlines"
             label="Outlines"
-            :value="showOutlines"
-            @input="
-              (e) => {
-                showOutlines = e.target.checked
-                updateNodeSettings()
-              }
-            "
+            @update:modelValue="() => updateNodeSettings()"
           />
           <ToggleSwitch
+            v-model="doCollisions"
             label="Collisions"
-            :value="doCollisions"
-            @input="
-              (e) => {
-                doCollisions = e.target.checked
-                updateNodeSettings()
-              }
-            "
+            @update:modelValue="() => updateNodeSettings()"
           />
         </Disclosure>
 
@@ -263,7 +238,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 import type {
 	Connection,
@@ -324,90 +299,92 @@ let linkDistance: Ref<number> = ref(100)
 
 // Extra Settings
 let showNodeModules: Ref<boolean> = ref(false)
-let showOrphans: Ref<boolean> = ref(true)
-let showLabels: Ref<boolean> = ref(true)
+let showOrphans: Ref<boolean> = ref(false)
+let showLabels: Ref<boolean> = ref(false)
 let showOutlines: Ref<boolean> = ref(true)
 let doCollisions: Ref<boolean> = ref(true)
 
-fetchSettings()
+onMounted(() => {
+	fetchSettings()
 
-window.addEventListener('message', (event) => {
-	const message = event.data // The JSON data our extension sent
-	switch (message.command) {
-	case 'setSettings':
-		nodeColor.value = message.text.nodeColor
-		selectedD3Color.value = message.text.selectedD3Color
-		centerForce.value = message.text.centerForce
-		chargeForce.value = message.text.chargeForce
-		linkForce.value = message.text.linkForce
-		linkDistance.value = message.text.linkDistance
-		connectionType.value = message.text.connectionType
-		nodeSize.value = message.text.nodeSize
-		showNodeModules.value = message.text.showNodeModules
-		showOrphans.value = message.text.showOrphans
-		showLabels.value = message.text.showLabels
-		showOutlines.value = message.text.showOutlines
-		doCollisions.value = message.text.doCollisions
+	window.addEventListener('message', (event) => {
+		const message = event.data // The JSON data our extension sent
+		switch (message.command) {
+		case 'setSettings':
+			nodeColor.value = message.text.nodeColor
+			selectedD3Color.value = message.text.selectedD3Color
+			centerForce.value = message.text.centerForce
+			chargeForce.value = message.text.chargeForce
+			linkForce.value = message.text.linkForce
+			linkDistance.value = message.text.linkDistance
+			connectionType.value = message.text.connectionType
+			nodeSize.value = message.text.nodeSize
+			showNodeModules.value = message.text.showNodeModules
+			showOrphans.value = message.text.showOrphans
+			showLabels.value = message.text.showLabels
+			showOutlines.value = message.text.showOutlines
+			doCollisions.value = message.text.doCollisions
 
-		updateNodeSettings()
-		return
-	case 'setGraphData':
-		nodes.value = message.text.nodes
-		connections.value = message.text.connections
-		currentOpenFile.value = message.text.currentOpenFile
-		showNodeModules.value = message.text.showNodeModules
+			updateNodeSettings()
+			return
+		case 'setGraphData':
+			nodes.value = message.text.nodes
+			connections.value = message.text.connections
+			currentOpenFile.value = message.text.currentOpenFile
+			showNodeModules.value = message.text.showNodeModules
 
-		if (maxNodeDepth.value === 0) {
-			maxNodeDepth.value = findMaxDepth(connections.value)
-		}
+			if (maxNodeDepth.value === 0) {
+				maxNodeDepth.value = findMaxDepth(connections.value)
+			}
 
-		extensionList.value = parseExtensions(nodes.value, {
-			useRandomColor: false,
-			overrideExtensionColors: overrideExtensionColors.value,
-			d3Color: selectedD3Color.value,
-		})
+			extensionList.value = parseExtensions(nodes.value, {
+				useRandomColor: false,
+				overrideExtensionColors: overrideExtensionColors.value,
+				d3Color: selectedD3Color.value,
+			})
 
-		drawGraph()
-		return
-	case 'setCurrentFile':
-		currentOpenFile.value = message.text
-		updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
-		return
-	case 'collapseNode':
-		if (collapseFullPaths.value.indexOf(message.fullPath) !== -1) {
-			collapseFullPaths.value.splice(
-				collapseFullPaths.value.indexOf(message.fullPath),
-				1,
-			)
-		} else {
-			collapseFullPaths.value.push(message.fullPath)
-		}
+			drawGraph()
+			return
+		case 'setCurrentFile':
+			currentOpenFile.value = message.text
+			updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
+			return
+		case 'collapseNode':
+			if (collapseFullPaths.value.indexOf(message.fullPath) !== -1) {
+				collapseFullPaths.value.splice(
+					collapseFullPaths.value.indexOf(message.fullPath),
+					1,
+				)
+			} else {
+				collapseFullPaths.value.push(message.fullPath)
+			}
 
-		updateNodeSettings()
-		return
-	case 'overrideExtensionColor':
-		if (
-			overrideExtensionColors.value.findIndex(
-				(override) => override.name === message.override.extension,
-			) !== -1
-		) {
-			overrideExtensionColors.value[
+			updateNodeSettings()
+			return
+		case 'overrideExtensionColor':
+			if (
 				overrideExtensionColors.value.findIndex(
 					(override) => override.name === message.override.extension,
-				)
-			] = message.override
-		} else {
-			overrideExtensionColors.value.push(message.override)
+				) !== -1
+			) {
+				overrideExtensionColors.value[
+					overrideExtensionColors.value.findIndex(
+						(override) => override.name === message.override.extension,
+					)
+				] = message.override
+			} else {
+				overrideExtensionColors.value.push(message.override)
+			}
+
+			extensionList.value = parseExtensions(nodes.value, {
+				useRandomColor: nodeColor.value === 'Random',
+				overrideExtensionColors: overrideExtensionColors.value,
+				d3Color: selectedD3Color.value,
+			})
+
+			updateD3Graph(nodes.value, extensionList.value)
 		}
-
-		extensionList.value = parseExtensions(nodes.value, {
-			useRandomColor: nodeColor.value === 'Random',
-			overrideExtensionColors: overrideExtensionColors.value,
-			d3Color: selectedD3Color.value,
-		})
-
-		updateD3Graph(nodes.value, extensionList.value)
-	}
+	})
 })
 
 // Update the graph with new settings
@@ -429,6 +406,9 @@ const drawGraph = () => {
 		connections: connections.value,
 		extensions: extensionList.value,
 		currentOpenFile: currentOpenFile.value,
+		showLabels: showLabels.value,
+		showOutlines: showOutlines.value,
+		doCollisions: doCollisions.value,
 	})
 }
 

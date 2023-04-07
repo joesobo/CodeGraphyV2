@@ -20,11 +20,17 @@ export const drawD3Graph = ({
 	connections,
 	extensions,
 	currentOpenFile,
+	showLabels,
+	showOutlines,
+	doCollisions,
 }: {
   nodes: Node[]
   connections: Connection[]
   extensions: Extension[]
   currentOpenFile: string
+  showLabels: boolean
+  showOutlines: boolean
+  doCollisions: boolean
 }) => {
 	if (nodes.length === 0) return
 
@@ -34,7 +40,7 @@ export const drawD3Graph = ({
 
 	const g = resetGraph(svg, nodes)
 
-	const forceSimulation = initForceSimulation(width, height)
+	const forceSimulation = initForceSimulation(width, height, doCollisions)
 	addEventListeners(forceSimulation, width, height)
 
 	const gCircles = drawNodes(
@@ -44,6 +50,8 @@ export const drawD3Graph = ({
 		nodes,
 		connections,
 		currentOpenFile,
+		showLabels,
+		showOutlines,
 	)
 	gCircles.attr('transform', (d: Node) => {
 		return `translate(${d.x}, ${d.y})`
@@ -78,8 +86,12 @@ const resetGraph = (svg: SVGElement, nodes: Node[]): SVGSelection => {
 	return svg.append<SVGGElement>('g')
 }
 
-const initForceSimulation = (width: number, height: number): NodeSimulation => {
-	return d3
+const initForceSimulation = (
+	width: number,
+	height: number,
+	doCollisions: boolean,
+): NodeSimulation => {
+	const forceSimulation = d3
 		.forceSimulation<Node, d3.SimulationLinkDatum<Node>>()
 		.force(
 			'link',
@@ -93,12 +105,17 @@ const initForceSimulation = (width: number, height: number): NodeSimulation => {
 				.distanceMax(width / 2),
 		)
 		.force('center', d3.forceCenter(width / 2, height / 2))
-		.force(
+
+	if (doCollisions) {
+		forceSimulation.force(
 			'collision',
 			d3.forceCollide<Node>().radius((d: Node) => {
 				return d.radius
 			}),
 		)
+	}
+
+	return forceSimulation
 }
 
 const addEventListeners = (
@@ -130,6 +147,8 @@ const drawNodes = (
 	nodes: Node[],
 	connections: Connection[],
 	currentOpenFile: string,
+	showLabels: boolean,
+	showOutlines: boolean,
 ): NodeSelection => {
 	const gs = g
 		.selectAll('.circleText')
@@ -143,20 +162,22 @@ const drawNodes = (
 	gs.append('circle')
 		.attr('r', (d: Node) => d.radius)
 		.attr('fill', (d: Node) => getNodeColor(d, extensions, currentOpenFile))
-		.attr('stroke', (d) => (d.collapsed ? '#ffd700' : ''))
-		.attr('stroke-width', (d) => (d.collapsed ? 4 : 0))
+		.attr('stroke', (d) => (d.collapsed && showOutlines ? '#ffd700' : ''))
+		.attr('stroke-width', (d) => (d.collapsed && showOutlines ? 4 : 0))
 		.on('click', click)
 		.on('mouseover', handleMouseOver(gs, currentOpenFile, nodes, connections))
 		.on('mouseout', handleMouseOut(gs))
 
 	// Draw text
-	gs.append('text')
-		.attr('y', (d: Node) => -d.radius - 12)
-		.attr('x', -5)
-		.attr('dy', 10)
-		.text((d: Node) => {
-			return d.name
-		})
+	if (showLabels) {
+		gs.append('text')
+			.attr('y', (d: Node) => -d.radius - 12)
+			.attr('x', -5)
+			.attr('dy', 10)
+			.text((d: Node) => {
+				return d.name
+			})
+	}
 
 	return gs
 }

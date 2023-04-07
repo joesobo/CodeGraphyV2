@@ -80,6 +80,7 @@ You can customize the `blacklist` of any files or folders you want ignored. Add 
 All the customizable settings in Codegraphy can also be added into your workspace `settings.json` to save state in-between sessions.
 
 **Nodes**
+
 - connectionType: "Interaction" | "Directory"
 - nodeSize: "Lines" | "Connections"
 - showNodeModules: boolean
@@ -89,12 +90,14 @@ All the customizable settings in Codegraphy can also be added into your workspac
 - doCollisions: boolean
 
 **D3 Forces**
+
 - centerForce: number
 - chargeForce: number
 - linkForce: number
 - linkDistance: number
 
 **Colors**
+
 - nodeColor: "D3" | "Random"
 - selectedD3Color: string
 
