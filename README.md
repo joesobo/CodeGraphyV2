@@ -24,7 +24,7 @@ CodeGraphyV2 is coming soon...
 
 ## Features
 
-![screenshot](src/assets/img/screenshot2.png)
+![Squid Gif](src/assets/img/squidgame.gif)
 
 - D3 physics based graph
 - Color coding nodes
@@ -35,7 +35,7 @@ CodeGraphyV2 is coming soon...
 
 ## Upcoming in V2
 
-![Squid Gif](src/assets/img/squidgame.gif)
+![Sliding Gif](src/assets/img/slide.gif)
 
 - [x] Collapsible nodes
 - [x] Displays connections to external packages (node_modules)
@@ -59,7 +59,7 @@ CodeGraphy's main feature is its ability to display the file hierarchy in a comp
 - Ability to open files directly from nodes
 - See the what classic directory mode looks like when graphed
 
-![Sliding Gif](src/assets/img/slide.gif)
+![screenshot](src/assets/img/screenshot2.png)
 
 ### Settings
 
