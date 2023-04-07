@@ -16,7 +16,6 @@ export type Settings = {
   linkDistance: number
   nodeColor: 'D3' | 'Random'
   selectedD3Color: string
-  lineColor: string
 }
 
 export const getWorkspaceSettings = () => {
@@ -42,7 +41,6 @@ export const getWorkspaceSettings = () => {
 	// Color Settings
 	const nodeColor = configuration.nodeColor
 	const selectedD3Color = configuration.selectedD3Color
-	const lineColor = configuration.lineColor
 
 	return {
 		connectionType,
@@ -60,7 +58,6 @@ export const getWorkspaceSettings = () => {
 		showLabels,
 		showOutlines,
 		doCollisions,
-		lineColor,
 	}
 }
 

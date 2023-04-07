@@ -210,11 +210,6 @@
         <Disclosure title="Colors" class="border-t border-border p-2">
           <!-- Color Switch -->
           <div class="mt-2 flex flex-col">
-            <div class="mb-4 flex items-center">
-              <PickColors v-model:value="lineColor" class="cursor-pointer" />
-              <p class="ml-3 text-sm font-light text-gray-300">Line Color</p>
-            </div>
-
             <span class="text-sm font-light text-gray-300">Node Color</span>
             <div
               class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
@@ -330,7 +325,6 @@ let showOrphans: Ref<boolean> = ref(true)
 let showLabels: Ref<boolean> = ref(true)
 let showOutlines: Ref<boolean> = ref(true)
 let doCollisions: Ref<boolean> = ref(true)
-let lineColor: Ref<string> = ref('#ff0000')
 
 fetchSettings()
 
@@ -345,7 +339,6 @@ window.addEventListener('message', (event) => {
 		chargeForce.value = message.text.chargeForce
 		linkForce.value = message.text.linkForce
 		linkDistance.value = message.text.linkDistance
-		lineColor.value = message.text.lineColor
 		connectionType.value = message.text.connectionType
 		nodeSize.value = message.text.nodeSize
 		nodeDepth.value = message.text.nodeDepth
@@ -450,7 +443,6 @@ const saveSettings = () => {
 		linkDistance: linkDistance.value,
 		nodeColor: nodeColor.value,
 		selectedD3Color: selectedD3Color.value,
-		lineColor: lineColor.value,
 	})
 }
 

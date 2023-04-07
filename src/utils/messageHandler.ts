@@ -116,7 +116,6 @@ const receiveMessages = async (webview: vscode.Webview) => {
 					linkDistance: messageSettings.linkDistance,
 					nodeColor: messageSettings.nodeColor,
 					selectedD3Color: messageSettings.selectedD3Color,
-					lineColor: messageSettings.lineColor,
 				})
 			}
 
