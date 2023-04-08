@@ -33,11 +33,11 @@
                   nodeSize = 'Lines'
                 }
                 updateNodeSettings()
-								setLanguageViewSettings({
-									mode: connectionType,
-									nodeColor: nodeColor,
-									selectedD3Color: selectedD3Color,
-								})
+                setLanguageViewSettings({
+                  mode: connectionType,
+                  nodeColor: nodeColor,
+                  selectedD3Color: selectedD3Color,
+                })
               }
             "
           >
