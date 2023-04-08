@@ -23,6 +23,8 @@ export const drawD3Graph = ({
 	showLabels,
 	showOutlines,
 	doCollisions,
+	chargeForce,
+	linkDistance,
 }: {
   nodes: Node[]
   connections: Connection[]
@@ -31,6 +33,8 @@ export const drawD3Graph = ({
   showLabels: boolean
   showOutlines: boolean
   doCollisions: boolean
+	chargeForce: number
+	linkDistance: number
 }) => {
 	if (nodes.length === 0) return
 
@@ -40,8 +44,10 @@ export const drawD3Graph = ({
 
 	const g = resetGraph(svg, nodes)
 
-	const forceSimulation = initForceSimulation(width, height, doCollisions)
-	addEventListeners(forceSimulation, width, height)
+	const forceSimulation = initForceSimulation(width, height, doCollisions,
+		chargeForce,
+		linkDistance,)
+	addEventListeners(forceSimulation, width)
 
 	const gCircles = drawNodes(
 		forceSimulation,
@@ -90,18 +96,20 @@ const initForceSimulation = (
 	width: number,
 	height: number,
 	doCollisions: boolean,
+	chargeForce: number,
+	linkDistance: number,
 ): NodeSimulation => {
 	const forceSimulation = d3
 		.forceSimulation<Node, d3.SimulationLinkDatum<Node>>()
 		.force(
 			'link',
-			d3.forceLink<Node, d3.SimulationLinkDatum<Node>>().distance(100),
+			d3.forceLink<Node, d3.SimulationLinkDatum<Node>>().distance(linkDistance),
 		)
 		.force(
 			'charge',
 			d3
 				.forceManyBody<Node>()
-				.strength(-10)
+				.strength(chargeForce)
 				.distanceMax(width / 2),
 		)
 		.force('center', d3.forceCenter(width / 2, height / 2))
@@ -121,22 +129,17 @@ const initForceSimulation = (
 const addEventListeners = (
 	forceSimulation: NodeSimulation,
 	width: number,
-	height: number,
 ): void => {
-	addForceChangeListener(forceSimulation, 'linkForce', d3.forceLink().strength)
 	addForceChangeListener(
 		forceSimulation,
-		'linkDistance',
-		d3.forceLink().distance,
+		'link',
+		(value) => d3.forceLink().distance(value),
 	)
 	addForceChangeListener(forceSimulation, 'chargeForce', (value) =>
 		d3
 			.forceManyBody()
 			.strength(value)
 			.distanceMax(width / 2),
-	)
-	addForceChangeListener(forceSimulation, 'centerForce', (value) =>
-		d3.forceCenter(width / 2, height / 2).strength(value),
 	)
 }
 

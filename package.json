@@ -95,20 +95,10 @@
           "default": true,
           "description": "Allow nodes to collide with each other"
         },
-        "codegraphy.centerForce": {
-          "type": "number",
-          "default": 0,
-          "description": "Force applied to nodes to center them in the graph"
-        },
         "codegraphy.chargeForce": {
           "type": "number",
           "default": -100,
           "description": "Force applied to nodes to repel them from neighbor nodes"
-        },
-        "codegraphy.linkForce": {
-          "type": "number",
-          "default": 0,
-          "description": "Force applied to links to keep nodes connected and close"
         },
         "codegraphy.linkDistance": {
           "type": "number",

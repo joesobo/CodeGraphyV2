@@ -100,18 +100,10 @@
         <Disclosure title="D3" class="mt-4 border-t border-border p-2">
           <div class="flex flex-col">
             <SliderRow
-              id="linkForce"
-              :value="linkForce"
-              label="Link Force"
-              :min="-100"
-              @input="(event: SliderInputEvent) => linkForce = Number.parseInt(event.target.value.toString())"
-              @mouseup="() => saveSettings()"
-            />
-            <SliderRow
               id="linkDistance"
               :value="linkDistance"
               label="Link Distance"
-              :max="1000"
+              :max="250"
               :step="10"
               @input="(event: SliderInputEvent) => linkDistance = Number.parseInt(event.target.value.toString())"
               @mouseup="() => saveSettings()"
@@ -121,16 +113,8 @@
               :value="chargeForce"
               label="Charge Force"
               :min="-100"
+							:max="100"
               @input="(event: SliderInputEvent) => chargeForce = Number.parseInt(event.target.value.toString())"
-              @mouseup="() => saveSettings()"
-            />
-            <SliderRow
-              id="centerForce"
-              :value="centerForce"
-              label="Center Force"
-              :max="1"
-              :step="0.01"
-              @input="(event: SliderInputEvent) => centerForce = Number.parseInt(event.target.value.toString())"
               @mouseup="() => saveSettings()"
             />
           </div>
@@ -302,9 +286,7 @@ let selectedD3Color: Ref<string> = ref('Spectral')
 // D3 Settings
 let nodeDepth: Ref<number> = ref(0)
 let maxNodeDepth: Ref<number> = ref(0)
-let centerForce: Ref<number> = ref(0)
 let chargeForce: Ref<number> = ref(-100)
-let linkForce: Ref<number> = ref(0)
 let linkDistance: Ref<number> = ref(100)
 
 // Extra Settings
@@ -323,9 +305,7 @@ onMounted(() => {
 		case 'setSettings':
 			nodeColor.value = message.text.nodeColor
 			selectedD3Color.value = message.text.selectedD3Color
-			centerForce.value = message.text.centerForce
 			chargeForce.value = message.text.chargeForce
-			linkForce.value = message.text.linkForce
 			linkDistance.value = message.text.linkDistance
 			connectionType.value = message.text.connectionType
 			nodeSize.value = message.text.nodeSize
@@ -419,6 +399,8 @@ const drawGraph = () => {
 		showLabels: showLabels.value,
 		showOutlines: showOutlines.value,
 		doCollisions: doCollisions.value,
+		chargeForce: chargeForce.value,
+		linkDistance: linkDistance.value,
 	})
 }
 
@@ -431,9 +413,7 @@ const saveSettings = () => {
 		showLabels: showLabels.value,
 		showOutlines: showOutlines.value,
 		doCollisions: doCollisions.value,
-		centerForce: centerForce.value,
 		chargeForce: chargeForce.value,
-		linkForce: linkForce.value,
 		linkDistance: linkDistance.value,
 		nodeColor: nodeColor.value,
 		selectedD3Color: selectedD3Color.value,

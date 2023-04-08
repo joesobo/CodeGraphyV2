@@ -91,9 +91,7 @@ All the customizable settings in Codegraphy can also be added into your workspac
 
 **D3 Forces**
 
-- centerForce: number
 - chargeForce: number
-- linkForce: number
 - linkDistance: number
 
 **Colors**
