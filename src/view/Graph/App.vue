@@ -33,6 +33,11 @@
                   nodeSize = 'Lines'
                 }
                 updateNodeSettings()
+								setLanguageViewSettings({
+									mode: connectionType,
+									nodeColor: nodeColor,
+									selectedD3Color: selectedD3Color,
+								})
               }
             "
           >
@@ -439,6 +444,7 @@ const saveSettings = () => {
 const updateGraph = () => {
 	saveSettings()
 	setLanguageViewSettings({
+		mode: connectionType.value,
 		nodeColor: nodeColor.value,
 		selectedD3Color: selectedD3Color.value,
 	})

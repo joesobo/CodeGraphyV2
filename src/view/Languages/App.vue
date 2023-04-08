@@ -64,7 +64,6 @@ let nodeDepth: Ref<number> = ref(0)
 
 // Extra Settings
 let showNodeModules: Ref<boolean> = ref(false)
-let showOrphans: Ref<boolean> = ref(false)
 
 onMounted(() => {
 	fetchSettings()
@@ -78,7 +77,6 @@ onMounted(() => {
 			nodeColor.value = message.text.nodeColor
 			selectedD3Color.value = message.text.selectedD3Color
 			showNodeModules.value = message.text.showNodeModules
-			showOrphans.value = message.text.showOrphans
 
 			getGraphData({
 				mode: connectionType.value,
@@ -86,7 +84,7 @@ onMounted(() => {
 				collapseFullPaths: [],
 				nodeDepth: nodeDepth.value,
 				showNodeModules: showNodeModules.value,
-				showOrphans: showOrphans.value,
+				showOrphans: true,
 			})
 			return
 		case 'setGraphData':

@@ -7,6 +7,7 @@ import {
 	updateWorkspaceSettings,
 } from './workspaceSettings'
 
+
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
 let saveCollapseFullPaths: string[]
@@ -85,6 +86,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				const workspaceSettings = getWorkspaceSettings()
 				workspaceSettings.nodeColor = message.text.nodeColor
 				workspaceSettings.selectedD3Color = message.text.selectedD3Color
+				workspaceSettings.connectionType = message.text.mode
 				await languageView.view.postMessage({
 					command: 'setSettings',
 					text: workspaceSettings,
