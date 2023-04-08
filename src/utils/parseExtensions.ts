@@ -16,43 +16,22 @@ export const parseExtensions = (
 	nodes.forEach((node) => {
 		let extension = ''
 		if (node.name.startsWith('.')) {
-			extension = node.name.substring(1).split('.').slice(1).join('.')
+			extension = `.${node.name.substring(1).split('.').slice(1).join('.')}`
 		} else {
-			extension = node.name.split('.').slice(1).join('.')
+			extension = `.${node.name.split('.').slice(1).join('.')}`
+		}
+
+		if (extension === '.') {
+			extension = 'Directory'
 		}
 
 		const extensionIndex = extensions.findIndex(
 			(ext) => ext.extension === extension,
 		)
 		if (extensionIndex === -1) {
-			let color
-			// Random Color
-			if (options.useRandomColor) {
-				color = randomColor({
-					luminosity: 'light',
-					seed: extension,
-				})
-			} else {
-				// D3 Color
-				const selectedThemeInterpolator: ((t: number) => string) | undefined =
-          d3ColorSchemes.find(
-          	(theme: D3Color) => theme.name === options.d3Color,
-          )?.interpolator
-				const d3Color = d3
-					.scaleSequential()
-					.domain([1, 10])
-					.interpolator(selectedThemeInterpolator ?? d3.interpolateRainbow)
-				if (d3Color) {
-					color = d3Color(getRandomIntSeed(extension, 10))
-				} else {
-					// Default Color
-					color = '#000000'
-				}
-			}
-
 			extensions.push({
 				extension,
-				color,
+				color: '',
 				count: 1,
 				lines: node.lines ?? 0,
 			})
@@ -60,6 +39,36 @@ export const parseExtensions = (
 			extensions[extensionIndex].count++
 			extensions[extensionIndex].lines += node.lines ?? 0
 		}
+	})
+
+	// color per extension
+	extensions.forEach((extension) => {
+		let color
+		// Random Color
+		if (options.useRandomColor) {
+			color = randomColor({
+				luminosity: 'light',
+				seed: extension.extension,
+			})
+		} else {
+			// D3 Color
+			const selectedThemeInterpolator: ((t: number) => string) | undefined =
+          d3ColorSchemes.find(
+          	(theme: D3Color) => theme.name === options.d3Color,
+          )?.interpolator
+			const d3Color = d3
+				.scaleSequential()
+				.domain([0, extensions.length])
+				.interpolator(selectedThemeInterpolator ?? d3.interpolateRainbow)
+			if (d3Color) {
+				color = d3Color(getRandomIntSeed(extension.extension, extensions.length))
+			} else {
+				// Default Color
+				color = '#000000'
+			}
+		}
+
+		extension.color = color
 	})
 
 	// Override Extension Colors

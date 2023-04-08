@@ -35,7 +35,7 @@ export class GraphViewProvider implements vscode.WebviewViewProvider {
 		)
 
 		registerView(webview, 'Graph View')
-		handleMessages(webview, 'Graph View')
+		handleMessages(webview)
 
 		return `
 			<!DOCTYPE html>

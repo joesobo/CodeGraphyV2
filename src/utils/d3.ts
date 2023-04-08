@@ -257,7 +257,7 @@ const enableZoom = (
 export const updateD3Graph = (
 	nodes: Node[],
 	extensions: Extension[],
-	currentOpenFile?: string,
+	currentOpenFile: string,
 ) => {
 	if (nodes.length === 0) return
 
@@ -271,19 +271,7 @@ export const updateD3Graph = (
 
 	circles.exit().remove()
 
-	circles.attr('fill', (node: Node) => {
-		let color = '#000'
-		const nodeExt = node.name.startsWith('.')
-			? node.name.substring(1).split('.').slice(1).join('.')
-			: node.name.split('.').slice(1).join('.')
-		color = extensions.find((ext) => ext.extension === nodeExt)?.color ?? '#000'
-
-		if (node.fullPath === currentOpenFile) {
-			return '#fff'
-		}
-
-		return color
-	})
+	circles.attr('fill', (node: Node) => getNodeColor(node, extensions, currentOpenFile))
 }
 
 const addForceChangeListener = (
@@ -391,9 +379,12 @@ const getNodeColor = (
 		return '#fff'
 	}
 
-	const nodeExt = node.name.startsWith('.')
+	let nodeExt = `.${node.name.startsWith('.')
 		? node.name.substring(1).split('.').slice(1).join('.')
-		: node.name.split('.').slice(1).join('.')
+		: node.name.split('.').slice(1).join('.')}`
+	if (nodeExt === '.') {
+		nodeExt = 'Directory'
+	}
 
 	return extensions.find((ext) => ext.extension === nodeExt)?.color ?? '#000'
 }

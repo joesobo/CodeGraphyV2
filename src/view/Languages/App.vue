@@ -17,7 +17,7 @@
         :key="extension.extension"
         class="border border-zinc-700 bg-zinc-800"
       >
-        <td class="pl-2">.{{ extension.extension }}</td>
+        <td class="pl-2">{{ extension.extension }}</td>
         <td class="pl-4">{{ extension.count }}</td>
         <td class="pl-4">{{ extension.lines }}</td>
         <td class="pl-4">

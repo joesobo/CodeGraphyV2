@@ -29,13 +29,13 @@ export const registerView = (view: vscode.Webview, title: string) => {
 	})
 }
 
-export const handleMessages = (view: vscode.Webview, title: string) => {
-	receiveMessages(view, title)
+export const handleMessages = (view: vscode.Webview) => {
+	receiveMessages(view)
 
 	sendMessages(view)
 }
 
-const receiveMessages = async (webview: vscode.Webview, title: string) => {
+const receiveMessages = async (webview: vscode.Webview) => {
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
 		case 'openFile': {
@@ -57,12 +57,10 @@ const receiveMessages = async (webview: vscode.Webview, title: string) => {
 			return
 		}
 		case 'collapseNode': {
-			if (title === 'Graph View') {
-				await webview.postMessage({
-					command: 'collapseNode',
-					fullPath: message.text,
-				})
-			}
+			await webview.postMessage({
+				command: 'collapseNode',
+				fullPath: message.text,
+			})
 			return
 		}
 		case 'getGraphData': {
@@ -83,11 +81,13 @@ const receiveMessages = async (webview: vscode.Webview, title: string) => {
 			return
 		}
 		case 'setLanguageViewSettings': {
-			if (title === 'Languages View') {
+			const languageView = views.find((view) => view.title === 'Languages View')
+
+			if (languageView) {
 				const workspaceSettings = getWorkspaceSettings()
 				workspaceSettings.nodeColor = message.text.nodeColor
 				workspaceSettings.selectedD3Color = message.text.selectedD3Color
-				await webview.postMessage({
+				await languageView.view.postMessage({
 					command: 'setSettings',
 					text: workspaceSettings,
 				})

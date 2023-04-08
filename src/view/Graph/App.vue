@@ -382,7 +382,7 @@ onMounted(() => {
 				d3Color: selectedD3Color.value,
 			})
 
-			updateD3Graph(nodes.value, extensionList.value)
+			updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
 		}
 	})
 })
@@ -443,6 +443,6 @@ const updateGraph = () => {
 		d3Color: selectedD3Color.value,
 		overrideExtensionColors: overrideExtensionColors.value,
 	})
-	updateD3Graph(nodes.value, extensionList.value)
+	updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
 }
 </script>
