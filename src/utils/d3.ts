@@ -10,10 +10,14 @@ import type {
 	SVGElement,
 	SVGSelection,
 } from './types'
-import type { D3DragEvent, DragBehavior, Simulation } from 'd3'
+import type { D3DragEvent, DragBehavior, Simulation, SimulationLinkDatum } from 'd3'
 
 import { getRandomIntSeed } from './basic'
 import { collapseNodes } from './collapseNodes'
+
+const MIN_DISTANCE = 0
+let MAX_DISTANCE = 250
+const MAX_RADIUS = 25
 
 export const drawD3Graph = ({
 	nodes,
@@ -99,11 +103,12 @@ const initForceSimulation = (
 	chargeForce: number,
 	linkDistance: number,
 ): NodeSimulation => {
+	MAX_DISTANCE = linkDistance
 	const forceSimulation = d3
 		.forceSimulation<Node, d3.SimulationLinkDatum<Node>>()
 		.force(
 			'link',
-			d3.forceLink<Node, d3.SimulationLinkDatum<Node>>().distance(linkDistance),
+			d3.forceLink<Node, d3.SimulationLinkDatum<Node>>().distance(0),
 		)
 		.force(
 			'charge',
@@ -133,7 +138,7 @@ const addEventListeners = (
 	addForceChangeListener(
 		forceSimulation,
 		'link',
-		(value) => d3.forceLink().distance(value),
+		(value) => MAX_DISTANCE = value
 	)
 	addForceChangeListener(forceSimulation, 'chargeForce', (value) =>
 		d3
@@ -234,6 +239,13 @@ const drawLinks = (
   >
 	linkForce.links(connections).id((d: Node) => {
 		return d.id
+	}).distance((link: SimulationLinkDatum<Node>) => {
+		const source = link.source as Node
+		const target = link.target as Node
+
+		const largestRadius = Math.max(source.radius, target.radius)
+
+		return MIN_DISTANCE + ((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
 	})
 }
 
