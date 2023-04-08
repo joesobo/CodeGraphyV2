@@ -113,7 +113,7 @@
               :value="chargeForce"
               label="Charge Force"
               :min="-100"
-							:max="100"
+              :max="100"
               @input="(event: SliderInputEvent) => chargeForce = Number.parseInt(event.target.value.toString())"
               @mouseup="() => saveSettings()"
             />

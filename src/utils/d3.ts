@@ -10,7 +10,12 @@ import type {
 	SVGElement,
 	SVGSelection,
 } from './types'
-import type { D3DragEvent, DragBehavior, Simulation, SimulationLinkDatum } from 'd3'
+import type {
+	D3DragEvent,
+	DragBehavior,
+	Simulation,
+	SimulationLinkDatum,
+} from 'd3'
 
 import { getRandomIntSeed } from './basic'
 import { collapseNodes } from './collapseNodes'
@@ -37,8 +42,8 @@ export const drawD3Graph = ({
   showLabels: boolean
   showOutlines: boolean
   doCollisions: boolean
-	chargeForce: number
-	linkDistance: number
+  chargeForce: number
+  linkDistance: number
 }) => {
 	if (nodes.length === 0) return
 
@@ -48,9 +53,13 @@ export const drawD3Graph = ({
 
 	const g = resetGraph(svg, nodes)
 
-	const forceSimulation = initForceSimulation(width, height, doCollisions,
+	const forceSimulation = initForceSimulation(
+		width,
+		height,
+		doCollisions,
 		chargeForce,
-		linkDistance,)
+		linkDistance,
+	)
 	addEventListeners(forceSimulation, width)
 
 	const gCircles = drawNodes(
@@ -138,7 +147,7 @@ const addEventListeners = (
 	addForceChangeListener(
 		forceSimulation,
 		'link',
-		(value) => MAX_DISTANCE = value
+		(value) => (MAX_DISTANCE = value),
 	)
 	addForceChangeListener(forceSimulation, 'chargeForce', (value) =>
 		d3
@@ -237,16 +246,22 @@ const drawLinks = (
     Node,
     d3.SimulationLinkDatum<Node>
   >
-	linkForce.links(connections).id((d: Node) => {
-		return d.id
-	}).distance((link: SimulationLinkDatum<Node>) => {
-		const source = link.source as Node
-		const target = link.target as Node
+	linkForce
+		.links(connections)
+		.id((d: Node) => {
+			return d.id
+		})
+		.distance((link: SimulationLinkDatum<Node>) => {
+			const source = link.source as Node
+			const target = link.target as Node
 
-		const largestRadius = Math.max(source.radius, target.radius)
+			const largestRadius = Math.max(source.radius, target.radius)
 
-		return MIN_DISTANCE + ((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
-	})
+			return (
+				MIN_DISTANCE +
+        ((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
+			)
+		})
 }
 
 const enableZoom = (
