@@ -271,7 +271,9 @@ export const updateD3Graph = (
 
 	circles.exit().remove()
 
-	circles.attr('fill', (node: Node) => getNodeColor(node, extensions, currentOpenFile))
+	circles.attr('fill', (node: Node) =>
+		getNodeColor(node, extensions, currentOpenFile),
+	)
 }
 
 const addForceChangeListener = (
@@ -379,9 +381,11 @@ const getNodeColor = (
 		return '#fff'
 	}
 
-	let nodeExt = `.${node.name.startsWith('.')
-		? node.name.substring(1).split('.').slice(1).join('.')
-		: node.name.split('.').slice(1).join('.')}`
+	let nodeExt = `.${
+		node.name.startsWith('.')
+			? node.name.substring(1).split('.').slice(1).join('.')
+			: node.name.split('.').slice(1).join('.')
+	}`
 	if (nodeExt === '.') {
 		nodeExt = 'Directory'
 	}

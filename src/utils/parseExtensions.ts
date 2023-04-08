@@ -53,15 +53,17 @@ export const parseExtensions = (
 		} else {
 			// D3 Color
 			const selectedThemeInterpolator: ((t: number) => string) | undefined =
-          d3ColorSchemes.find(
-          	(theme: D3Color) => theme.name === options.d3Color,
-          )?.interpolator
+        d3ColorSchemes.find(
+        	(theme: D3Color) => theme.name === options.d3Color,
+        )?.interpolator
 			const d3Color = d3
 				.scaleSequential()
 				.domain([0, extensions.length])
 				.interpolator(selectedThemeInterpolator ?? d3.interpolateRainbow)
 			if (d3Color) {
-				color = d3Color(getRandomIntSeed(extension.extension, extensions.length))
+				color = d3Color(
+					getRandomIntSeed(extension.extension, extensions.length),
+				)
 			} else {
 				// Default Color
 				color = '#000000'

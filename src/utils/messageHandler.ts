@@ -7,7 +7,6 @@ import {
 	updateWorkspaceSettings,
 } from './workspaceSettings'
 
-
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
 let saveCollapseFullPaths: string[]
@@ -78,7 +77,9 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			return
 		}
 		case 'setLanguageViewSettings': {
-			const languageView = views.find((view) => view.title === 'Languages View')
+			const languageView = views.find(
+				(view) => view.title === 'Languages View',
+			)
 
 			if (languageView) {
 				const workspaceSettings = getWorkspaceSettings()
