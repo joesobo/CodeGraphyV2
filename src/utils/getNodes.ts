@@ -53,8 +53,15 @@ const getNodeSize = (
 		let connectionCount = 0
 
 		connections.forEach((connection) => {
-			if (connection.source === index || connection.target === index) {
-				connectionCount++
+			const regex = /(\d+)-(\d+)/
+			const match = connection.id.match(regex)
+
+			if (match) {
+				const sourceId = Number.parseInt(match[1])
+				const targetId = Number.parseInt(match[2])
+				if (sourceId === index || targetId === index) {
+					connectionCount++
+				}
 			}
 		})
 

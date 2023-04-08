@@ -80,8 +80,6 @@ describe('filterOrphans', () => {
 			},
 		]
 
-		console.log(result.nodes)
-
 		expect(result.nodes).toEqual(expectedNodes)
 		expect(result.connections).toEqual(connections)
 	})

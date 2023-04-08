@@ -29,6 +29,9 @@
               () => {
                 connectionType =
                   connectionType === 'Interaction' ? 'Directory' : 'Interaction'
+                if (connectionType === 'Directory') {
+                  nodeSize = 'Lines'
+                }
                 updateNodeSettings()
               }
             "
@@ -136,9 +139,11 @@
               class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
               @click="
                 () => {
-                  nodeSize =
-                    nodeSize === 'Connections' ? 'Lines' : 'Connections'
-                  updateNodeSettings()
+                  if (connectionType !== 'Directory') {
+                    nodeSize =
+                      nodeSize === 'Connections' ? 'Lines' : 'Connections'
+                    updateNodeSettings()
+                  }
                 }
               "
             >
