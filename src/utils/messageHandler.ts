@@ -71,13 +71,10 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			const workspaceSettings = getWorkspaceSettings()
 			const returnSettings: Settings = { ...workspaceSettings }
 
-			views.forEach(async (webview) => {
-				await webview.view.postMessage({
-					command: 'setSettings',
-					text: returnSettings,
-				})
+			await webview.postMessage({
+				command: 'setSettings',
+				text: returnSettings,
 			})
-
 			return
 		}
 		case 'setLanguageViewSettings': {

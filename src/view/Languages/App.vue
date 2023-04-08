@@ -35,12 +35,13 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { Ref, onMounted, ref } from 'vue'
 import PickColors from 'vue-pick-colors'
 
 import type { Connection, Extension, Node } from '../../utils/types'
 
 import {
+	fetchSettings,
 	getGraphData,
 	overrideExtensionColor,
 } from '../../utils/graphMessenger'
@@ -65,41 +66,45 @@ let nodeDepth: Ref<number> = ref(0)
 let showNodeModules: Ref<boolean> = ref(false)
 let showOrphans: Ref<boolean> = ref(false)
 
-window.addEventListener('message', (event) => {
-	const message = event.data // The JSON data our extension sent
-	switch (message.command) {
-	case 'setSettings':
-		connectionType.value = message.text.connectionType
-		nodeSize.value = message.text.nodeSize
-		nodeColor.value = message.text.nodeColor
-		selectedD3Color.value = message.text.selectedD3Color
-		showNodeModules.value = message.text.showNodeModules
-		showOrphans.value = message.text.showOrphans
+onMounted(() => {
+	fetchSettings()
 
-		getGraphData({
-			mode: connectionType.value,
-			nodeSize: nodeSize.value,
-			collapseFullPaths: [],
-			nodeDepth: nodeDepth.value,
-			showNodeModules: showNodeModules.value,
-			showOrphans: showOrphans.value,
-		})
-		return
-	case 'setGraphData':
-		nodes.value = message.text.nodes
-		connections.value = message.text.connections
+	window.addEventListener('message', (event) => {
+		const message = event.data // The JSON data our extension sent
+		switch (message.command) {
+		case 'setSettings':
+			connectionType.value = message.text.connectionType
+			nodeSize.value = message.text.nodeSize
+			nodeColor.value = message.text.nodeColor
+			selectedD3Color.value = message.text.selectedD3Color
+			showNodeModules.value = message.text.showNodeModules
+			showOrphans.value = message.text.showOrphans
 
-		extensionList.value = parseExtensions(nodes.value, {
-			useRandomColor: nodeColor.value === 'Random',
-			overrideExtensionColors: extensionList.value.map((extension) => {
-				return {
-					extension: extension.extension,
-					color: extension.color,
-				}
-			}),
-			d3Color: selectedD3Color.value,
-		})
-		return
-	}
+			getGraphData({
+				mode: connectionType.value,
+				nodeSize: nodeSize.value,
+				collapseFullPaths: [],
+				nodeDepth: nodeDepth.value,
+				showNodeModules: showNodeModules.value,
+				showOrphans: showOrphans.value,
+			})
+			return
+		case 'setGraphData':
+			nodes.value = message.text.nodes
+			connections.value = message.text.connections
+
+			extensionList.value = parseExtensions(nodes.value, {
+				useRandomColor: nodeColor.value === 'Random',
+				overrideExtensionColors: extensionList.value.map((extension) => {
+					return {
+						extension: extension.extension,
+						color: extension.color,
+					}
+				}),
+				d3Color: selectedD3Color.value,
+			})
+			return
+		}
+	})
 })
 </script>
