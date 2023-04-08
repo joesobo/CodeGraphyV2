@@ -35,7 +35,7 @@ export class LanguageViewProvider implements vscode.WebviewViewProvider {
 		)
 
 		registerView(webview, 'Languages View')
-		handleMessages()
+		handleMessages(webview, 'Languages View')
 
 		return `
 			<!DOCTYPE html>

@@ -7,6 +7,7 @@ import {
 	updateWorkspaceSettings,
 } from './workspaceSettings'
 
+
 let saveNodeSize: 'Lines' | 'Connections'
 let saveMode: 'Interaction' | 'Directory'
 let saveCollapseFullPaths: string[]
@@ -28,15 +29,13 @@ export const registerView = (view: vscode.Webview, title: string) => {
 	})
 }
 
-export const handleMessages = () => {
-	views.forEach((webview) => {
-		receiveMessages(webview.view)
+export const handleMessages = (view: vscode.Webview, title: string) => {
+	receiveMessages(view, title)
 
-		sendMessages(webview.view)
-	})
+	sendMessages(view)
 }
 
-const receiveMessages = async (webview: vscode.Webview) => {
+const receiveMessages = async (webview: vscode.Webview, title: string) => {
 	webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
 		case 'openFile': {
@@ -58,10 +57,12 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			return
 		}
 		case 'collapseNode': {
-			await webview.postMessage({
-				command: 'collapseNode',
-				fullPath: message.text,
-			})
+			if (title === 'Graph View') {
+				await webview.postMessage({
+					command: 'collapseNode',
+					fullPath: message.text,
+				})
+			}
 			return
 		}
 		case 'getGraphData': {
@@ -82,15 +83,11 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			return
 		}
 		case 'setLanguageViewSettings': {
-			const workspaceSettings = getWorkspaceSettings()
-			workspaceSettings.nodeColor = message.text.nodeColor
-			workspaceSettings.selectedD3Color = message.text.selectedD3Color
-
-			const languageView = views.find(
-				(view) => view.title === 'Languages View',
-			)
-			if (languageView) {
-				await languageView.view.postMessage({
+			if (title === 'Languages View') {
+				const workspaceSettings = getWorkspaceSettings()
+				workspaceSettings.nodeColor = message.text.nodeColor
+				workspaceSettings.selectedD3Color = message.text.selectedD3Color
+				await webview.postMessage({
 					command: 'setSettings',
 					text: workspaceSettings,
 				})
