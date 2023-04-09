@@ -116,10 +116,7 @@ const initForceSimulation = (
 	MAX_DISTANCE = linkDistance
 	const forceSimulation = d3
 		.forceSimulation<Node, d3.SimulationLinkDatum<Node>>()
-		.force(
-			'link',
-			d3.forceLink<Node, d3.SimulationLinkDatum<Node>>(),
-		)
+		.force('link', d3.forceLink<Node, d3.SimulationLinkDatum<Node>>())
 		.force(
 			'charge',
 			d3
@@ -248,7 +245,6 @@ const drawLinks = (
     d3.SimulationLinkDatum<Node>
   >
 	const directoryMode = nodes.find((node) => node.name.split('.').length === 1)
-	console.log('TEST', directoryMode)
 	linkForce
 		.links(connections)
 		.id((d: Node) => {
@@ -271,15 +267,15 @@ const drawLinks = (
 
 				return (
 					MIN_DISTANCE +
-					((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
+          ((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
 				)
 			}
 
-			return d3.scalePow()
+			return d3
+				.scalePow()
 				.exponent(2)
 				.domain([MIN_RADIUS, MAX_RADIUS]) // domain of your data
 				.range([MIN_DISTANCE, MAX_DISTANCE * 1.5])(largestRadius)
-
 		})
 }
 

@@ -48,6 +48,7 @@ specifiers:
   vue-i18n: '9'
   vue-pick-colors: ^1.3.3
   vue-tsc: ^0.40.6
+  vue3-popper: ^1.5.0
 
 dependencies:
   '@headlessui/vue': 1.7.12_vue@3.2.47
@@ -60,6 +61,7 @@ dependencies:
   vue: 3.2.47
   vue-i18n: 9.2.2_vue@3.2.47
   vue-pick-colors: 1.3.3_vue@3.2.47
+  vue3-popper: 1.5.0_vue@3.2.47
 
 devDependencies:
   '@iconify-json/ant-design': 1.1.5
@@ -810,10 +812,10 @@ packages:
       }
     dev: true
 
-  /@popperjs/core/2.11.6:
+  /@popperjs/core/2.11.7:
     resolution:
       {
-        integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==,
+        integrity: sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw==,
       }
     dev: false
 
@@ -2713,6 +2715,13 @@ packages:
       }
     engines: { node: '>=0.11' }
     dev: true
+
+  /debounce/1.2.1:
+    resolution:
+      {
+        integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==,
+      }
+    dev: false
 
   /debug/3.2.7:
     resolution:
@@ -6507,7 +6516,7 @@ packages:
     peerDependencies:
       vue: ^3.2.26
     dependencies:
-      '@popperjs/core': 2.11.6
+      '@popperjs/core': 2.11.7
       vue: 3.2.47
     dev: false
 
@@ -6536,6 +6545,20 @@ packages:
       '@vue/runtime-dom': 3.2.47
       '@vue/server-renderer': 3.2.47_vue@3.2.47
       '@vue/shared': 3.2.47
+
+  /vue3-popper/1.5.0_vue@3.2.47:
+    resolution:
+      {
+        integrity: sha512-xaEnx90YBnlSg5G2yWqm2DHWHg+DB99UVRp4VsyTF0QLXyHrqSuE1Xo5+sG0AQq/lBcrGMlk5NU5xE2MDLKViw==,
+      }
+    engines: { node: '>=12' }
+    peerDependencies:
+      vue: ^3.2.20
+    dependencies:
+      '@popperjs/core': 2.11.7
+      debounce: 1.2.1
+      vue: 3.2.47
+    dev: false
 
   /w3c-xmlserializer/4.0.0:
     resolution:

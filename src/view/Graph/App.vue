@@ -15,47 +15,77 @@
         <!-- Icons -->
         <div class="flex">
           <!-- Restart -->
-          <button
-            class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-            @click="drawGraph()"
+					<Popper
+            content="Refresh the graph"
+            hover
+            arrow
+            openDelay="500"
           >
-            <RestartIcon width="1.25rem" height="1.25rem" />
-          </button>
+					<button
+							id="restart"
+              class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+              @click="drawGraph()"
+            >
+              <RestartIcon width="1.25rem" height="1.25rem" />
+            </button>
+          </Popper>
 
           <!-- Connections -->
-          <button
-            class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-            @click="
-              () => {
-                connectionType =
-                  connectionType === 'Interaction' ? 'Directory' : 'Interaction'
-                if (connectionType === 'Directory') {
-                  nodeSize = 'Lines'
-                }
-                updateNodeSettings()
-                setLanguageViewSettings({
-                  mode: connectionType,
-                  nodeColor: nodeColor,
-                  selectedD3Color: selectedD3Color,
-                })
-              }
-            "
+          <Popper
+            content="Toggle between connections and directory"
+            hover
+            arrow
+            openDelay="500"
+            placement="bottom-start"
+            arrowPadding="20px"
           >
-            <GraphIcon
-              v-if="connectionType === 'Interaction'"
-              width="1.25rem"
-              height="1.25rem"
-            />
-            <DirectoryIcon v-else width="1.25rem" height="1.25rem" />
-          </button>
+            <button
+              id="connections"
+              class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+              @click="
+                () => {
+                  connectionType =
+                    connectionType === 'Interaction'
+                      ? 'Directory'
+                      : 'Interaction'
+                  if (connectionType === 'Directory') {
+                    nodeSize = 'Lines'
+                  }
+                  updateNodeSettings()
+                  setLanguageViewSettings({
+                    mode: connectionType,
+                    nodeColor: nodeColor,
+                    selectedD3Color: selectedD3Color,
+                  })
+                }
+              "
+            >
+              <GraphIcon
+                v-if="connectionType === 'Interaction'"
+                width="1.25rem"
+                height="1.25rem"
+              />
+              <DirectoryIcon v-else width="1.25rem" height="1.25rem" />
+            </button>
+          </Popper>
 
           <!-- Settings -->
-          <button
-            class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-            @click="displaySettingsPopup = true"
+          <Popper
+            content="Open the settings popup"
+            hover
+            arrow
+            openDelay="500"
+            placement="bottom-start"
+            arrowPadding="20px"
           >
-            <SettingsIcon width="1.25rem" height="1.25rem" />
-          </button>
+            <button
+              id="settings"
+              class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+              @click="displaySettingsPopup = true"
+            >
+              <SettingsIcon width="1.25rem" height="1.25rem" />
+            </button>
+          </Popper>
         </div>
       </div>
 
@@ -233,6 +263,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import Popper from 'vue3-popper'
 
 import type {
 	Connection,
