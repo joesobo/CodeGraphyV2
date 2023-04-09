@@ -9,20 +9,59 @@
     >
       <!-- Top Row -->
       <div class="flex justify-between">
-        <!-- Node Count -->
-        <p class="ml-4 mt-4 text-white">Count: {{ nodes?.length }}</p>
+        <div class="flex">
+          <!-- Info -->
+          <Popper
+            hover
+            arrow
+            openDelay="500"
+            placement="bottom-end"
+            arrowPadding="-20px"
+          >
+            <template #content>
+              <h1 class="m-0 mt-2 p-0 text-lg font-bold text-white">
+                Welcome to CodeGraphy!
+              </h1>
+              <p class="mt-4">Here are some tips to get started:</p>
+              <ul class="mb-2 list-outside list-disc">
+                <li class="ml-2 mt-3">
+                  <code class="rounded bg-primary p-1 text-white">Click</code>
+                  - Open the selected nodes file
+                </li>
+                <li class="ml-2 mt-3">
+                  <code class="rounded bg-primary p-1 text-white">
+                    Shift + Click
+                  </code>
+                  - Collapse the clicked node and any children
+                </li>
+                <li class="ml-2 mt-3">
+                  <code class="rounded bg-primary p-1 text-white">
+                    Click + Drag
+                  </code>
+                  - Move the entire graph
+                </li>
+                <li class="ml-2 mt-3">
+                  <code class="rounded bg-primary p-1 text-white">Scroll</code>
+                  - Zoom in and out
+                </li>
+              </ul>
+            </template>
+            <div
+              class="pointer-events-auto mt-4 ml-4 flex h-5 w-5 cursor-pointer items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+            >
+              <InfoIcon width="1.25rem" height="1.25rem" />
+            </div>
+          </Popper>
+          <!-- Node Count -->
+          <p class="ml-4 mt-4 text-white">Count: {{ nodes?.length }}</p>
+        </div>
 
         <!-- Icons -->
         <div class="flex">
           <!-- Restart -->
-					<Popper
-            content="Refresh the graph"
-            hover
-            arrow
-            openDelay="500"
-          >
-					<button
-							id="restart"
+          <Popper content="Refresh the graph" hover arrow openDelay="500">
+            <button
+              id="restart"
               class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
               @click="drawGraph()"
             >
@@ -294,6 +333,7 @@ import CloseIcon from '~icons/mdi/close-circle'
 import RandomIcon from '~icons/mdi/dice-multiple'
 import DirectoryIcon from '~icons/mdi/folder'
 import DepthGraphIcon from '~icons/mdi/graph'
+import InfoIcon from '~icons/mdi/information'
 import RestartIcon from '~icons/mdi/restart'
 import LinesIcon from '~icons/mdi/text'
 import ConnectionIcon from '~icons/mdi/transit-connection-variant'
