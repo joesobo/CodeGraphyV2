@@ -256,6 +256,13 @@ const drawLinks = (
 			const target = link.target as Node
 
 			const largestRadius = Math.max(source.radius, target.radius)
+			const sourceExt = source.name.split('.').slice(1).join('.')
+			const targetExt = target.name.split('.').slice(1).join('.')
+
+			// This means that the connection is between 2 directories
+			if (sourceExt === '' && targetExt === '') {
+				return MAX_DISTANCE * 1.5
+			}
 
 			return (
 				MIN_DISTANCE +
