@@ -15,6 +15,7 @@ import { getNodes } from './getNodes'
 import { getUnprocessedNodes } from './getUnprocessedNodes'
 import { processGraphInfo } from './processGraphInfo'
 
+
 vi.mock('vscode', () => {
 	const workspace = {
 		workspaceFolders: [
@@ -142,6 +143,7 @@ describe('getNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				lines: 1
 			},
 			{
 				id: 1,
@@ -151,6 +153,7 @@ describe('getNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				lines: 1
 			},
 			{
 				id: 2,
@@ -160,6 +163,7 @@ describe('getNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				lines: 1
 			},
 			{
 				id: 3,
@@ -169,6 +173,7 @@ describe('getNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				lines: undefined
 			},
 		]
 

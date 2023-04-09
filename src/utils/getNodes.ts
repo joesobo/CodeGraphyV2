@@ -24,6 +24,10 @@ export const getNodes = (
 			depth: -1,
 			collapsed: false,
 			hidden: false,
+			lines:
+        unprocessedNode.type === 'File'
+        	? (unprocessedNode.data as File).lines
+        	: undefined,
 		})
 	})
 

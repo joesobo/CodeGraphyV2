@@ -51,6 +51,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: 1,
 			},
 			{
 				id: 1,
@@ -60,6 +61,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: 1,
 			},
 			{
 				id: 2,
@@ -69,6 +71,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: 1,
 			},
 			{
 				id: 3,
@@ -78,6 +81,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: undefined
 			},
 		]
 
@@ -109,6 +113,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: 1,
 			},
 			{
 				id: 1,
@@ -118,6 +123,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: 1,
 			},
 			{
 				id: 2,
@@ -127,6 +133,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: 1,
 			},
 			{
 				id: 3,
@@ -136,6 +143,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				lines: undefined
 			},
 		]
 
