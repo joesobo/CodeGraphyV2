@@ -23,6 +23,7 @@ import { collapseNodes } from './collapseNodes'
 const MIN_DISTANCE = 0
 let MAX_DISTANCE = 250
 const MAX_RADIUS = 25
+const MIN_RADIUS = 10
 
 export const drawD3Graph = ({
 	nodes,
@@ -117,7 +118,7 @@ const initForceSimulation = (
 		.forceSimulation<Node, d3.SimulationLinkDatum<Node>>()
 		.force(
 			'link',
-			d3.forceLink<Node, d3.SimulationLinkDatum<Node>>().distance(0),
+			d3.forceLink<Node, d3.SimulationLinkDatum<Node>>(),
 		)
 		.force(
 			'charge',
@@ -246,6 +247,8 @@ const drawLinks = (
     Node,
     d3.SimulationLinkDatum<Node>
   >
+	const directoryMode = nodes.find((node) => node.name.split('.').length === 1)
+	console.log('TEST', directoryMode)
 	linkForce
 		.links(connections)
 		.id((d: Node) => {
@@ -256,18 +259,27 @@ const drawLinks = (
 			const target = link.target as Node
 
 			const largestRadius = Math.max(source.radius, target.radius)
-			const sourceExt = source.name.split('.').slice(1).join('.')
-			const targetExt = target.name.split('.').slice(1).join('.')
 
-			// This means that the connection is between 2 directories
-			if (sourceExt === '' && targetExt === '') {
-				return MAX_DISTANCE * 1.5
+			if (directoryMode) {
+				const sourceExt = source.name.split('.').slice(1).join('.')
+				const targetExt = target.name.split('.').slice(1).join('.')
+
+				// This means that the connection is between 2 directories
+				if (sourceExt === '' && targetExt === '') {
+					return MAX_DISTANCE * 1.5
+				}
+
+				return (
+					MIN_DISTANCE +
+					((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
+				)
 			}
 
-			return (
-				MIN_DISTANCE +
-        ((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
-			)
+			return d3.scalePow()
+				.exponent(2)
+				.domain([MIN_RADIUS, MAX_RADIUS]) // domain of your data
+				.range([MIN_DISTANCE, MAX_DISTANCE * 1.5])(largestRadius)
+
 		})
 }
 
