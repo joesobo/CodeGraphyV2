@@ -37,6 +37,7 @@ CodeGraphyV2 is coming soon...
 
 ![Sliding Gif](src/assets/img/slide.gif)
 
+- [ ] Multi-line import
 - [x] Collapsible nodes
 - [x] Displays connections to external packages (node_modules)
 - [x] Switch between files through graph nodes

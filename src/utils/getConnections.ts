@@ -146,7 +146,11 @@ const findConnectionIndex = (
 	let result = -1
 
 	unprocessedNodes.forEach((unprocessedNode, index) => {
-		if (unprocessedNode.data.name.includes(fullImportPath)) {
+		// Remove extensions to find better matches
+		const checkPath = unprocessedNode.data.name.split('.')[0]
+		const importPath = fullImportPath.split('.')[0]
+
+		if (checkPath === importPath) {
 			result = index
 		}
 	})
