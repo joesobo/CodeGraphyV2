@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2 mb-4 flex flex-col justify-between px-4">
+  <div class="mb-4 mt-2 flex flex-col justify-between px-4">
     <label class="text-white">
       {{ label }}
     </label>

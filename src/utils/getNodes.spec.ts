@@ -81,7 +81,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
-				lines: undefined
+				lines: undefined,
 			},
 		]
 
@@ -143,7 +143,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
-				lines: undefined
+				lines: undefined,
 			},
 		]
 

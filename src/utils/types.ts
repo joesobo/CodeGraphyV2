@@ -35,6 +35,7 @@ export interface Extension {
 }
 
 export interface ParseOptions {
+  mode: 'Interaction' | 'Directory'
   useRandomColor: boolean
   overrideExtensionColors: Record<string, string>[]
   d3Color?: string

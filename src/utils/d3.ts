@@ -30,6 +30,7 @@ export const drawD3Graph = ({
 	connections,
 	extensions,
 	currentOpenFile,
+	mode,
 	showLabels,
 	showOutlines,
 	doCollisions,
@@ -40,6 +41,7 @@ export const drawD3Graph = ({
   connections: Connection[]
   extensions: Extension[]
   currentOpenFile: string
+  mode: 'Interaction' | 'Directory'
   showLabels: boolean
   showOutlines: boolean
   doCollisions: boolean
@@ -70,6 +72,7 @@ export const drawD3Graph = ({
 		nodes,
 		connections,
 		currentOpenFile,
+		mode,
 		showLabels,
 		showOutlines,
 	)
@@ -162,6 +165,7 @@ const drawNodes = (
 	nodes: Node[],
 	connections: Connection[],
 	currentOpenFile: string,
+	mode: 'Interaction' | 'Directory',
 	showLabels: boolean,
 	showOutlines: boolean,
 ): NodeSelection => {
@@ -176,7 +180,9 @@ const drawNodes = (
 	// Draw node
 	gs.append('circle')
 		.attr('r', (d: Node) => d.radius)
-		.attr('fill', (d: Node) => getNodeColor(d, extensions, currentOpenFile))
+		.attr('fill', (d: Node) =>
+			getNodeColor(d, extensions, currentOpenFile, mode),
+		)
 		.attr('stroke', (d) => (d.collapsed && showOutlines ? '#ffd700' : ''))
 		.attr('stroke-width', (d) => (d.collapsed && showOutlines ? 4 : 0))
 		.on('click', click)
@@ -303,6 +309,7 @@ export const updateD3Graph = (
 	nodes: Node[],
 	extensions: Extension[],
 	currentOpenFile: string,
+	mode: 'Interaction' | 'Directory',
 ) => {
 	if (nodes.length === 0) return
 
@@ -317,7 +324,7 @@ export const updateD3Graph = (
 	circles.exit().remove()
 
 	circles.attr('fill', (node: Node) =>
-		getNodeColor(node, extensions, currentOpenFile),
+		getNodeColor(node, extensions, currentOpenFile, mode),
 	)
 }
 
@@ -421,6 +428,7 @@ const getNodeColor = (
 	node: Node,
 	extensions: Extension[],
 	currentOpenFile: string,
+	mode: 'Interaction' | 'Directory',
 ): string => {
 	if (node.fullPath === currentOpenFile) {
 		return '#fff'
@@ -432,7 +440,7 @@ const getNodeColor = (
 			: node.name.split('.').slice(1).join('.')
 	}`
 	if (nodeExt === '.') {
-		nodeExt = 'Directory'
+		nodeExt = mode === 'Directory' ? 'Directory' : 'Package'
 	}
 
 	return extensions.find((ext) => ext.extension === nodeExt)?.color ?? '#000'

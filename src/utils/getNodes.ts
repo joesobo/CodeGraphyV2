@@ -14,7 +14,11 @@ export const getNodes = (
 
 	unprocessedNodes.forEach((unprocessedNode, index) => {
 		const nodePath = unprocessedNode.data.name.replace(/\\/g, '/')
-		const nodeName = nodePath.split('/').pop() || ''
+		let nodeName = nodePath.split('/').pop() || ''
+
+		if (unprocessedNode.type === 'Package') {
+			nodeName = nodePath.split('node_modules/')?.pop() || ''
+		}
 
 		nodes.push({
 			id: index,

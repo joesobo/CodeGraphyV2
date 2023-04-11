@@ -1,7 +1,8 @@
-import fs from 'fs'
-import path from 'path'
+import type { Connection, UnprocessedNode } from './types'
 
-import { Connection, UnprocessedNode } from './types'
+import fs from 'fs'
+
+import { findNearestNodeModules } from './getNodeModules'
 
 export const getConnections = (
 	unprocessedNodes: UnprocessedNode[],
@@ -106,7 +107,7 @@ const containsImport = (line: string) => {
 }
 
 const getImportPath = (line: string) => {
-	const lineArr = line.replace('(', ' ').split(' ')
+	const lineArr = line.replace('(', ' ').replace('),', ' ').split(' ')
 
 	const index = lineArr.findIndex(
 		(el) => el.startsWith('"') || el.startsWith('\''),
@@ -149,42 +150,6 @@ const findConnectionIndex = (
 			result = index
 		}
 	})
-
-	return result
-}
-
-const findNearestNodeModules = (directory: string, importPath: string) => {
-	let result = ''
-	let found = false
-
-	while (directory !== '' && !found) {
-		const files = fs.readdirSync(directory)
-
-		files.forEach((file) => {
-			const filePath = path.join(directory, file)
-			const stats = fs.statSync(filePath)
-
-			if (stats.isDirectory() && file === 'node_modules') {
-				const packagePath = path.join(directory, 'node_modules')
-				const moduleFiles = fs.readdirSync(packagePath)
-
-				moduleFiles.forEach((module) => {
-					if (module !== importPath) return
-
-					const modulePath = path.join(packagePath, module)
-					const stats = fs.statSync(modulePath)
-
-					if (stats.isDirectory()) {
-						result = modulePath
-						found = true
-						return
-					}
-				})
-			}
-		})
-
-		directory = directory.split('/').slice(0, -1).join('/')
-	}
 
 	return result
 }

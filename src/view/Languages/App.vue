@@ -47,7 +47,7 @@ import {
 } from '../../utils/graphMessenger'
 import { parseExtensions } from '../../utils/parseExtensions'
 
-const tableHeaders = ['Extension', 'Count', 'Lines', 'Color']
+const tableHeaders = ['Type', 'Count', 'Lines', 'Color']
 
 let nodes: Ref<Node[]> = ref([])
 let connections: Ref<Connection[]> = ref([])
@@ -100,6 +100,7 @@ onMounted(() => {
 					}
 				}),
 				d3Color: selectedD3Color.value,
+				mode: connectionType.value,
 			})
 
 			return

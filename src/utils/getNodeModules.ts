@@ -1,7 +1,7 @@
+import type { File, Package } from './types'
+
 import fs from 'fs'
 import path from 'path'
-
-import { File, Package } from './types'
 
 export const getNodeModules = ({
 	files,
@@ -64,7 +64,22 @@ const isDirectPath = (importPath: string) => {
 	return !importPath.startsWith('.')
 }
 
-const findNearestNodeModules = (directory: string, importPath: string) => {
+const isValidDirectory = (path: string) => {
+	try {
+		if (fs.existsSync(path)) {
+			const stats = fs.statSync(path)
+			return stats.isDirectory()
+		}
+		return false
+	} catch (error) {
+		return false
+	}
+}
+
+export const findNearestNodeModules = (
+	directory: string,
+	importPath: string,
+) => {
 	let result = ''
 	let found = false
 
@@ -76,21 +91,13 @@ const findNearestNodeModules = (directory: string, importPath: string) => {
 			const stats = fs.statSync(filePath)
 
 			if (stats.isDirectory() && file === 'node_modules') {
-				const packagePath = path.join(directory, 'node_modules')
-				const moduleFiles = fs.readdirSync(packagePath)
+				const packagePath = path.join(directory, 'node_modules', importPath)
 
-				moduleFiles.forEach((module) => {
-					if (module !== importPath) return
-
-					const modulePath = path.join(packagePath, module)
-					const stats = fs.statSync(modulePath)
-
-					if (stats.isDirectory()) {
-						result = modulePath
-						found = true
-						return
-					}
-				})
+				if (isValidDirectory(packagePath)) {
+					result = packagePath
+					found = true
+					return
+				}
 			}
 		})
 

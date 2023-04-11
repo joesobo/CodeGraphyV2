@@ -22,7 +22,7 @@ export const parseExtensions = (
 		}
 
 		if (extension === '.') {
-			extension = 'Directory'
+			extension = options.mode === 'Directory' ? 'Directory' : 'Package'
 		}
 
 		const extensionIndex = extensions.findIndex(

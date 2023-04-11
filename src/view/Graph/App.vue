@@ -47,7 +47,7 @@
               </ul>
             </template>
             <div
-              class="pointer-events-auto mt-4 ml-4 flex h-5 w-5 cursor-pointer items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+              class="pointer-events-auto ml-4 mt-4 flex h-5 w-5 cursor-pointer items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
             >
               <InfoIcon width="1.25rem" height="1.25rem" />
             </div>
@@ -62,7 +62,7 @@
           <Popper content="Refresh the graph" hover arrow openDelay="500">
             <button
               id="restart"
-              class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+              class="pointer-events-auto mr-4 mt-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
               @click="drawGraph()"
             >
               <RestartIcon width="1.25rem" height="1.25rem" />
@@ -80,7 +80,7 @@
           >
             <button
               id="connections"
-              class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+              class="pointer-events-auto mr-4 mt-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
               @click="
                 () => {
                   connectionType =
@@ -119,7 +119,7 @@
           >
             <button
               id="settings"
-              class="pointer-events-auto mt-4 mr-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
+              class="pointer-events-auto mr-4 mt-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
               @click="displaySettingsPopup = true"
             >
               <SettingsIcon width="1.25rem" height="1.25rem" />
@@ -154,7 +154,7 @@
       <!-- Settings Popup -->
       <div
         v-show="displaySettingsPopup"
-        class="pointer-events-auto absolute top-0 right-0 mr-2 mt-2 flex max-h-96 w-full max-w-[200px] flex-col overflow-y-scroll rounded-md bg-dropdown pt-2 shadow-lg scrollbar-hide"
+        class="pointer-events-auto absolute right-0 top-0 mr-2 mt-2 flex max-h-96 w-full max-w-[200px] flex-col overflow-y-scroll rounded-md bg-dropdown pt-2 shadow-lg scrollbar-hide"
       >
         <div class="flex items-center justify-between px-2 text-lg">
           <h1 class="m-0 p-0 font-bold text-white">Settings</h1>
@@ -191,7 +191,7 @@
 
         <!-- Node Settings -->
         <Disclosure title="Node" class="border-t border-border p-2">
-          <div class="mt-2 mb-4 flex flex-col">
+          <div class="mb-4 mt-2 flex flex-col">
             <span class="text-sm font-light text-gray-300">Node Size</span>
             <div
               class="mt-2 box-border flex w-full cursor-pointer justify-between rounded-md border border-border"
@@ -206,7 +206,7 @@
               "
             >
               <div
-                class="flex flex-1 justify-center py-1 px-2"
+                class="flex flex-1 justify-center px-2 py-1"
                 :class="
                   nodeSize === 'Connections' ? 'text-white bg-primary' : ''
                 "
@@ -214,7 +214,7 @@
                 <ConnectionIcon width="1.25rem" height="1.25rem" />
               </div>
               <div
-                class="flex flex-1 justify-center py-1 px-2"
+                class="flex flex-1 justify-center px-2 py-1"
                 :class="nodeSize === 'Lines' ? 'text-white bg-primary' : ''"
               >
                 <LinesIcon width="1.25rem" height="1.25rem" />
@@ -222,6 +222,7 @@
             </div>
           </div>
           <ToggleSwitch
+            v-if="connectionType !== 'Directory'"
             v-model="showNodeModules"
             label="Node Modules"
             @update:modelValue="() => updateNodeSettings()"
@@ -263,13 +264,13 @@
               "
             >
               <div
-                class="flex flex-1 justify-center py-1 px-2"
+                class="flex flex-1 justify-center px-2 py-1"
                 :class="nodeColor === 'D3' ? 'text-white bg-primary' : ''"
               >
                 <LogoIcon width="1.25rem" height="1.25rem" />
               </div>
               <div
-                class="flex flex-1 justify-center py-1 px-2"
+                class="flex flex-1 justify-center px-2 py-1"
                 :class="nodeColor === 'Random' ? 'text-white bg-primary' : ''"
               >
                 <RandomIcon width="1.25rem" height="1.25rem" />
@@ -402,13 +403,19 @@ onMounted(() => {
 				useRandomColor: false,
 				overrideExtensionColors: overrideExtensionColors.value,
 				d3Color: selectedD3Color.value,
+				mode: connectionType.value,
 			})
 
 			drawGraph()
 			return
 		case 'setCurrentFile':
 			currentOpenFile.value = message.text
-			updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
+			updateD3Graph(
+				nodes.value,
+				extensionList.value,
+				currentOpenFile.value,
+				connectionType.value,
+			)
 			return
 		case 'collapseNode':
 			if (collapseFullPaths.value.indexOf(message.fullPath) !== -1) {
@@ -441,9 +448,15 @@ onMounted(() => {
 				useRandomColor: nodeColor.value === 'Random',
 				overrideExtensionColors: overrideExtensionColors.value,
 				d3Color: selectedD3Color.value,
+				mode: connectionType.value,
 			})
 
-			updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
+			updateD3Graph(
+				nodes.value,
+				extensionList.value,
+				currentOpenFile.value,
+				connectionType.value,
+			)
 		}
 	})
 })
@@ -467,6 +480,7 @@ const drawGraph = () => {
 		connections: connections.value,
 		extensions: extensionList.value,
 		currentOpenFile: currentOpenFile.value,
+		mode: connectionType.value,
 		showLabels: showLabels.value,
 		showOutlines: showOutlines.value,
 		doCollisions: doCollisions.value,
@@ -504,7 +518,13 @@ const updateGraph = () => {
 		useRandomColor: nodeColor.value === 'Random',
 		d3Color: selectedD3Color.value,
 		overrideExtensionColors: overrideExtensionColors.value,
+		mode: connectionType.value,
 	})
-	updateD3Graph(nodes.value, extensionList.value, currentOpenFile.value)
+	updateD3Graph(
+		nodes.value,
+		extensionList.value,
+		currentOpenFile.value,
+		connectionType.value,
+	)
 }
 </script>
