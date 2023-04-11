@@ -17,9 +17,9 @@ export const setSettings = (settings: Settings) => {
 	})
 }
 
-export const setLanguageViewSettings = (settings?: Record<string, unknown>) => {
+export const setStatsViewSettings = (settings?: Record<string, unknown>) => {
 	vscode.postMessage({
-		command: 'setLanguageViewSettings',
+		command: 'setStatsViewSettings',
 		text: settings,
 	})
 }

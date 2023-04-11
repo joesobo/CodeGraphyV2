@@ -40,9 +40,9 @@
           "type": "webview"
         },
         {
-          "id": "codegraphy-view-languages",
-          "name": "Languages",
-          "contextualTitle": "Languages",
+          "id": "codegraphy-view-stats",
+          "name": "Stats",
+          "contextualTitle": "Stats",
           "type": "webview"
         }
       ]

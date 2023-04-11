@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-import { GraphViewProvider, LanguageViewProvider } from './providers'
+import { GraphViewProvider, StatsViewProvider } from './providers'
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
@@ -12,8 +12,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(
-			'codegraphy-view-languages',
-			new LanguageViewProvider(context.extensionUri),
+			'codegraphy-view-stats',
+			new StatsViewProvider(context.extensionUri),
 		),
 	)
 }

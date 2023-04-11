@@ -1,2 +1,2 @@
 export { GraphViewProvider } from './GraphViewProvider'
-export { LanguageViewProvider } from './LanguageViewProvider'
+export { StatsViewProvider } from './StatsViewProvider'

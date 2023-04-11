@@ -76,17 +76,15 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			})
 			return
 		}
-		case 'setLanguageViewSettings': {
-			const languageView = views.find(
-				(view) => view.title === 'Languages View',
-			)
+		case 'setStatsViewSettings': {
+			const statsView = views.find((view) => view.title === 'Stats View')
 
-			if (languageView) {
+			if (statsView) {
 				const workspaceSettings = getWorkspaceSettings()
 				workspaceSettings.nodeColor = message.text.nodeColor
 				workspaceSettings.selectedD3Color = message.text.selectedD3Color
 				workspaceSettings.connectionType = message.text.mode
-				await languageView.view.postMessage({
+				await statsView.view.postMessage({
 					command: 'setSettings',
 					text: workspaceSettings,
 				})

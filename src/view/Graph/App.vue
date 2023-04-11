@@ -91,7 +91,7 @@
                     nodeSize = 'Lines'
                   }
                   updateNodeSettings()
-                  setLanguageViewSettings({
+                  setStatsViewSettings({
                     mode: connectionType,
                     nodeColor: nodeColor,
                     selectedD3Color: selectedD3Color,
@@ -323,7 +323,7 @@ import { findMaxDepth } from '../../utils/findMaxDepth'
 import {
 	fetchSettings,
 	getGraphData,
-	setLanguageViewSettings,
+	setStatsViewSettings,
 	setSettings,
 } from '../../utils/graphMessenger'
 import { parseExtensions } from '../../utils/parseExtensions'
@@ -508,7 +508,7 @@ const saveSettings = () => {
 // Update the graph without regenerating the nodes / connections
 const updateGraph = () => {
 	saveSettings()
-	setLanguageViewSettings({
+	setStatsViewSettings({
 		mode: connectionType.value,
 		nodeColor: nodeColor.value,
 		selectedD3Color: selectedD3Color.value,

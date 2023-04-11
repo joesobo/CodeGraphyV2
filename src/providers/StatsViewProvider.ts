@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 
 import { handleMessages, registerView } from '../utils/messageHandler'
 
-export class LanguageViewProvider implements vscode.WebviewViewProvider {
+export class StatsViewProvider implements vscode.WebviewViewProvider {
 	private _view?: vscode.WebviewView
 
 	constructor(private readonly _extensionUri: vscode.Uri) {}
@@ -34,7 +34,7 @@ export class LanguageViewProvider implements vscode.WebviewViewProvider {
 			vscode.Uri.joinPath(this._extensionUri, 'dist', 'output.css'),
 		)
 
-		registerView(webview, 'Languages View')
+		registerView(webview, 'Stats View')
 		handleMessages(webview)
 
 		return `
@@ -53,7 +53,7 @@ export class LanguageViewProvider implements vscode.WebviewViewProvider {
 						const vscode = acquireVsCodeApi();
 					</script>
 
-					<div id="language-app"></div>
+					<div id="stats-app"></div>
 
 					<script type="module" src="${scriptUri}"></script>
 				</body>
