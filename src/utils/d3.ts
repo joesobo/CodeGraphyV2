@@ -20,7 +20,7 @@ import type {
 import { getRandomIntSeed } from './basic'
 import { collapseNodes } from './collapseNodes'
 
-const MIN_DISTANCE = 0
+const MIN_DISTANCE = 10
 let MAX_DISTANCE = 250
 const MAX_RADIUS = 25
 const MIN_RADIUS = 10
@@ -251,6 +251,7 @@ const drawLinks = (
     d3.SimulationLinkDatum<Node>
   >
 	const directoryMode = nodes.find((node) => node.name.split('.').length === 1)
+
 	linkForce
 		.links(connections)
 		.id((d: Node) => {
@@ -272,8 +273,8 @@ const drawLinks = (
 				}
 
 				return (
-					MIN_DISTANCE +
-          ((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
+					MAX_DISTANCE +
+          ((MIN_DISTANCE - MAX_DISTANCE) * largestRadius) / MAX_RADIUS
 				)
 			}
 
