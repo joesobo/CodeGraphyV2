@@ -27,27 +27,33 @@ const fetchInteractionConnections = (unprocessedNodes: UnprocessedNode[]) => {
 
 		const file = unprocessedNode.data
 		const fileContents = fs.readFileSync(file.name, 'utf-8')
-		const lines = fileContents.split(/\r?\n/)
 
-		for (const line of lines) {
-			if (containsImport(line.trim()) === -1) continue
+		const importRegex =
+      /(?:import\s+(?:\*+\s+as\s+[\w*]+|(?:(?:[\w*]+\s*,\s*)?\{[^{}]*\}|[\w*]+))\s*from\s*['"]([^'"]+)['"]|require\s*\(\s*['"]([^'"]+)['"]\s*\)|.*CodeGraphy\s+connect:\s+(['"])([^'"]+)\3)/g
 
-			const importPath = getImportPath(line.trim())
+		let match
+		while ((match = importRegex.exec(fileContents)) !== null) {
+			// If it's an import statement, the path is captured in the second group.
+			// If it's a require statement, the path is captured in the third group.
+			// If it's a custom "CodeGraphy connect" comment, the path is captured in the fourth group.
+			const importPath = match[1] || match[2] || match[4]
 			const fullPath = getFullPath(file.name, importPath)
 			const connectionIndex = findConnectionIndex(unprocessedNodes, fullPath)
 
+			// If the connection already exists or no connection found, skip it
 			if (
-				connectionIndex !== -1 &&
-        !connections.find(
-        	(connection) => connection.id === index + '-' + connectionIndex,
+				connectionIndex === -1 ||
+        connections.find(
+        	(connection) => connection.id === `${index}-${connectionIndex}`,
         )
-			) {
-				connections.push({
-					id: index + '-' + connectionIndex,
-					source: index,
-					target: connectionIndex,
-				})
-			}
+			)
+				continue
+
+			connections.push({
+				id: index + '-' + connectionIndex,
+				source: index,
+				target: connectionIndex,
+			})
 		}
 	})
 
@@ -98,22 +104,6 @@ const fetchDirectoryConnections = (unprocessedNodes: UnprocessedNode[]) => {
 	})
 
 	return connections
-}
-
-const containsImport = (line: string) => {
-	return line.search(
-		/^(import|export).*from\s+(['"]).*\2|.*require\s*\(\s*(['"]).*\3|.*CodeGraphy\s+connect:\s+(['"]).*\4/,
-	)
-}
-
-const getImportPath = (line: string) => {
-	const lineArr = line.replace('(', ' ').replace('),', ' ').split(' ')
-
-	const index = lineArr.findIndex(
-		(el) => el.startsWith('"') || el.startsWith('\''),
-	)
-
-	return lineArr[index].replace(/['"]+/g, '')
 }
 
 const getFullPath = (filePath: string, importPath: string) => {
