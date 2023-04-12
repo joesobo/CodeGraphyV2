@@ -88,6 +88,7 @@ All the customizable settings in Codegraphy can also be added into your workspac
 - showOrphans: boolean
 - showLabels: boolean
 - showOutlines: boolean
+- showArrows: boolean
 - doCollisions: boolean
 
 **D3 Forces**

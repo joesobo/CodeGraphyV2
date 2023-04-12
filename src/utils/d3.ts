@@ -33,6 +33,7 @@ export const drawD3Graph = ({
 	mode,
 	showLabels,
 	showOutlines,
+	showArrows,
 	doCollisions,
 	chargeForce,
 	linkDistance,
@@ -44,6 +45,7 @@ export const drawD3Graph = ({
   mode: 'Interaction' | 'Directory'
   showLabels: boolean
   showOutlines: boolean
+  showArrows: boolean
   doCollisions: boolean
   chargeForce: number
   linkDistance: number
@@ -55,6 +57,9 @@ export const drawD3Graph = ({
 	const height = Number.parseInt(svg.attr('height'))
 
 	const g = resetGraph(svg, nodes)
+	if (showArrows) {
+		setupArrowHead(svg, nodes)
+	}
 
 	const forceSimulation = initForceSimulation(
 		width,
@@ -79,7 +84,7 @@ export const drawD3Graph = ({
 	gCircles.attr('transform', (d: Node) => {
 		return `translate(${d.x}, ${d.y})`
 	})
-	drawLinks(forceSimulation, g, connections, nodes, gCircles)
+	drawLinks(forceSimulation, g, connections, nodes, gCircles, showArrows)
 	gCircles.raise()
 
 	enableZoom(svg, g, width, height)
@@ -107,6 +112,24 @@ const resetGraph = (svg: SVGElement, nodes: Node[]): SVGSelection => {
 	})
 
 	return svg.append<SVGGElement>('g')
+}
+
+const setupArrowHead = (svg: SVGElement, nodes: Node[]): void => {
+	const marker = svg
+		.append('defs')
+		.selectAll('marker')
+		.data(nodes)
+		.enter()
+		.append('marker')
+		.attr('id', (d, i) => `arrowhead-${i}`)
+		.attr('viewBox', '0 -5 10 10')
+		.attr('refX', (d) => d.radius * 2 + 5)
+		.attr('refY', 0)
+		.attr('markerWidth', 6)
+		.attr('markerHeight', 6)
+		.attr('orient', 'auto')
+
+	marker.append('path').attr('d', 'M0,-5L10,0L0,5').attr('fill', '#fff')
 }
 
 const initForceSimulation = (
@@ -209,6 +232,7 @@ const drawLinks = (
 	connections: Connection[],
 	nodes: Node[],
 	gCircles: NodeSelection,
+	showArrows: boolean,
 ) => {
 	const links = g
 		.append('g')
@@ -218,6 +242,22 @@ const drawLinks = (
 		.append('line')
 		.attr('stroke', '#666')
 		.attr('stroke-width', 1)
+		.attr('marker-end', (d) => {
+			if (showArrows) {
+				const regex = /(\d+)-(\d+)/
+				const match = d.id.match(regex)
+
+				if (match) {
+					const targetId = Number.parseInt(match[2])
+
+					return `url(#arrowhead-${nodes.findIndex(
+						(node) => node.id === targetId,
+					)})`
+				}
+			}
+
+			return ''
+		})
 
 	const isNode = (node: Node | string | number): node is Node => {
 		return typeof node !== 'string' && typeof node !== 'number'

@@ -90,6 +90,11 @@
           "default": true,
           "description": "Show outlines on collapsed nodes"
         },
+        "codegraphy.showArrows": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show arrows on links showing the direction of connections"
+        },
         "codegraphy.doCollisions": {
           "type": "boolean",
           "default": true,

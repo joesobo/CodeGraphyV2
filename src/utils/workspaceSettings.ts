@@ -7,6 +7,7 @@ export type Settings = {
   showOrphans: boolean
   showLabels: boolean
   showOutlines: boolean
+  showArrows: boolean
   doCollisions: boolean
   chargeForce: number
   linkDistance: number
@@ -24,6 +25,7 @@ export const getWorkspaceSettings = () => {
 	const showOrphans = configuration.showOrphans
 	const showLabels = configuration.showLabels
 	const showOutlines = configuration.showOutlines
+	const showArrows = configuration.showArrows
 	const doCollisions = configuration.doCollisions
 
 	// D3 Settings
@@ -45,6 +47,7 @@ export const getWorkspaceSettings = () => {
 		showOrphans,
 		showLabels,
 		showOutlines,
+		showArrows,
 		doCollisions,
 	}
 }

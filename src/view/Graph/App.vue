@@ -243,6 +243,11 @@
             @update:modelValue="() => updateNodeSettings()"
           />
           <ToggleSwitch
+            v-model="showArrows"
+            label="Arrows"
+            @update:modelValue="() => updateNodeSettings()"
+          />
+          <ToggleSwitch
             v-model="doCollisions"
             label="Collisions"
             @update:modelValue="() => updateNodeSettings()"
@@ -366,6 +371,7 @@ let showNodeModules: Ref<boolean> = ref(false)
 let showOrphans: Ref<boolean> = ref(false)
 let showLabels: Ref<boolean> = ref(false)
 let showOutlines: Ref<boolean> = ref(true)
+let showArrows: Ref<boolean> = ref(false)
 let doCollisions: Ref<boolean> = ref(true)
 
 onMounted(() => {
@@ -385,6 +391,7 @@ onMounted(() => {
 			showOrphans.value = message.text.showOrphans
 			showLabels.value = message.text.showLabels
 			showOutlines.value = message.text.showOutlines
+			showArrows.value = message.text.showArrows
 			doCollisions.value = message.text.doCollisions
 
 			updateNodeSettings()
@@ -483,6 +490,7 @@ const drawGraph = () => {
 		mode: connectionType.value,
 		showLabels: showLabels.value,
 		showOutlines: showOutlines.value,
+		showArrows: showArrows.value,
 		doCollisions: doCollisions.value,
 		chargeForce: chargeForce.value,
 		linkDistance: linkDistance.value,
@@ -497,6 +505,7 @@ const saveSettings = () => {
 		showOrphans: showOrphans.value,
 		showLabels: showLabels.value,
 		showOutlines: showOutlines.value,
+		showArrows: showArrows.value,
 		doCollisions: doCollisions.value,
 		chargeForce: chargeForce.value,
 		linkDistance: linkDistance.value,
