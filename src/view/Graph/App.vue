@@ -2,27 +2,34 @@
   <div class="flex max-w-[500px] flex-col">
     <!-- Search Bar -->
     <div
-      class="relative mb-4 flex cursor-pointer items-center bg-zinc-900 text-white"
+      class="relative mb-4 flex cursor-pointer items-center rounded-lg bg-zinc-900 px-4 py-2 text-white"
     >
+      <SearchIcon class="mr-2" width="1.25rem" height="1.25rem" />
       <input
         v-model="searchInput"
         type="text"
         placeholder="Search nodes..."
-        class="w-full"
+        class="w-full text-base"
         @change="updateNodeSettings()"
       />
-      <ClearIcon
-        v-if="searchInput"
-        width="1.25rem"
-        height="1.25rem"
-        class="absolute right-3 top-1/2 -translate-y-1/2"
-        @click="
-          () => {
-            searchInput = ''
-            updateNodeSettings()
-          }
-        "
-      />
+      <Popper content="Clear" hover arrow openDelay="500">
+        <button
+          v-if="searchInput"
+          class="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
+          @click="drawGraph()"
+        >
+          <ClearIcon
+            width="1.25rem"
+            height="1.25rem"
+            @click="
+              () => {
+                searchInput = ''
+                updateNodeSettings()
+              }
+            "
+          />
+        </button>
+      </Popper>
     </div>
 
     <!-- D3 Graph -->
@@ -35,7 +42,7 @@
 
     <!-- Graph Overlay -->
     <div
-      class="pointer-events-none absolute top-12 flex h-[500px] w-[500px] flex-col justify-between"
+      class="pointer-events-none absolute top-[4.5rem] flex h-[500px] w-[500px] flex-col justify-between"
     >
       <!-- Top Row -->
       <div class="flex justify-between">
@@ -76,11 +83,11 @@
                 </li>
               </ul>
             </template>
-            <div
+            <button
               class="pointer-events-auto ml-4 mt-4 flex h-5 w-5 cursor-pointer items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
             >
               <InfoIcon width="1.25rem" height="1.25rem" />
-            </div>
+            </button>
           </Popper>
           <!-- Node Count -->
           <p class="ml-4 mt-4 text-white">Count: {{ nodes?.length }}</p>
@@ -371,6 +378,7 @@ import RandomIcon from '~icons/mdi/dice-multiple'
 import DirectoryIcon from '~icons/mdi/folder'
 import DepthGraphIcon from '~icons/mdi/graph'
 import InfoIcon from '~icons/mdi/information'
+import SearchIcon from '~icons/mdi/magnify'
 import RestartIcon from '~icons/mdi/restart'
 import LinesIcon from '~icons/mdi/text'
 import ConnectionIcon from '~icons/mdi/transit-connection-variant'
