@@ -1,34 +1,28 @@
-import type { Connection, Node } from './types'
+import type { UnprocessedNode } from './types'
 
 export const filterSearch = (
-	nodes: Node[],
-	connections: Connection[],
+	unprocessedNode: UnprocessedNode[],
 	searchInput: string,
 ) => {
-	if (searchInput === undefined) return { nodes, connections }
+	if (searchInput === undefined) return unprocessedNode
 
-	const filteredNodes: Node[] = nodes.filter((node) => {
-		const search = searchInput.toLowerCase()
-		return node.name.toLowerCase().includes(search)
-	})
+	const filteredNodes: UnprocessedNode[] = unprocessedNode.filter((node) => {
+		const nodePath = node.data.name.replace(/\\/g, '/')
+		let nodeFullPath = nodePath.split('/').pop() || ''
 
-	// filter out any connections that have non-existing nodes
-	const filteredConnections = connections.filter((connection) => {
-		const regex = /(\d+)-(\d+)/
-		const match = connection.id.match(regex)
-
-		if (match) {
-			const sourceId = Number.parseInt(match[1])
-			const targetId = Number.parseInt(match[2])
-
-			const sourceNode = filteredNodes.find((node) => node.id === sourceId)
-			const targetNode = filteredNodes.find((node) => node.id === targetId)
-
-			return sourceNode && targetNode
+		if (node.type === 'Package') {
+			nodeFullPath = nodePath.split('node_modules/')?.pop() || ''
 		}
 
-		return false
+		let search = searchInput.toLowerCase()
+
+		if (search.startsWith('/')) {
+			search = search.replace('/', '')
+			return node.data.name.toLowerCase().includes(search)
+		} else {
+			return nodeFullPath.toLowerCase().includes(search)
+		}
 	})
 
-	return { nodes: filteredNodes, connections: filteredConnections }
+	return filteredNodes
 }

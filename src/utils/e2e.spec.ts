@@ -95,11 +95,13 @@ describe('getNodes', () => {
 		const { files, dirs } = getDirectoryInfo(mode)
 		const packages = getNodeModules({ files, mode, showNodeModules })
 
-		const unprocessedNodes: UnprocessedNode[] = getUnprocessedNodes(
+		let unprocessedNodes: UnprocessedNode[] = getUnprocessedNodes(
 			files,
 			dirs,
 			packages,
 		)
+
+		unprocessedNodes = filterSearch(unprocessedNodes, searchInput)
 
 		const connections = getConnections(unprocessedNodes, mode)
 		let nodes = getNodes(unprocessedNodes, connections, nodeSize)
@@ -129,8 +131,6 @@ describe('getNodes', () => {
 		if (!showOrphans) {
 			result = filterOrphans(nodes, filteredConnections)
 		}
-
-		result = filterSearch(nodes, filteredConnections, searchInput)
 
 		const expectedConnections: Connection[] = [
 			{ id: '0-1', source: 0, target: 1 },

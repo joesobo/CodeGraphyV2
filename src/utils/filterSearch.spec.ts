@@ -1,4 +1,4 @@
-import type { Connection, Node } from './types'
+import type { UnprocessedNode } from './types'
 
 import { filterSearch } from './filterSearch'
 
@@ -6,79 +6,112 @@ describe('filterSearch', () => {
 	it('should only return the shown nodes and connections', () => {
 		const searchInput = 'test'
 
-		const nodes: Node[] = [
+		const nodes: UnprocessedNode[] = [
 			{
-				id: 0,
-				name: 'file1.ts',
-				fullPath: '/project/file1.ts',
-				radius: 25,
-				depth: 0,
-				collapsed: false,
-				hidden: false,
+				type: 'File',
+				data: {
+					name: '/project/file1.ts',
+				},
 			},
 			{
-				id: 1,
-				name: 'file2.ts',
-				fullPath: '/project/file2.ts',
-				radius: 25,
-				depth: 1,
-				collapsed: true,
-				hidden: false,
+				type: 'File',
+				data: {
+					name: '/project/file2.ts',
+				},
 			},
 			{
-				id: 2,
-				name: 'test3.ts',
-				fullPath: '/project/subdir/test3.ts',
-				radius: 25,
-				depth: 2,
-				collapsed: false,
-				hidden: true,
+				type: 'File',
+				data: {
+					name: '/project/test3.ts',
+				},
 			},
 			{
-				id: 3,
-				name: 'test4.ts',
-				fullPath: '/project/subdir/test4.ts',
-				radius: 25,
-				depth: 3,
-				collapsed: false,
-				hidden: true,
+				type: 'File',
+				data: {
+					name: '/project/test4.ts',
+				},
 			},
 		]
 
-		const connections: Connection[] = [
-			{ id: '0-1', source: 0, target: 1 },
-			{ id: '1-2', source: 1, target: 2 },
-			{ id: '2-3', source: 2, target: 3 },
-		]
+		const result = filterSearch(nodes, searchInput)
 
-		const result = filterSearch(nodes, connections, searchInput)
-
-		const expectedNodes: Node[] = [
+		const expectedNodes: UnprocessedNode[] = [
 			{
-				id: 2,
-				name: 'test3.ts',
-				fullPath: '/project/subdir/test3.ts',
-				radius: 25,
-				depth: 2,
-				collapsed: false,
-				hidden: true,
+				type: 'File',
+				data: {
+					name: '/project/test3.ts',
+				},
 			},
 			{
-				id: 3,
-				name: 'test4.ts',
-				fullPath: '/project/subdir/test4.ts',
-				radius: 25,
-				depth: 3,
-				collapsed: false,
-				hidden: true,
+				type: 'File',
+				data: {
+					name: '/project/test4.ts',
+				},
 			},
 		]
 
-		const expectedConnections: Connection[] = [
-			{ id: '2-3', source: 2, target: 3 },
+		expect(result).toEqual(expectedNodes)
+	})
+
+	it('should only return the shown nodes and connections in the appropriate dir', () => {
+		const searchInput = '/subdir'
+
+		const nodes: UnprocessedNode[] = [
+			{
+				type: 'File',
+				data: {
+					name: '/project/file1.ts',
+				},
+			},
+			{
+				type: 'File',
+				data: {
+					name: '/project/file2.ts',
+				},
+			},
+			{
+				type: 'File',
+				data: {
+					name: '/project/subdir/test3.ts',
+				},
+			},
+			{
+				type: 'File',
+				data: {
+					name: '/project/subdir/test4.ts',
+				},
+			},
+			{
+				type: 'Directory',
+				data: {
+					name: '/project/subdir',
+				},
+			},
 		]
 
-		expect(result.nodes).toEqual(expectedNodes)
-		expect(result.connections).toEqual(expectedConnections)
+		const result = filterSearch(nodes, searchInput)
+
+		const expectedNodes: UnprocessedNode[] = [
+			{
+				type: 'File',
+				data: {
+					name: '/project/subdir/test3.ts',
+				},
+			},
+			{
+				type: 'File',
+				data: {
+					name: '/project/subdir/test4.ts',
+				},
+			},
+			{
+				type: 'Directory',
+				data: {
+					name: '/project/subdir',
+				},
+			},
+		]
+
+		expect(result).toEqual(expectedNodes)
 	})
 })

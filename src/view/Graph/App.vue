@@ -2,13 +2,13 @@
   <div class="flex max-w-[500px] flex-col">
     <!-- Search Bar -->
     <div
-      class="relative mb-4 flex cursor-pointer items-center rounded-lg bg-zinc-900 px-4 py-2 text-white"
+      class="relative mb-4 flex cursor-pointer items-center rounded-lg bg-zinc-900 px-2 py-1 text-white"
     >
       <SearchIcon class="mr-2" width="1.25rem" height="1.25rem" />
       <input
         v-model="searchInput"
         type="text"
-        placeholder="Search nodes..."
+        placeholder="Search nodes names or directories (/dir) ..."
         class="w-full text-base"
         @change="updateNodeSettings()"
       />
@@ -16,18 +16,14 @@
         <button
           v-if="searchInput"
           class="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
-          @click="drawGraph()"
+          @click="
+            () => {
+              searchInput = ''
+              updateNodeSettings()
+            }
+          "
         >
-          <ClearIcon
-            width="1.25rem"
-            height="1.25rem"
-            @click="
-              () => {
-                searchInput = ''
-                updateNodeSettings()
-              }
-            "
-          />
+          <ClearIcon width="1.25rem" height="1.25rem" />
         </button>
       </Popper>
     </div>

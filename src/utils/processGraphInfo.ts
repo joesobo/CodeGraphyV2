@@ -35,11 +35,13 @@ export const processGraphInfo = ({
 	const { files, dirs } = getDirectoryInfo(mode)
 	const packages = getNodeModules({ files, mode, showNodeModules })
 
-	const unprocessedNodes: UnprocessedNode[] = getUnprocessedNodes(
+	let unprocessedNodes: UnprocessedNode[] = getUnprocessedNodes(
 		files,
 		dirs,
 		packages,
 	)
+
+	unprocessedNodes = filterSearch(unprocessedNodes, searchInput)
 
 	const rawConnections = getConnections(unprocessedNodes, mode)
 	let nodes = getNodes(unprocessedNodes, rawConnections, nodeSize)
@@ -71,8 +73,6 @@ export const processGraphInfo = ({
 	if (!showOrphans) {
 		result = filterOrphans(nodes, filteredConnections)
 	}
-
-	result = filterSearch(nodes, filteredConnections, searchInput)
 
 	result = normalizeIds(result.nodes, result.connections)
 
