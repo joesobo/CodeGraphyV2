@@ -104,6 +104,13 @@ const receiveMessages = async (webview: vscode.Webview) => {
 
 			return
 		}
+		case 'openContextMenu': {
+			await webview.postMessage({
+				command: 'openContextMenu',
+				text: message.text,
+			})
+			return
+		}
 		case 'overrideExtensionColor': {
 			const graphView = views.find((view) => view.title === 'Graph View')
 			if (graphView) {

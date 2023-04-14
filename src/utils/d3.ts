@@ -207,6 +207,7 @@ const drawNodes = (
 		.attr('stroke', (d) => (d.collapsed && showOutlines ? '#ffd700' : ''))
 		.attr('stroke-width', (d) => (d.collapsed && showOutlines ? 4 : 0))
 		.on('click', click)
+		.on('contextmenu', handleContextMenu)
 		.on('mouseover', handleMouseOver(gs, currentOpenFile, nodes, connections))
 		.on('mouseout', handleMouseOut(gs))
 
@@ -425,6 +426,18 @@ const click = (event: MouseEvent, d: Node) => {
 			text: path,
 		})
 	}
+}
+
+const handleContextMenu = (event: MouseEvent, d: Node) => {
+	event.preventDefault()
+	vscode.postMessage({
+		command: 'openContextMenu',
+		text: {
+			name: d.name,
+			x: event.pageX,
+			y: event.pageY,
+		},
+	})
 }
 
 const handleMouseOver =

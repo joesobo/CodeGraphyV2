@@ -48,6 +48,41 @@
       class="overflow-hidden bg-zinc-900"
     />
 
+    <!-- Context Menu Overlay -->
+    <div
+      v-if="showContextMenu"
+      class="absolute max-w-[250px] rounded-md border border-border bg-[#202125] px-4 py-2 text-white"
+      :style="{
+        left: `${contextMenuPosition.x}px`,
+        top: `${contextMenuPosition.y}px`,
+      }"
+    >
+      <p class="mb-2 break-words">{{ contextPath }}</p>
+      <div class="flex justify-between space-x-2">
+        <Popper content="Add File" hover arrow openDelay="500">
+          <button
+            class="cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
+          >
+            <FileIcon width="1.25rem" height="1.25rem" />
+          </button>
+        </Popper>
+        <Popper content="Add Folder" hover arrow openDelay="500">
+          <button
+            class="cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
+          >
+            <FolderIcon width="1.25rem" height="1.25rem" />
+          </button>
+        </Popper>
+        <Popper content="Favorite" hover arrow openDelay="500">
+          <button
+            class="cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
+          >
+            <StarIcon width="1.25rem" height="1.25rem" />
+          </button>
+        </Popper>
+      </div>
+    </div>
+
     <!-- Graph Overlay -->
     <div
       class="pointer-events-none absolute top-[6.5rem] flex h-[500px] w-[500px] flex-col justify-between"
@@ -383,11 +418,14 @@ import LogoIcon from '~icons/logos/d3'
 import ClearIcon from '~icons/mdi/clear-circle'
 import CloseIcon from '~icons/mdi/close-circle'
 import RandomIcon from '~icons/mdi/dice-multiple'
+import FileIcon from '~icons/mdi/file'
 import DirectoryIcon from '~icons/mdi/folder'
+import FolderIcon from '~icons/mdi/folder'
 import DepthGraphIcon from '~icons/mdi/graph'
 import InfoIcon from '~icons/mdi/information'
 import SearchIcon from '~icons/mdi/magnify'
 import RestartIcon from '~icons/mdi/restart'
+import StarIcon from '~icons/mdi/star'
 import LinesIcon from '~icons/mdi/text'
 import ConnectionIcon from '~icons/mdi/transit-connection-variant'
 import GraphIcon from '~icons/ph/graph'
@@ -401,6 +439,10 @@ let currentOpenFile: Ref<string> = ref('')
 let displaySettingsPopup: Ref<boolean> = ref(false)
 let searchInput: Ref<string> = ref('')
 let extensionFilters: Ref<string[]> = ref([])
+
+const showContextMenu: Ref<boolean> = ref(false)
+const contextMenuPosition = ref({ x: 0, y: 0 })
+const contextPath = ref('')
 
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
@@ -484,6 +526,13 @@ onMounted(() => {
 			}
 
 			updateNodeSettings()
+			return
+		case 'openContextMenu':
+			if (contextPath.value === message.text.name) {
+				closeContextMenu()
+			} else {
+				openContextMenu(message.text.name, message.text.x, message.text.y)
+			}
 			return
 		case 'overrideExtensionColor':
 			if (
@@ -596,5 +645,16 @@ const toggleFilterExtension = (extension: string) => {
 	}
 
 	updateNodeSettings()
+}
+
+const openContextMenu = (path: string, x: number, y: number) => {
+	contextMenuPosition.value = { x, y }
+	contextPath.value = path
+	showContextMenu.value = true
+}
+
+const closeContextMenu = () => {
+	contextPath.value = ''
+	showContextMenu.value = false
 }
 </script>
