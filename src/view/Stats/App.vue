@@ -85,6 +85,7 @@ onMounted(() => {
 				nodeDepth: nodeDepth.value,
 				showNodeModules: showNodeModules.value,
 				showOrphans: true,
+				searchInput: ''
 			})
 			return
 		case 'setGraphData':

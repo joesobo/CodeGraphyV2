@@ -37,6 +37,9 @@ CodeGraphyV2 is coming soon...
 
 ![Sliding Gif](src/assets/img/slide.gif)
 
+- [ ] Favorite
+- [ ] Filter
+- [x] Search
 - [x] Multi-line import
 - [x] Collapsible nodes
 - [x] Displays connections to external packages (node_modules)
