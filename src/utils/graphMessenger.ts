@@ -38,6 +38,7 @@ export const getGraphData = (graphData: {
   showNodeModules: boolean
   showOrphans: boolean
   searchInput: string
+  extensionFilters: string[]
 }) => {
 	vscode.postMessage({
 		command: 'getGraphData',
@@ -48,5 +49,6 @@ export const getGraphData = (graphData: {
 		showNodeModules: graphData.showNodeModules,
 		showOrphans: graphData.showOrphans,
 		searchInput: graphData.searchInput,
+		extensionFilters: graphData.extensionFilters.slice(),
 	})
 }

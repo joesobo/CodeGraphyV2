@@ -6,6 +6,7 @@ import { assignNodeDepth } from './assignNodeDepth'
 import { collapseNodes } from './collapseNodes'
 import { filterCollapsed } from './filterCollapsed'
 import { filterDepth } from './filterDepth'
+import { filterExtensions } from './filterExtensions'
 import { filterOrphans } from './filterOrphans'
 import { filterSearch } from './filterSearch'
 import { getConnections } from './getConnections'
@@ -23,6 +24,7 @@ export const processGraphInfo = ({
 	showNodeModules,
 	showOrphans,
 	searchInput,
+	extensionFilters,
 }: {
   mode: 'Interaction' | 'Directory'
   nodeSize: 'Lines' | 'Connections'
@@ -31,6 +33,7 @@ export const processGraphInfo = ({
   showNodeModules: boolean
   showOrphans: boolean
   searchInput: string
+  extensionFilters: string[]
 }) => {
 	const { files, dirs } = getDirectoryInfo(mode)
 	const packages = getNodeModules({ files, mode, showNodeModules })
@@ -42,6 +45,7 @@ export const processGraphInfo = ({
 	)
 
 	unprocessedNodes = filterSearch(unprocessedNodes, searchInput)
+	unprocessedNodes = filterExtensions(unprocessedNodes, extensionFilters)
 
 	const rawConnections = getConnections(unprocessedNodes, mode)
 	let nodes = getNodes(unprocessedNodes, rawConnections, nodeSize)

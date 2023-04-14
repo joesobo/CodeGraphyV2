@@ -7,6 +7,7 @@ import { assignNodeDepth } from './assignNodeDepth'
 import { collapseNodes } from './collapseNodes'
 import { filterCollapsed } from './filterCollapsed'
 import { filterDepth } from './filterDepth'
+import { filterExtensions } from './filterExtensions'
 import { filterOrphans } from './filterOrphans'
 import { filterSearch } from './filterSearch'
 import { getConnections } from './getConnections'
@@ -91,6 +92,7 @@ describe('getNodes', () => {
 		const showNodeModules = true
 		const showOrphans = true
 		const searchInput = ''
+		const extensionFilters: string[] = []
 
 		const { files, dirs } = getDirectoryInfo(mode)
 		const packages = getNodeModules({ files, mode, showNodeModules })
@@ -102,6 +104,7 @@ describe('getNodes', () => {
 		)
 
 		unprocessedNodes = filterSearch(unprocessedNodes, searchInput)
+		unprocessedNodes = filterExtensions(unprocessedNodes, extensionFilters)
 
 		const connections = getConnections(unprocessedNodes, mode)
 		let nodes = getNodes(unprocessedNodes, connections, nodeSize)
@@ -192,6 +195,7 @@ describe('getNodes', () => {
       	showNodeModules,
       	showOrphans,
       	searchInput,
+      	extensionFilters,
       })
 
 		expect(processedNodes).toEqual(filteredNodes)

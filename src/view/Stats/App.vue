@@ -86,6 +86,7 @@ onMounted(() => {
 				showNodeModules: showNodeModules.value,
 				showOrphans: true,
 				searchInput: '',
+				extensionFilters: [],
 			})
 			return
 		case 'setGraphData':

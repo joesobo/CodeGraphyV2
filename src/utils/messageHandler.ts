@@ -14,6 +14,7 @@ let saveNodeDepth: number
 let saveShowNodeModules: boolean
 let saveShowOrphans: boolean
 let saveSearchInput: string
+let saveExtensionFilters: string[]
 
 type View = {
   view: vscode.Webview
@@ -53,6 +54,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				showNodeModules: saveShowNodeModules,
 				showOrphans: saveShowOrphans,
 				searchInput: saveSearchInput,
+				extensionFilters: saveExtensionFilters,
 			})
 
 			return
@@ -125,6 +127,7 @@ const getGraphData = async (
     showNodeModules: boolean
     showOrphans: boolean
     searchInput: string
+    extensionFilters: string[]
   },
 ) => {
 	// setup
@@ -135,6 +138,7 @@ const getGraphData = async (
 	saveShowNodeModules = message.showNodeModules
 	saveShowOrphans = message.showOrphans
 	saveSearchInput = message.searchInput
+	saveExtensionFilters = message.extensionFilters
 
 	const { nodes, connections } = processGraphInfo({
 		mode: message.mode,
@@ -144,6 +148,7 @@ const getGraphData = async (
 		showNodeModules: message.showNodeModules,
 		showOrphans: message.showOrphans,
 		searchInput: message.searchInput,
+		extensionFilters: message.extensionFilters,
 	})
 
 	await webview.postMessage({

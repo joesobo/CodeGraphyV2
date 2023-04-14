@@ -2,7 +2,7 @@
   <div class="flex max-w-[500px] flex-col">
     <!-- Search Bar -->
     <div
-      class="relative mb-4 flex cursor-pointer items-center rounded-lg bg-zinc-900 px-2 py-1 text-white"
+      class="relative mb-2 flex cursor-pointer items-center rounded-lg bg-zinc-900 px-2 py-1 text-white"
     >
       <SearchIcon class="mr-2" width="1.25rem" height="1.25rem" />
       <input
@@ -28,6 +28,18 @@
       </Popper>
     </div>
 
+    <!-- Filters -->
+    <div class="mb-2 flex w-full items-center justify-between space-x-2">
+      <button
+        v-for="extension in extensionList"
+        :key="extension.extension"
+        class="rounded-md border border-border bg-gray-700 px-4 py-2 text-white"
+        @click="toggleFilterExtension(extension.extension)"
+      >
+        {{ extension.extension }}
+      </button>
+    </div>
+
     <!-- D3 Graph -->
     <svg
       id="graph"
@@ -38,7 +50,7 @@
 
     <!-- Graph Overlay -->
     <div
-      class="pointer-events-none absolute top-[4.5rem] flex h-[500px] w-[500px] flex-col justify-between"
+      class="pointer-events-none absolute top-[6.5rem] flex h-[500px] w-[500px] flex-col justify-between"
     >
       <!-- Top Row -->
       <div class="flex justify-between">
@@ -388,6 +400,7 @@ let currentOpenFile: Ref<string> = ref('')
 
 let displaySettingsPopup: Ref<boolean> = ref(false)
 let searchInput: Ref<string> = ref('')
+let extensionFilters: Ref<string[]> = ref([])
 
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
@@ -515,6 +528,7 @@ const updateNodeSettings = () => {
 		showNodeModules: showNodeModules.value,
 		showOrphans: showOrphans.value,
 		searchInput: searchInput.value,
+		extensionFilters: extensionFilters.value,
 	})
 }
 
@@ -572,5 +586,15 @@ const updateGraph = () => {
 		currentOpenFile.value,
 		connectionType.value,
 	)
+}
+
+const toggleFilterExtension = (extension: string) => {
+	if (extensionFilters.value.indexOf(extension) !== -1) {
+		extensionFilters.value.splice(extensionFilters.value.indexOf(extension), 1)
+	} else {
+		extensionFilters.value.push(extension)
+	}
+
+	updateNodeSettings()
 }
 </script>
