@@ -16,7 +16,6 @@ import { getNodes } from './getNodes'
 import { getUnprocessedNodes } from './getUnprocessedNodes'
 import { processGraphInfo } from './processGraphInfo'
 
-
 vi.mock('vscode', () => {
 	const workspace = {
 		workspaceFolders: [

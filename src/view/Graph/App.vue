@@ -16,10 +16,12 @@
         width="1.25rem"
         height="1.25rem"
         class="absolute right-3 top-1/2 -translate-y-1/2"
-        @click="() => {
-					searchInput = ''
-					updateNodeSettings()
-				}"
+        @click="
+          () => {
+            searchInput = ''
+            updateNodeSettings()
+          }
+        "
       />
     </div>
 

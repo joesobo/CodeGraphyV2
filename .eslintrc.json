@@ -46,7 +46,10 @@
             "position": "before"
           }
         ],
-        "alphabetize": { "order": "asc" }
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
       }
     ],
     "indent": ["error", "tab"],
