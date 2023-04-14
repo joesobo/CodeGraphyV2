@@ -1,8 +1,16 @@
-import { Connection, Node } from './types'
+import type { Connection, Node } from './types'
 
-export const filterCollapsed = (nodes: Node[], connections: Connection[]) => {
-	// filter out any nodes that are hidden
-	const filteredNodes = nodes.filter((node) => !node.hidden)
+export const filterSearch = (
+	nodes: Node[],
+	connections: Connection[],
+	searchInput: string,
+) => {
+	if (searchInput === undefined) return { nodes, connections }
+
+	const filteredNodes: Node[] = nodes.filter((node) => {
+		const search = searchInput.toLowerCase()
+		return node.name.toLowerCase().includes(search)
+	})
 
 	// filter out any connections that have non-existing nodes
 	const filteredConnections = connections.filter((connection) => {

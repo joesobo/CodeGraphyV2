@@ -15,8 +15,6 @@ export const filterOrphans = (nodes: Node[], connections: Connection[]) => {
 				}
 			}
 		})
-
-		return false
 	})
 
 	return { nodes: filteredNodes, connections }

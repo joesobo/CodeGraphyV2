@@ -50,9 +50,7 @@ export const drawD3Graph = ({
   chargeForce: number
   linkDistance: number
 }) => {
-	if (nodes.length === 0) return
-
-	const svg = setupSVG('svg')
+	const svg = setupSVG('#graph')
 	const width = Number.parseInt(svg.attr('width'))
 	const height = Number.parseInt(svg.attr('height'))
 

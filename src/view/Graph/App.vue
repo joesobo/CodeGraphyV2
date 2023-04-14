@@ -1,11 +1,39 @@
 <template>
   <div class="flex max-w-[500px] flex-col">
+    <!-- Search Bar -->
+    <div
+      class="relative mb-4 flex cursor-pointer items-center bg-zinc-900 text-white"
+    >
+      <input
+        v-model="searchInput"
+        type="text"
+        placeholder="Search nodes..."
+        class="w-full"
+        @change="updateNodeSettings()"
+      />
+      <ClearIcon
+        v-if="searchInput"
+        width="1.25rem"
+        height="1.25rem"
+        class="absolute right-3 top-1/2 -translate-y-1/2"
+        @click="() => {
+					searchInput = ''
+					updateNodeSettings()
+				}"
+      />
+    </div>
+
     <!-- D3 Graph -->
-    <svg width="500" height="500" class="overflow-hidden bg-zinc-900" />
+    <svg
+      id="graph"
+      width="500"
+      height="500"
+      class="overflow-hidden bg-zinc-900"
+    />
 
     <!-- Graph Overlay -->
     <div
-      class="pointer-events-none absolute flex h-[500px] w-[500px] flex-col justify-between"
+      class="pointer-events-none absolute top-12 flex h-[500px] w-[500px] flex-col justify-between"
     >
       <!-- Top Row -->
       <div class="flex justify-between">
@@ -335,6 +363,7 @@ import { parseExtensions } from '../../utils/parseExtensions'
 
 import SettingsIcon from '~icons/ant-design/setting-filled'
 import LogoIcon from '~icons/logos/d3'
+import ClearIcon from '~icons/mdi/clear-circle'
 import CloseIcon from '~icons/mdi/close-circle'
 import RandomIcon from '~icons/mdi/dice-multiple'
 import DirectoryIcon from '~icons/mdi/folder'
@@ -352,6 +381,7 @@ let overrideExtensionColors: Ref<Record<string, string>[]> = ref([])
 let currentOpenFile: Ref<string> = ref('')
 
 let displaySettingsPopup: Ref<boolean> = ref(false)
+let searchInput: Ref<string> = ref('')
 
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
@@ -478,6 +508,7 @@ const updateNodeSettings = () => {
 		nodeDepth: nodeDepth.value,
 		showNodeModules: showNodeModules.value,
 		showOrphans: showOrphans.value,
+		searchInput: searchInput.value,
 	})
 }
 

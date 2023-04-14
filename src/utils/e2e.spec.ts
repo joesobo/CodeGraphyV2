@@ -8,12 +8,14 @@ import { collapseNodes } from './collapseNodes'
 import { filterCollapsed } from './filterCollapsed'
 import { filterDepth } from './filterDepth'
 import { filterOrphans } from './filterOrphans'
+import { filterSearch } from './filterSearch'
 import { getConnections } from './getConnections'
 import { getDirectoryInfo } from './getDirectoryInfo'
 import { getNodeModules } from './getNodeModules'
 import { getNodes } from './getNodes'
 import { getUnprocessedNodes } from './getUnprocessedNodes'
 import { processGraphInfo } from './processGraphInfo'
+
 
 vi.mock('vscode', () => {
 	const workspace = {
@@ -89,6 +91,7 @@ describe('getNodes', () => {
 		const nodeDepth = 0
 		const showNodeModules = true
 		const showOrphans = true
+		const searchInput = ''
 
 		const { files, dirs } = getDirectoryInfo(mode)
 		const packages = getNodeModules({ files, mode, showNodeModules })
@@ -127,6 +130,8 @@ describe('getNodes', () => {
 		if (!showOrphans) {
 			result = filterOrphans(nodes, filteredConnections)
 		}
+
+		result = filterSearch(nodes, filteredConnections, searchInput)
 
 		const expectedConnections: Connection[] = [
 			{ id: '0-1', source: 0, target: 1 },
@@ -187,6 +192,7 @@ describe('getNodes', () => {
       	nodeDepth,
       	showNodeModules,
       	showOrphans,
+      	searchInput,
       })
 
 		expect(processedNodes).toEqual(filteredNodes)
