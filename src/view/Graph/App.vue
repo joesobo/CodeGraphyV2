@@ -29,7 +29,7 @@
     </div>
 
     <!-- Filters -->
-    <div class="mb-2 flex w-full items-center justify-between space-x-2">
+    <div class="mb-2 flex w-full items-center justify-between space-x-2 overflow-scroll">
       <button
         v-for="extension in extensionList"
         :key="extension.extension"
@@ -46,6 +46,7 @@
       width="500"
       height="500"
       class="overflow-hidden bg-zinc-900"
+			@click="closeContextMenu()"
     />
 
     <!-- Context Menu Overlay -->
