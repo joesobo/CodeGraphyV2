@@ -6,24 +6,29 @@
       top: `${y}px`,
     }"
   >
-    <p class="mb-2">{{ contextName }}</p>
+    <p class="mb-2 text-lg">{{ contextName }}</p>
     <div class="flex justify-between space-x-2">
-      <IconButton popperContent="Add File" @click="() => addFile()">
+      <IconButton padRight padTop popperContent="Add File" @click="addFile">
         <FileIcon width="1.25rem" height="1.25rem" />
       </IconButton>
-      <IconButton v-if="mode === 'Directory'" popperContent="Add Folder">
+      <IconButton
+        v-if="mode === 'Directory'"
+        padRight
+        padTop
+        popperContent="Add Folder"
+      >
         <FolderIcon width="1.25rem" height="1.25rem" />
       </IconButton>
-      <IconButton popperContent="Favorite">
+      <IconButton padRight padTop popperContent="Favorite">
         <StarIcon width="1.25rem" height="1.25rem" />
       </IconButton>
-      <IconButton popperContent="Rename">
+      <IconButton padRight padTop popperContent="Rename">
         <RenameIcon width="1.25rem" height="1.25rem" />
       </IconButton>
-      <IconButton popperContent="Copy Path">
+      <IconButton padRight padTop popperContent="Copy Path">
         <CopyIcon width="1.25rem" height="1.25rem" />
       </IconButton>
-      <IconButton popperContent="Delete">
+      <IconButton padTop popperContent="Delete">
         <DeleteIcon width="1.25rem" height="1.25rem" />
       </IconButton>
     </div>
