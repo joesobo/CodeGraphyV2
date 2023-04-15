@@ -12,24 +12,24 @@
         class="w-full text-base"
         @change="updateNodeSettings()"
       />
-      <Popper content="Clear" hover arrow openDelay="500">
-        <button
-          v-if="searchInput"
-          class="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
-          @click="
-            () => {
-              searchInput = ''
-              updateNodeSettings()
-            }
-          "
-        >
-          <ClearIcon width="1.25rem" height="1.25rem" />
-        </button>
-      </Popper>
+      <IconButton
+        v-if="searchInput"
+        popperContent="Clear"
+        @click="
+          () => {
+            searchInput = ''
+            updateNodeSettings()
+          }
+        "
+      >
+        <ClearIcon width="1.25rem" height="1.25rem" />
+      </IconButton>
     </div>
 
     <!-- Filters -->
-    <div class="mb-2 flex w-full items-center justify-between space-x-2 overflow-scroll">
+    <div
+      class="mb-2 flex w-full items-center justify-between space-x-2 overflow-scroll"
+    >
       <button
         v-for="extension in extensionList"
         :key="extension.extension"
@@ -46,43 +46,17 @@
       width="500"
       height="500"
       class="overflow-hidden bg-zinc-900"
-			@click="closeContextMenu()"
+      @click="closeContextMenu()"
     />
 
     <!-- Context Menu Overlay -->
-    <div
+    <ContextMenu
       v-if="showContextMenu"
-      class="absolute max-w-[250px] rounded-md border border-border bg-[#202125] px-4 py-2 text-white"
-      :style="{
-        left: `${contextMenuPosition.x}px`,
-        top: `${contextMenuPosition.y}px`,
-      }"
-    >
-      <p class="mb-2 break-words">{{ contextPath }}</p>
-      <div class="flex justify-between space-x-2">
-        <Popper content="Add File" hover arrow openDelay="500">
-          <button
-            class="cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
-          >
-            <FileIcon width="1.25rem" height="1.25rem" />
-          </button>
-        </Popper>
-        <Popper content="Add Folder" hover arrow openDelay="500">
-          <button
-            class="cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
-          >
-            <FolderIcon width="1.25rem" height="1.25rem" />
-          </button>
-        </Popper>
-        <Popper content="Favorite" hover arrow openDelay="500">
-          <button
-            class="cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
-          >
-            <StarIcon width="1.25rem" height="1.25rem" />
-          </button>
-        </Popper>
-      </div>
-    </div>
+      :x="contextMenuPosition.x"
+      :y="contextMenuPosition.y"
+      :contextName="contextPath"
+      :mode="connectionType"
+    />
 
     <!-- Graph Overlay -->
     <div
@@ -127,11 +101,11 @@
                 </li>
               </ul>
             </template>
-            <button
+            <div
               class="pointer-events-auto ml-4 mt-4 flex h-5 w-5 cursor-pointer items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
             >
               <InfoIcon width="1.25rem" height="1.25rem" />
-            </button>
+            </div>
           </Popper>
           <!-- Node Count -->
           <p class="ml-4 mt-4 text-white">Count: {{ nodes?.length }}</p>
@@ -140,72 +114,56 @@
         <!-- Icons -->
         <div class="flex">
           <!-- Restart -->
-          <Popper content="Refresh the graph" hover arrow openDelay="500">
-            <button
-              id="restart"
-              class="pointer-events-auto mr-4 mt-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-              @click="drawGraph()"
-            >
-              <RestartIcon width="1.25rem" height="1.25rem" />
-            </button>
-          </Popper>
+          <IconButton
+            id="restart"
+            popperContent="Refresh the graph"
+            padRight
+						padTop
+            @click="drawGraph()"
+          >
+            <RestartIcon width="1.25rem" height="1.25rem" />
+          </IconButton>
 
           <!-- Connections -->
-          <Popper
-            content="Toggle between connections and directory"
-            hover
-            arrow
-            openDelay="500"
-            placement="bottom-start"
-            arrowPadding="20px"
-          >
-            <button
-              id="connections"
-              class="pointer-events-auto mr-4 mt-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-              @click="
-                () => {
-                  connectionType =
-                    connectionType === 'Interaction'
-                      ? 'Directory'
-                      : 'Interaction'
-                  if (connectionType === 'Directory') {
-                    nodeSize = 'Lines'
-                  }
-                  updateNodeSettings()
-                  setStatsViewSettings({
-                    mode: connectionType,
-                    nodeColor: nodeColor,
-                    selectedD3Color: selectedD3Color,
-                  })
+          <IconButton
+            id="connections"
+            popperContent="Toggle between connections and directory"
+            padRight
+						padTop
+            @click="
+              () => {
+                connectionType =
+                  connectionType === 'Interaction' ? 'Directory' : 'Interaction'
+                if (connectionType === 'Directory') {
+                  nodeSize = 'Lines'
                 }
-              "
-            >
-              <GraphIcon
-                v-if="connectionType === 'Interaction'"
-                width="1.25rem"
-                height="1.25rem"
-              />
-              <DirectoryIcon v-else width="1.25rem" height="1.25rem" />
-            </button>
-          </Popper>
+                updateNodeSettings()
+                setStatsViewSettings({
+                  mode: connectionType,
+                  nodeColor: nodeColor,
+                  selectedD3Color: selectedD3Color,
+                })
+              }
+            "
+          >
+            <GraphIcon
+              v-if="connectionType === 'Interaction'"
+              width="1.25rem"
+              height="1.25rem"
+            />
+            <DirectoryIcon v-else width="1.25rem" height="1.25rem" />
+          </IconButton>
 
           <!-- Settings -->
-          <Popper
-            content="Open the settings popup"
-            hover
-            arrow
-            openDelay="500"
-            placement="bottom-start"
-            arrowPadding="20px"
+          <IconButton
+            id="settings"
+            popperContent="Open the settings popup"
+            padRight
+						padTop
+            @click="displaySettingsPopup = true"
           >
-            <button
-              id="settings"
-              class="pointer-events-auto mr-4 mt-4 flex h-5 w-5 items-center justify-center bg-transparent p-0 text-white hover:bg-transparent hover:text-primary-hover"
-              @click="displaySettingsPopup = true"
-            >
-              <SettingsIcon width="1.25rem" height="1.25rem" />
-            </button>
-          </Popper>
+            <SettingsIcon width="1.25rem" height="1.25rem" />
+          </IconButton>
         </div>
       </div>
 
@@ -400,9 +358,11 @@ import type {
 import type { Ref } from 'vue'
 
 import Disclosure from '../../components/Disclosure.vue'
+import IconButton from '../../components/IconButton.vue'
 import SliderRow from '../../components/SliderRow.vue'
 import SliderRowIcon from '../../components/SliderRowIcon.vue'
 import ToggleSwitch from '../../components/ToggleSwitch.vue'
+import ContextMenu from '../../modules/ContextMenu.vue'
 import { drawD3Graph, updateD3Graph } from '../../utils/d3'
 import { colorSchemes, getD3BackgroundColor } from '../../utils/d3ColorSchemes'
 import { findMaxDepth } from '../../utils/findMaxDepth'
@@ -419,14 +379,11 @@ import LogoIcon from '~icons/logos/d3'
 import ClearIcon from '~icons/mdi/clear-circle'
 import CloseIcon from '~icons/mdi/close-circle'
 import RandomIcon from '~icons/mdi/dice-multiple'
-import FileIcon from '~icons/mdi/file'
 import DirectoryIcon from '~icons/mdi/folder'
-import FolderIcon from '~icons/mdi/folder'
 import DepthGraphIcon from '~icons/mdi/graph'
 import InfoIcon from '~icons/mdi/information'
 import SearchIcon from '~icons/mdi/magnify'
 import RestartIcon from '~icons/mdi/restart'
-import StarIcon from '~icons/mdi/star'
 import LinesIcon from '~icons/mdi/text'
 import ConnectionIcon from '~icons/mdi/transit-connection-variant'
 import GraphIcon from '~icons/ph/graph'
