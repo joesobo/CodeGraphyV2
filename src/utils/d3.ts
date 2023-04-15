@@ -433,6 +433,7 @@ const handleContextMenu = (event: MouseEvent, d: Node) => {
 	vscode.postMessage({
 		command: 'openContextMenu',
 		text: {
+			path: d.fullPath,
 			name: d.name,
 			x: event.pageX,
 			y: event.pageY,

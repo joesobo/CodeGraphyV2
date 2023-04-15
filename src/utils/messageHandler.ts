@@ -1,20 +1,12 @@
 import * as vscode from 'vscode'
 
-import { processGraphInfo } from './processGraphInfo'
+import { createFile } from './createFile'
+import { getGraphData, refetchGraphData } from './getGraphData'
 import {
 	Settings,
 	getWorkspaceSettings,
 	updateWorkspaceSettings,
 } from './workspaceSettings'
-
-let saveNodeSize: 'Lines' | 'Connections'
-let saveMode: 'Interaction' | 'Directory'
-let saveCollapseFullPaths: string[]
-let saveNodeDepth: number
-let saveShowNodeModules: boolean
-let saveShowOrphans: boolean
-let saveSearchInput: string
-let saveExtensionFilters: string[]
 
 type View = {
   view: vscode.Webview
@@ -46,16 +38,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 					await vscode.window.showTextDocument(doc)
 				})
 
-			await getGraphData(webview, {
-				mode: saveMode,
-				nodeSize: saveNodeSize,
-				collapseFullPaths: saveCollapseFullPaths,
-				nodeDepth: saveNodeDepth,
-				showNodeModules: saveShowNodeModules,
-				showOrphans: saveShowOrphans,
-				searchInput: saveSearchInput,
-				extensionFilters: saveExtensionFilters,
-			})
+			await refetchGraphData(webview)
 
 			return
 		}
@@ -111,6 +94,15 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			})
 			return
 		}
+		case 'createFile': {
+			await createFile(
+				message.text.fileConnectionName,
+				message.text.fileConnectionPath,
+				message.text.newFileName,
+			)
+			await refetchGraphData(webview)
+			return
+		}
 		case 'overrideExtensionColor': {
 			const graphView = views.find((view) => view.title === 'Graph View')
 			if (graphView) {
@@ -122,53 +114,6 @@ const receiveMessages = async (webview: vscode.Webview) => {
 		}
 		}
 	})
-}
-
-const getGraphData = async (
-	webview: vscode.Webview,
-	message: {
-    mode: 'Interaction' | 'Directory'
-    nodeSize: 'Lines' | 'Connections'
-    collapseFullPaths: string[]
-    nodeDepth: number
-    showNodeModules: boolean
-    showOrphans: boolean
-    searchInput: string
-    extensionFilters: string[]
-  },
-) => {
-	// setup
-	saveMode = message.mode
-	saveNodeSize = message.nodeSize
-	saveCollapseFullPaths = message.collapseFullPaths
-	saveNodeDepth = message.nodeDepth
-	saveShowNodeModules = message.showNodeModules
-	saveShowOrphans = message.showOrphans
-	saveSearchInput = message.searchInput
-	saveExtensionFilters = message.extensionFilters
-
-	const { nodes, connections } = processGraphInfo({
-		mode: message.mode,
-		nodeSize: message.nodeSize,
-		collapseFullPaths: message.collapseFullPaths,
-		nodeDepth: message.nodeDepth,
-		showNodeModules: message.showNodeModules,
-		showOrphans: message.showOrphans,
-		searchInput: message.searchInput,
-		extensionFilters: message.extensionFilters,
-	})
-
-	await webview.postMessage({
-		command: 'setGraphData',
-		text: {
-			connections: connections,
-			nodes: nodes,
-			currentOpenFile:
-        vscode.window.activeTextEditor?.document.fileName || null,
-			showNodeModules: message.showNodeModules,
-		},
-	})
-	return
 }
 
 const sendMessages = (webview: vscode.Webview) => {

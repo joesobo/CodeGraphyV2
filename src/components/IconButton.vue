@@ -2,7 +2,7 @@
   <Popper :content="popperContent" hover arrow openDelay="500">
     <button
       :id="id"
-      class="pointer-events-auto cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
+      class="pointer-events-auto h-5 w-5 cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"
       :class="padding"
     >
       <slot />
@@ -18,7 +18,7 @@ const props = defineProps<{
   popperContent: string
   id?: string
   padRight?: boolean
-	padTop?: boolean
+  padTop?: boolean
 }>()
 
 const padding = computed(() => {

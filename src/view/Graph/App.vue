@@ -54,7 +54,8 @@
       v-if="showContextMenu"
       :x="contextMenuPosition.x"
       :y="contextMenuPosition.y"
-      :contextName="contextPath"
+      :contextPath="contextPath"
+      :contextName="contextName"
       :mode="connectionType"
     />
 
@@ -118,7 +119,7 @@
             id="restart"
             popperContent="Refresh the graph"
             padRight
-						padTop
+            padTop
             @click="drawGraph()"
           >
             <RestartIcon width="1.25rem" height="1.25rem" />
@@ -129,7 +130,7 @@
             id="connections"
             popperContent="Toggle between connections and directory"
             padRight
-						padTop
+            padTop
             @click="
               () => {
                 connectionType =
@@ -159,7 +160,7 @@
             id="settings"
             popperContent="Open the settings popup"
             padRight
-						padTop
+            padTop
             @click="displaySettingsPopup = true"
           >
             <SettingsIcon width="1.25rem" height="1.25rem" />
@@ -400,7 +401,8 @@ let extensionFilters: Ref<string[]> = ref([])
 
 const showContextMenu: Ref<boolean> = ref(false)
 const contextMenuPosition = ref({ x: 0, y: 0 })
-const contextPath = ref('')
+const contextPath: Ref<string> = ref('')
+const contextName: Ref<string> = ref('')
 
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
@@ -489,7 +491,7 @@ onMounted(() => {
 			if (contextPath.value === message.text.name) {
 				closeContextMenu()
 			} else {
-				openContextMenu(message.text.name, message.text.x, message.text.y)
+				openContextMenu(message.text)
 			}
 			return
 		case 'overrideExtensionColor':
@@ -605,9 +607,12 @@ const toggleFilterExtension = (extension: string) => {
 	updateNodeSettings()
 }
 
-const openContextMenu = (path: string, x: number, y: number) => {
+const openContextMenu = (message: Record<string, unknown>) => {
+	const x = message.x as number
+	const y = message.y as number
 	contextMenuPosition.value = { x, y }
-	contextPath.value = path
+	contextPath.value = message.path as string
+	contextName.value = message.name as string
 	showContextMenu.value = true
 }
 
