@@ -1,6 +1,8 @@
 import * as vscode from 'vscode'
 
+
 import { createFile } from './createFile'
+import { deleteFile } from './deleteFile'
 import { getGraphData, refetchGraphData } from './getGraphData'
 import {
 	Settings,
@@ -99,6 +101,13 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				message.text.fileConnectionName,
 				message.text.fileConnectionPath,
 				message.text.newFileName,
+			)
+			await refetchGraphData(webview)
+			return
+		}
+		case 'deleteFile': {
+			deleteFile(
+				message.text.file
 			)
 			await refetchGraphData(webview)
 			return

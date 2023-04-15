@@ -28,7 +28,7 @@
       <IconButton padRight padTop popperContent="Copy Path">
         <CopyIcon width="1.25rem" height="1.25rem" />
       </IconButton>
-      <IconButton padTop popperContent="Delete">
+      <IconButton padTop popperContent="Delete" @click="deleteFile">
         <DeleteIcon width="1.25rem" height="1.25rem" />
       </IconButton>
     </div>
@@ -60,6 +60,15 @@ const addFile = () => {
 			fileConnectionPath: props.contextPath,
 			fileConnectionName: props.contextName,
 			newFileName: 'Test.ts',
+		},
+	})
+}
+
+const deleteFile = () => {
+	vscode.postMessage({
+		command: 'deleteFile',
+		text: {
+			file: props.contextPath,
 		},
 	})
 }
