@@ -18,15 +18,6 @@
   --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
 }
 
-input:not([type='checkbox']) {
-  background-color: transparent !important;
-  color: #fff !important;
-}
-
-input:not([type='checkbox']):focus {
-  outline: 0px solid transparent;
-}
-
 body {
   padding: 0 var(--container-paddding);
   color: var(--vscode-foreground);
@@ -97,7 +88,6 @@ input:not([type='checkbox']),
 textarea {
   display: block;
   width: 100%;
-  border: none;
   font-family: var(--vscode-font-family);
   padding: var(--input-padding-vertical) var(--input-padding-horizontal);
   color: var(--vscode-input-foreground);

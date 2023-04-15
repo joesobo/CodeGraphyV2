@@ -1,6 +1,5 @@
 import * as vscode from 'vscode'
 
-
 import { createFile } from './createFile'
 import { deleteFile } from './deleteFile'
 import { getGraphData, refetchGraphData } from './getGraphData'
@@ -106,9 +105,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			return
 		}
 		case 'deleteFile': {
-			deleteFile(
-				message.text.file
-			)
+			deleteFile(message.text.file)
 			await refetchGraphData(webview)
 			return
 		}

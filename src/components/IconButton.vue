@@ -1,6 +1,5 @@
 <template>
-  <Popper :content="popperContent" hover arrow openDelay="500"
-	>
+  <Popper :content="popperContent" hover arrow openDelay="500">
     <button
       :id="id"
       class="pointer-events-auto h-full w-full cursor-pointer items-center justify-center bg-transparent p-0 hover:bg-transparent hover:text-primary-hover"

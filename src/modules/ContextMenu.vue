@@ -6,36 +6,57 @@
       top: `${y}px`,
     }"
   >
-    <p class="mb-2 text-lg">{{ contextName }}</p>
-    <div class="flex justify-between space-x-2">
-      <IconButton padRight padTop popperContent="Add File" @click="addFile">
-        <FileIcon width="1.25rem" height="1.25rem" />
-      </IconButton>
-      <IconButton
-        v-if="mode === 'Directory'"
-        padRight
-        padTop
-        popperContent="Add Folder"
-      >
-        <FolderIcon width="1.25rem" height="1.25rem" />
-      </IconButton>
-      <IconButton padRight padTop popperContent="Favorite">
-        <StarIcon width="1.25rem" height="1.25rem" />
-      </IconButton>
-      <IconButton padRight padTop popperContent="Rename">
-        <RenameIcon width="1.25rem" height="1.25rem" />
-      </IconButton>
-      <IconButton padRight padTop popperContent="Copy Path">
-        <CopyIcon width="1.25rem" height="1.25rem" />
-      </IconButton>
-      <IconButton padTop popperContent="Delete" @click="deleteFile">
-        <DeleteIcon width="1.25rem" height="1.25rem" />
-      </IconButton>
+    <!-- Add File -->
+    <form v-if="creatingFile" class="flex">
+      <input
+        v-model="newFileName"
+        type="text"
+        class="mr-2 border border-border text-white"
+      />
+      <button type="submit" @click="addFile">Add File</button>
+    </form>
+
+    <!-- Main Content -->
+    <div v-else>
+      <p class="mb-2 text-lg">{{ contextName }}</p>
+
+      <div class="flex justify-between space-x-2">
+        <IconButton
+          padRight
+          padTop
+          popperContent="Add File"
+          @click="startCreatingFile"
+        >
+          <FileIcon width="1.25rem" height="1.25rem" />
+        </IconButton>
+        <IconButton
+          v-if="mode === 'Directory'"
+          padRight
+          padTop
+          popperContent="Add Folder"
+        >
+          <FolderIcon width="1.25rem" height="1.25rem" />
+        </IconButton>
+        <IconButton padRight padTop popperContent="Favorite">
+          <StarIcon width="1.25rem" height="1.25rem" />
+        </IconButton>
+        <IconButton padRight padTop popperContent="Rename">
+          <RenameIcon width="1.25rem" height="1.25rem" />
+        </IconButton>
+        <IconButton padRight padTop popperContent="Copy Path">
+          <CopyIcon width="1.25rem" height="1.25rem" />
+        </IconButton>
+        <IconButton padTop popperContent="Delete" @click="deleteFile">
+          <DeleteIcon width="1.25rem" height="1.25rem" />
+        </IconButton>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import IconButton from '../components/IconButton.vue'
 
 import CopyIcon from '~icons/mdi/content-copy'
@@ -53,15 +74,25 @@ const props = defineProps<{
   mode: 'Interaction' | 'Directory'
 }>()
 
+const creatingFile = ref(false)
+const newFileName = ref('')
+
+const startCreatingFile = () => {
+	creatingFile.value = true
+}
+
 const addFile = () => {
 	vscode.postMessage({
 		command: 'createFile',
 		text: {
 			fileConnectionPath: props.contextPath,
 			fileConnectionName: props.contextName,
-			newFileName: 'Test.ts',
+			newFileName: newFileName.value,
 		},
 	})
+
+	creatingFile.value = false
+	newFileName.value = ''
 }
 
 const deleteFile = () => {
