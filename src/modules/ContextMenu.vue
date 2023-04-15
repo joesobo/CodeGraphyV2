@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 import IconButton from '../components/IconButton.vue'
 
@@ -73,6 +73,25 @@ const props = defineProps<{
   contextPath: string
   mode: 'Interaction' | 'Directory'
 }>()
+
+const emit = defineEmits<{
+  (event: 'close'): void
+}>()
+
+let handleKeyDown: (event: KeyboardEvent) => void
+
+onMounted(() => {
+	handleKeyDown = (event: KeyboardEvent) => {
+		if (event.key === 'Escape') {
+			emit('close')
+		}
+	}
+	window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+	window.removeEventListener('keydown', handleKeyDown)
+})
 
 const creatingFile = ref(false)
 const newFileName = ref('')

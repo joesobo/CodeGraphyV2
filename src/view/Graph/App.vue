@@ -51,12 +51,13 @@
 
     <!-- Context Menu Overlay -->
     <ContextMenu
-      v-if="showContextMenu"
+			v-if="showContextMenu"
       :x="contextMenuPosition.x"
       :y="contextMenuPosition.y"
       :contextPath="contextPath"
       :contextName="contextName"
       :mode="connectionType"
+			@close="closeContextMenu()"
     />
 
     <!-- Graph Overlay -->
