@@ -312,8 +312,8 @@ const drawLinks = (
 				}
 
 				return (
-					MAX_DISTANCE +
-          ((MIN_DISTANCE - MAX_DISTANCE) * largestRadius) / MAX_RADIUS
+					MIN_DISTANCE +
+          ((MAX_DISTANCE - MIN_DISTANCE) * largestRadius) / MAX_RADIUS
 				)
 			}
 
