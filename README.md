@@ -37,9 +37,10 @@ CodeGraphyV2 is coming soon...
 
 ![Sliding Gif](src/assets/img/slide.gif)
 
-- [ ] Favorite
-- [ ] Filter
+- [x] Favorite
+- [x] Filter
 - [x] Search
+- [x] Add/Update/Delete Files and Nodes
 - [x] Multi-line import
 - [x] Collapsible nodes
 - [x] Displays connections to external packages (node_modules)
@@ -93,6 +94,7 @@ All the customizable settings in Codegraphy can also be added into your workspac
 - showOutlines: boolean
 - showArrows: boolean
 - doCollisions: boolean
+- favorites: Array of paths to files
 
 **D3 Forces**
 
