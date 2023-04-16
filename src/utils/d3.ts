@@ -37,6 +37,9 @@ export const drawD3Graph = ({
 	doCollisions,
 	chargeForce,
 	linkDistance,
+	selectedNodeColor,
+	favoriteNodeColor,
+	outlineColor,
 }: {
   nodes: Node[]
   connections: Connection[]
@@ -49,6 +52,9 @@ export const drawD3Graph = ({
   doCollisions: boolean
   chargeForce: number
   linkDistance: number
+  selectedNodeColor: string
+  favoriteNodeColor: string
+  outlineColor: string
 }) => {
 	const svg = setupSVG('#graph')
 	const width = Number.parseInt(svg.attr('width'))
@@ -78,6 +84,9 @@ export const drawD3Graph = ({
 		mode,
 		showLabels,
 		showOutlines,
+		selectedNodeColor,
+		favoriteNodeColor,
+		outlineColor,
 	)
 	gCircles.attr('transform', (d: Node) => {
 		return `translate(${d.x}, ${d.y})`
@@ -189,6 +198,9 @@ const drawNodes = (
 	mode: 'Interaction' | 'Directory',
 	showLabels: boolean,
 	showOutlines: boolean,
+	selectedNodeColor: string,
+	favoriteNodeColor: string,
+	outlineColor: string,
 ): NodeSelection => {
 	const gs = g
 		.selectAll('.circleText')
@@ -202,11 +214,16 @@ const drawNodes = (
 	gs.append('circle')
 		.attr('r', (d: Node) => d.radius)
 		.attr('fill', (d: Node) =>
-			d.favorite
-				? '#ffd700'
-				: getNodeColor(d, extensions, currentOpenFile, mode),
+			getNodeColor(
+				d,
+				extensions,
+				currentOpenFile,
+				mode,
+				selectedNodeColor,
+				favoriteNodeColor,
+			),
 		)
-		.attr('stroke', (d) => (d.collapsed && showOutlines ? '#ffd700' : ''))
+		.attr('stroke', (d) => (d.collapsed && showOutlines ? outlineColor : ''))
 		.attr('stroke-width', (d) => (d.collapsed && showOutlines ? 4 : 0))
 		.on('click', click)
 		.on('contextmenu', handleContextMenu)
@@ -352,6 +369,8 @@ export const updateD3Graph = (
 	extensions: Extension[],
 	currentOpenFile: string,
 	mode: 'Interaction' | 'Directory',
+	selectedNodeColor: string,
+	favoriteNodeColor: string,
 ) => {
 	if (nodes.length === 0) return
 
@@ -366,7 +385,14 @@ export const updateD3Graph = (
 	circles.exit().remove()
 
 	circles.attr('fill', (node: Node) =>
-		getNodeColor(node, extensions, currentOpenFile, mode),
+		getNodeColor(
+			node,
+			extensions,
+			currentOpenFile,
+			mode,
+			selectedNodeColor,
+			favoriteNodeColor,
+		),
 	)
 }
 
@@ -497,9 +523,15 @@ const getNodeColor = (
 	extensions: Extension[],
 	currentOpenFile: string,
 	mode: 'Interaction' | 'Directory',
+	selectedNodeColor: string,
+	favoriteNodeColor: string,
 ): string => {
 	if (node.fullPath === currentOpenFile) {
-		return '#fff'
+		return selectedNodeColor
+	}
+
+	if (node.favorite) {
+		return favoriteNodeColor
 	}
 
 	let nodeExt = `.${

@@ -105,6 +105,9 @@ All the customizable settings in Codegraphy can also be added into your workspac
 
 - nodeColor: "D3" | "Random"
 - selectedD3Color: string
+- selectedNodeColor: string
+- favoriteNodeColor: string
+- outlineColor: string
 
 ## Known Issues
 

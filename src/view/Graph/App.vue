@@ -322,6 +322,38 @@
             </div>
           </div>
 
+          <!-- Node Color Options -->
+          <div class="flex justify-between">
+            <span class="text-sm font-light text-gray-300">
+              Selected Node Color
+            </span>
+            <PickColors
+              v-model:value="selectedNodeColor"
+              class="cursor-pointer"
+              @change="updateNodeSettings"
+            />
+          </div>
+
+          <div class="flex justify-between">
+            <span class="text-sm font-light text-gray-300">
+              Favorite Node Color
+            </span>
+            <PickColors
+              v-model:value="favoriteNodeColor"
+              class="cursor-pointer"
+              @change="updateNodeSettings"
+            />
+          </div>
+
+          <div class="flex justify-between">
+            <span class="text-sm font-light text-gray-300">Outline Color</span>
+            <PickColors
+              v-model:value="outlineColor"
+              class="cursor-pointer"
+              @change="updateNodeSettings"
+            />
+          </div>
+
           <!-- D3 Colors -->
           <div v-if="nodeColor === 'D3'" class="mt-4 flex flex-col">
             <button
@@ -347,6 +379,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import PickColors from 'vue-pick-colors'
 import Popper from 'vue3-popper'
 
 import type {
@@ -408,6 +441,9 @@ let nodeSize: Ref<'Connections' | 'Lines'> = ref('Lines')
 let collapseFullPaths: Ref<string[]> = ref([])
 let nodeColor: Ref<'D3' | 'Random'> = ref('D3')
 let selectedD3Color: Ref<string> = ref('Spectral')
+let selectedNodeColor: Ref<string> = ref('#fff')
+let favoriteNodeColor: Ref<string> = ref('#ffd700')
+let outlineColor: Ref<string> = ref('#ffd700')
 
 // D3 Settings
 let nodeDepth: Ref<number> = ref(0)
@@ -471,6 +507,8 @@ onMounted(() => {
 				extensionList.value,
 				currentOpenFile.value,
 				connectionType.value,
+				selectedNodeColor.value,
+				favoriteNodeColor.value,
 			)
 			return
 		case 'collapseNode':
@@ -519,6 +557,8 @@ onMounted(() => {
 				extensionList.value,
 				currentOpenFile.value,
 				connectionType.value,
+				selectedNodeColor.value,
+				favoriteNodeColor.value,
 			)
 		}
 	})
@@ -552,6 +592,9 @@ const drawGraph = () => {
 		doCollisions: doCollisions.value,
 		chargeForce: chargeForce.value,
 		linkDistance: linkDistance.value,
+		selectedNodeColor: selectedNodeColor.value,
+		favoriteNodeColor: favoriteNodeColor.value,
+		outlineColor: outlineColor.value,
 	})
 }
 
@@ -569,6 +612,9 @@ const saveSettings = () => {
 		linkDistance: linkDistance.value,
 		nodeColor: nodeColor.value,
 		selectedD3Color: selectedD3Color.value,
+		selectedNodeColor: selectedNodeColor.value,
+		favoriteNodeColor: favoriteNodeColor.value,
+		outlineColor: outlineColor.value,
 	})
 }
 
@@ -592,6 +638,8 @@ const updateGraph = () => {
 		extensionList.value,
 		currentOpenFile.value,
 		connectionType.value,
+		selectedNodeColor.value,
+		favoriteNodeColor.value,
 	)
 }
 

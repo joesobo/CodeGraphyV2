@@ -124,6 +124,21 @@
           "type": "string",
           "default": "D3",
           "description": "Method for coloring nodes"
+        },
+        "codegraphy.selectedNodeColor": {
+          "type": "string",
+          "default": "#fff",
+          "description": "Color of the selected node"
+        },
+        "codegraphy.favoriteNodeColor": {
+          "type": "string",
+          "default": "#ffd700",
+          "description": "Color of favorite nodes"
+        },
+        "codegraphy.outlineColor": {
+          "type": "string",
+          "default": "#ffd700",
+          "description": "Color of the outline on collapsed nodes"
         }
       }
     }
