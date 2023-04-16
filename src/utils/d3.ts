@@ -202,7 +202,9 @@ const drawNodes = (
 	gs.append('circle')
 		.attr('r', (d: Node) => d.radius)
 		.attr('fill', (d: Node) =>
-			getNodeColor(d, extensions, currentOpenFile, mode),
+			d.favorite
+				? '#ffd700'
+				: getNodeColor(d, extensions, currentOpenFile, mode),
 		)
 		.attr('stroke', (d) => (d.collapsed && showOutlines ? '#ffd700' : ''))
 		.attr('stroke-width', (d) => (d.collapsed && showOutlines ? 4 : 0))

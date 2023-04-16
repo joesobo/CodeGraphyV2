@@ -1,6 +1,7 @@
 import type { Connection, File, Node, UnprocessedNode } from './types'
 
 import { getRandomInt } from './basic'
+import { isFavorite } from './favoriteFile'
 
 const MIN_RADIUS = 10
 const MAX_RADIUS = 25
@@ -32,6 +33,10 @@ export const getNodes = (
 			lines:
         unprocessedNode.type === 'File'
         	? (unprocessedNode.data as File).lines
+        	: undefined,
+			favorite:
+        unprocessedNode.type === 'File'
+        	? isFavorite(unprocessedNode.data.name)
         	: undefined,
 		})
 	})

@@ -10,6 +10,7 @@ export interface Node extends SimulationNodeDatum {
   hidden: boolean
   type: 'File' | 'Directory' | 'Package'
   lines?: number
+  favorite?: boolean
 }
 
 export type Connection = {

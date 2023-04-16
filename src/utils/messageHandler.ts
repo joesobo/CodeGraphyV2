@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
 
-
 import { copyPathToClipboard } from './copyPath'
 import { createFile } from './createFile'
 import { deleteNode } from './deleteNode'
+import { favoriteFile } from './favoriteFile'
 import { getGraphData, refetchGraphData } from './getGraphData'
 import {
 	Settings,
@@ -104,6 +104,11 @@ const receiveMessages = async (webview: vscode.Webview) => {
 		}
 		case 'copyPath': {
 			await copyPathToClipboard(message.text.path)
+			return
+		}
+		case 'favoriteFile': {
+			await favoriteFile(message.text.node)
+			await refetchGraphData(webview)
 			return
 		}
 		case 'deleteNode': {

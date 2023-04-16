@@ -60,6 +60,11 @@
           ],
           "description": "Blacklist folders and files"
         },
+        "codegraphy.favorites": {
+          "type": "array",
+          "default": [],
+          "description": "Favorite files"
+        },
         "codegraphy.connectionType": {
           "type": "string",
           "default": "Interaction",

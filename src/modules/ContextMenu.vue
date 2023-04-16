@@ -37,7 +37,13 @@
         >
           <FolderIcon width="1.25rem" height="1.25rem" />
         </IconButton>
-        <IconButton padRight padTop popperContent="Favorite">
+        <IconButton
+          v-if="canFavorite"
+          padRight
+          padTop
+          popperContent="Favorite"
+          @click="favoriteFile"
+        >
           <StarIcon width="1.25rem" height="1.25rem" />
         </IconButton>
         <IconButton padRight padTop popperContent="Rename">
@@ -46,11 +52,7 @@
         <IconButton padRight padTop popperContent="Copy Path" @click="copyPath">
           <CopyIcon width="1.25rem" height="1.25rem" />
         </IconButton>
-        <IconButton
-          padTop
-          popperContent="Delete"
-          @click="deleteNode"
-        >
+        <IconButton padTop popperContent="Delete" @click="deleteNode">
           <DeleteIcon width="1.25rem" height="1.25rem" />
         </IconButton>
       </div>
@@ -101,6 +103,7 @@ onUnmounted(() => {
 })
 
 const canCreateDir = computed(() => props.contextNode.type === 'Directory')
+const canFavorite = computed(() => props.contextNode.type !== 'Directory')
 
 const startCreatingFile = () => {
 	creatingFile.value = true
@@ -119,6 +122,17 @@ const addFile = () => {
 
 	creatingFile.value = false
 	newFileName.value = ''
+}
+
+const favoriteFile = () => {
+	vscode.postMessage({
+		command: 'favoriteFile',
+		text: {
+			node: {
+				...props.contextNode,
+			},
+		},
+	})
 }
 
 const copyPath = () => {
