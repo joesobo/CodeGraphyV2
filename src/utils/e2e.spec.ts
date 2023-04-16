@@ -30,6 +30,7 @@ vi.mock('vscode', () => {
 			return {
 				codegraphy: {
 					blacklist: [],
+					favorites: [],
 				},
 			}
 		}),
@@ -147,6 +148,7 @@ describe('getNodes', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: 0,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -158,6 +160,7 @@ describe('getNodes', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: 1,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -169,6 +172,7 @@ describe('getNodes', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: 2,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -183,7 +187,6 @@ describe('getNodes', () => {
 				collapsed: false,
 				hidden: false,
 				type: 'Package',
-				lines: undefined,
 			},
 		]
 

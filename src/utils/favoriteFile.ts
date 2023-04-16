@@ -23,7 +23,7 @@ export const favoriteFile = async (node: Node) => {
 }
 
 export const isFavorite = (filePath: string) => {
-	const configuration = vscode.workspace.getConfiguration('codegraphy')
+	const configuration = vscode.workspace.getConfiguration().codegraphy
 	const favorites: string[] = configuration.favorites
 
 	return favorites.includes(filePath)

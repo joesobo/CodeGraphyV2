@@ -1,8 +1,53 @@
 import mockFs from 'mock-fs'
+import { vi } from 'vitest'
 
 import type { Connection, Node, UnprocessedNode } from './types'
 
 import { getNodes } from './getNodes'
+
+vi.mock('vscode', () => {
+	const workspace = {
+		workspaceFolders: [
+			{
+				uri: {
+					path: '/project',
+				},
+			},
+		],
+		getConfiguration: vi.fn().mockImplementation(() => {
+			return {
+				codegraphy: {
+					favorites: [],
+				},
+			}
+		}),
+		onDidChangeConfiguration: vi.fn(),
+	}
+
+	const window = {
+		showInformationMessage: vi.fn(),
+		showErrorMessage: vi.fn(),
+		activeTextEditor: {
+			document: {
+				fileName: '/project/file1.ts',
+			},
+		},
+	}
+
+	return {
+		workspace,
+		window,
+		Uri: {
+			parse: vi.fn(),
+		},
+		Range: vi.fn(),
+		Position: vi.fn(),
+		commands: {
+			executeCommand: vi.fn(),
+		},
+		WorkspaceEdit: vi.fn(),
+	}
+})
 
 describe('getNodes', () => {
 	beforeEach(() => {
@@ -49,6 +94,7 @@ describe('getNodes', () => {
 				fullPath: '/project/file1.ts',
 				radius: 25,
 				depth: -1,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -60,6 +106,7 @@ describe('getNodes', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: -1,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -71,6 +118,7 @@ describe('getNodes', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: -1,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -85,7 +133,6 @@ describe('getNodes', () => {
 				collapsed: false,
 				hidden: false,
 				type: 'Package',
-				lines: undefined,
 			},
 		]
 
@@ -115,6 +162,7 @@ describe('getNodes', () => {
 				fullPath: '/project/file1.ts',
 				radius: 17.5,
 				depth: -1,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -126,6 +174,7 @@ describe('getNodes', () => {
 				fullPath: '/project/file2.ts',
 				radius: 25,
 				depth: -1,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -137,6 +186,7 @@ describe('getNodes', () => {
 				fullPath: '/project/subdir/file3.ts',
 				radius: 25,
 				depth: -1,
+				favorite: false,
 				collapsed: false,
 				hidden: false,
 				type: 'File',
@@ -151,7 +201,6 @@ describe('getNodes', () => {
 				collapsed: false,
 				hidden: false,
 				type: 'Package',
-				lines: undefined,
 			},
 		]
 

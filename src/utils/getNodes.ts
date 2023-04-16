@@ -21,7 +21,7 @@ export const getNodes = (
 			nodeName = nodePath.split('node_modules/')?.pop() || ''
 		}
 
-		nodes.push({
+		const node: Node = {
 			id: index,
 			name: nodeName,
 			fullPath: unprocessedNode.data.name,
@@ -30,15 +30,14 @@ export const getNodes = (
 			collapsed: false,
 			hidden: false,
 			type: unprocessedNode.type,
-			lines:
-        unprocessedNode.type === 'File'
-        	? (unprocessedNode.data as File).lines
-        	: undefined,
-			favorite:
-        unprocessedNode.type === 'File'
-        	? isFavorite(unprocessedNode.data.name)
-        	: undefined,
-		})
+		}
+
+		if (unprocessedNode.type === 'File') {
+			node.lines = (unprocessedNode.data as File).lines
+			node.favorite = isFavorite(unprocessedNode.data.name)
+		}
+
+		nodes.push(node)
 	})
 
 	return nodes
