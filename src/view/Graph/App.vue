@@ -478,6 +478,9 @@ onMounted(() => {
 			showOutlines.value = message.text.showOutlines
 			showArrows.value = message.text.showArrows
 			doCollisions.value = message.text.doCollisions
+			selectedNodeColor.value = message.text.selectedNodeColor
+			favoriteNodeColor.value = message.text.favoriteNodeColor
+			outlineColor.value = message.text.outlineColor
 
 			updateNodeSettings()
 			return
