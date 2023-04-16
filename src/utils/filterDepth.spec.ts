@@ -13,6 +13,7 @@ describe('filterDepth', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -22,6 +23,7 @@ describe('filterDepth', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -31,6 +33,7 @@ describe('filterDepth', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -40,6 +43,7 @@ describe('filterDepth', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -65,6 +69,7 @@ describe('filterDepth', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -74,6 +79,7 @@ describe('filterDepth', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -83,6 +89,7 @@ describe('filterDepth', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -92,6 +99,7 @@ describe('filterDepth', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -101,6 +109,7 @@ describe('filterDepth', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -121,6 +130,7 @@ describe('filterDepth', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -130,6 +140,7 @@ describe('filterDepth', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 

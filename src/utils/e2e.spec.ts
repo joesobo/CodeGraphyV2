@@ -149,6 +149,7 @@ describe('getNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -159,6 +160,7 @@ describe('getNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -169,6 +171,7 @@ describe('getNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -179,6 +182,7 @@ describe('getNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'Package',
 				lines: undefined,
 			},
 		]

@@ -59,6 +59,7 @@ describe('assignNodeDepth', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -68,6 +69,7 @@ describe('assignNodeDepth', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -77,6 +79,7 @@ describe('assignNodeDepth', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -86,6 +89,7 @@ describe('assignNodeDepth', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -106,6 +110,7 @@ describe('assignNodeDepth', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -115,6 +120,7 @@ describe('assignNodeDepth', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -124,6 +130,7 @@ describe('assignNodeDepth', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -133,6 +140,7 @@ describe('assignNodeDepth', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 

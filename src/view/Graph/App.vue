@@ -51,13 +51,11 @@
 
     <!-- Context Menu Overlay -->
     <ContextMenu
-			v-if="showContextMenu"
+      v-if="showContextMenu && contextNode"
       :x="contextMenuPosition.x"
       :y="contextMenuPosition.y"
-      :contextPath="contextPath"
-      :contextName="contextName"
-      :mode="connectionType"
-			@close="closeContextMenu()"
+      :contextNode="contextNode"
+      @close="closeContextMenu()"
     />
 
     <!-- Graph Overlay -->
@@ -402,8 +400,7 @@ let extensionFilters: Ref<string[]> = ref([])
 
 const showContextMenu: Ref<boolean> = ref(false)
 const contextMenuPosition = ref({ x: 0, y: 0 })
-const contextPath: Ref<string> = ref('')
-const contextName: Ref<string> = ref('')
+const contextNode: Ref<Node | undefined> = ref()
 
 // Display Settings
 let connectionType: Ref<'Interaction' | 'Directory'> = ref('Interaction')
@@ -489,7 +486,7 @@ onMounted(() => {
 			updateNodeSettings()
 			return
 		case 'openContextMenu':
-			if (contextPath.value === message.text.name) {
+			if (contextNode.value?.name === message.text.node.name) {
 				closeContextMenu()
 			} else {
 				openContextMenu(message.text)
@@ -612,13 +609,12 @@ const openContextMenu = (message: Record<string, unknown>) => {
 	const x = message.x as number
 	const y = message.y as number
 	contextMenuPosition.value = { x, y }
-	contextPath.value = message.path as string
-	contextName.value = message.name as string
+	contextNode.value = message.node as Node
 	showContextMenu.value = true
 }
 
 const closeContextMenu = () => {
-	contextPath.value = ''
+	contextNode.value = undefined
 	showContextMenu.value = false
 }
 </script>

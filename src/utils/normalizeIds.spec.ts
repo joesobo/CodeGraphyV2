@@ -12,6 +12,7 @@ describe('normalizeIds', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -21,6 +22,7 @@ describe('normalizeIds', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -30,6 +32,7 @@ describe('normalizeIds', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -39,6 +42,7 @@ describe('normalizeIds', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 		const connections: Connection[] = [
@@ -58,6 +62,7 @@ describe('normalizeIds', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -67,6 +72,7 @@ describe('normalizeIds', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -76,6 +82,7 @@ describe('normalizeIds', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -85,6 +92,7 @@ describe('normalizeIds', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 		const expectedConnections: Connection[] = [

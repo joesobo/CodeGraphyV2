@@ -13,6 +13,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -22,6 +23,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -31,6 +33,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -40,6 +43,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -64,6 +68,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -73,6 +78,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -82,6 +88,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -91,6 +98,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -107,6 +115,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -116,6 +125,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -125,6 +135,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -134,6 +145,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 		]
 
@@ -159,6 +171,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -168,6 +181,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -177,6 +191,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -186,6 +201,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -202,6 +218,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -211,6 +228,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -220,6 +238,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -245,6 +264,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -254,6 +274,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -263,6 +284,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -279,6 +301,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -288,6 +311,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -297,6 +321,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -306,6 +331,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -331,6 +357,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -340,6 +367,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -349,6 +377,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -358,6 +387,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 		]
 
@@ -374,6 +404,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -383,6 +414,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -392,6 +424,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -401,6 +434,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -410,6 +444,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 5,
@@ -419,6 +454,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 6,
@@ -428,6 +464,7 @@ describe('collapseNodes', () => {
 				depth: 4,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -457,6 +494,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -466,6 +504,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -475,6 +514,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -484,6 +524,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -493,6 +534,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 5,
@@ -502,6 +544,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 6,
@@ -511,6 +554,7 @@ describe('collapseNodes', () => {
 				depth: 4,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 		]
 
@@ -527,6 +571,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -536,6 +581,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -545,6 +591,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -554,6 +601,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -563,6 +611,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 5,
@@ -572,6 +621,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 6,
@@ -581,6 +631,7 @@ describe('collapseNodes', () => {
 				depth: 4,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 		]
 
@@ -610,6 +661,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -619,6 +671,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -628,6 +681,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -637,6 +691,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -646,6 +701,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 5,
@@ -655,6 +711,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 6,
@@ -664,6 +721,7 @@ describe('collapseNodes', () => {
 				depth: 4,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -680,6 +738,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -689,6 +748,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -698,6 +758,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -707,6 +768,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -716,6 +778,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -742,6 +805,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -751,6 +815,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -760,6 +825,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -769,6 +835,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 4,
@@ -778,6 +845,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 		]
 
@@ -794,6 +862,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -803,6 +872,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -812,6 +882,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -821,6 +892,7 @@ describe('collapseNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -845,6 +917,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -854,6 +927,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -863,6 +937,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -872,6 +947,7 @@ describe('collapseNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -888,6 +964,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -897,6 +974,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -906,6 +984,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -915,6 +994,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
@@ -940,6 +1020,7 @@ describe('collapseNodes', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -949,6 +1030,7 @@ describe('collapseNodes', () => {
 				depth: 1,
 				collapsed: true,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -958,6 +1040,7 @@ describe('collapseNodes', () => {
 				depth: 2,
 				collapsed: true,
 				hidden: true,
+				type: 'File',
 			},
 			{
 				id: 3,
@@ -967,6 +1050,7 @@ describe('collapseNodes', () => {
 				depth: 3,
 				collapsed: false,
 				hidden: true,
+				type: 'File',
 			},
 		]
 

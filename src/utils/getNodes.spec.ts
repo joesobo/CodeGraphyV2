@@ -51,6 +51,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -61,6 +62,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -71,6 +73,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -81,6 +84,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'Package',
 				lines: undefined,
 			},
 		]
@@ -113,6 +117,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -123,6 +128,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -133,6 +139,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 				lines: 1,
 			},
 			{
@@ -143,6 +150,7 @@ describe('getNodes', () => {
 				depth: -1,
 				collapsed: false,
 				hidden: false,
+				type: 'Package',
 				lines: undefined,
 			},
 		]

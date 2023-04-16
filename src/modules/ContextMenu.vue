@@ -18,7 +18,7 @@
 
     <!-- Main Content -->
     <div v-else>
-      <p class="mb-2 text-lg">{{ contextName }}</p>
+      <p class="mb-2 text-lg">{{ contextNode.name }}</p>
 
       <div class="flex justify-between space-x-2">
         <IconButton
@@ -30,7 +30,7 @@
           <FileIcon width="1.25rem" height="1.25rem" />
         </IconButton>
         <IconButton
-          v-if="mode === 'Directory'"
+          v-if="canCreateDir()"
           padRight
           padTop
           popperContent="Add Folder"
@@ -57,6 +57,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 
+import type { Node } from '../utils/types'
+
 import IconButton from '../components/IconButton.vue'
 
 import CopyIcon from '~icons/mdi/content-copy'
@@ -69,9 +71,7 @@ import StarIcon from '~icons/mdi/star'
 const props = defineProps<{
   x: number
   y: number
-  contextName: string
-  contextPath: string
-  mode: 'Interaction' | 'Directory'
+  contextNode: Node
 }>()
 
 const emit = defineEmits<{
@@ -96,6 +96,10 @@ onUnmounted(() => {
 const creatingFile = ref(false)
 const newFileName = ref('')
 
+const canCreateDir = () => {
+	return props.contextNode.type === 'Directory'
+}
+
 const startCreatingFile = () => {
 	creatingFile.value = true
 }
@@ -104,8 +108,8 @@ const addFile = () => {
 	vscode.postMessage({
 		command: 'createFile',
 		text: {
-			fileConnectionPath: props.contextPath,
-			fileConnectionName: props.contextName,
+			fileConnectionPath: props.contextNode.fullPath,
+			fileConnectionName: props.contextNode.name,
 			newFileName: newFileName.value,
 		},
 	})
@@ -118,7 +122,7 @@ const deleteFile = () => {
 	vscode.postMessage({
 		command: 'deleteFile',
 		text: {
-			file: props.contextPath,
+			file: props.contextNode.fullPath,
 		},
 	})
 }

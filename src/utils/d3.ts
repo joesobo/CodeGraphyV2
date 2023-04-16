@@ -430,11 +430,22 @@ const click = (event: MouseEvent, d: Node) => {
 
 const handleContextMenu = (event: MouseEvent, d: Node) => {
 	event.preventDefault()
+	const node: Node = {
+		id: d.id,
+		name: d.name,
+		fullPath: d.fullPath,
+		radius: d.radius,
+		depth: d.depth,
+		collapsed: d.collapsed,
+		hidden: d.hidden,
+		type: d.type,
+		lines: d.lines,
+	}
+
 	vscode.postMessage({
 		command: 'openContextMenu',
 		text: {
-			path: d.fullPath,
-			name: d.name,
+			node,
 			x: event.pageX,
 			y: event.pageY,
 		},

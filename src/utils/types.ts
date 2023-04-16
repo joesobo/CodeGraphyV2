@@ -8,6 +8,7 @@ export interface Node extends SimulationNodeDatum {
   depth: number
   collapsed: boolean
   hidden: boolean
+  type: 'File' | 'Directory' | 'Package'
   lines?: number
 }
 

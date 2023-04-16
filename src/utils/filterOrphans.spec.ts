@@ -12,6 +12,7 @@ describe('filterOrphans', () => {
 				radius: 25,
 				depth: 0,
 				collapsed: false,
+				type: 'File',
 				hidden: false,
 			},
 			{
@@ -21,6 +22,7 @@ describe('filterOrphans', () => {
 				radius: 25,
 				depth: 1,
 				collapsed: false,
+				type: 'File',
 				hidden: false,
 			},
 			{
@@ -30,6 +32,7 @@ describe('filterOrphans', () => {
 				radius: 25,
 				depth: 2,
 				collapsed: false,
+				type: 'File',
 				hidden: false,
 			},
 			{
@@ -39,6 +42,7 @@ describe('filterOrphans', () => {
 				radius: 25,
 				depth: -1,
 				collapsed: false,
+				type: 'File',
 				hidden: false,
 			},
 		]
@@ -59,6 +63,7 @@ describe('filterOrphans', () => {
 				depth: 0,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 1,
@@ -68,6 +73,7 @@ describe('filterOrphans', () => {
 				depth: 1,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 			{
 				id: 2,
@@ -77,6 +83,7 @@ describe('filterOrphans', () => {
 				depth: 2,
 				collapsed: false,
 				hidden: false,
+				type: 'File',
 			},
 		]
 
