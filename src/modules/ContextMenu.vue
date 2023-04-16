@@ -16,6 +16,16 @@
       <button type="submit" @click="addFile">Add File</button>
     </form>
 
+    <!-- Add Folder -->
+    <form v-if="creatingFolder" class="flex">
+      <input
+        v-model="newFolderName"
+        type="text"
+        class="mr-2 border border-border text-white"
+      />
+      <button type="submit" @click="addFolder">Add Folder</button>
+    </form>
+
     <!-- Main Content -->
     <div v-else>
       <p class="mb-2 text-lg">{{ contextNode.name }}</p>
@@ -30,10 +40,11 @@
           <FileIcon width="1.25rem" height="1.25rem" />
         </IconButton>
         <IconButton
-          v-if="canCreateDir"
+          v-if="canCreateFolder"
           padRight
           padTop
           popperContent="Add Folder"
+          @click="startCreatingFolder"
         >
           <FolderIcon width="1.25rem" height="1.25rem" />
         </IconButton>
@@ -87,6 +98,9 @@ const emit = defineEmits<{
 const creatingFile = ref(false)
 const newFileName = ref('')
 
+const creatingFolder = ref(false)
+const newFolderName = ref('')
+
 let handleKeyDown: (event: KeyboardEvent) => void
 
 onMounted(() => {
@@ -102,11 +116,15 @@ onUnmounted(() => {
 	window.removeEventListener('keydown', handleKeyDown)
 })
 
-const canCreateDir = computed(() => props.contextNode.type === 'Directory')
+const canCreateFolder = computed(() => props.contextNode.type === 'Directory')
 const canFavorite = computed(() => props.contextNode.type !== 'Directory')
 
 const startCreatingFile = () => {
 	creatingFile.value = true
+}
+
+const startCreatingFolder = () => {
+	creatingFolder.value = true
 }
 
 const addFile = () => {
@@ -122,6 +140,23 @@ const addFile = () => {
 
 	creatingFile.value = false
 	newFileName.value = ''
+	emit('close')
+}
+
+const addFolder = () => {
+	vscode.postMessage({
+		command: 'createFolder',
+		text: {
+			nodeConnection: {
+				...props.contextNode,
+			},
+			newFolderName: newFolderName.value,
+		},
+	})
+
+	creatingFolder.value = false
+	newFolderName.value = ''
+	emit('close')
 }
 
 const favoriteFile = () => {
@@ -133,6 +168,7 @@ const favoriteFile = () => {
 			},
 		},
 	})
+	emit('close')
 }
 
 const copyPath = () => {
@@ -142,6 +178,7 @@ const copyPath = () => {
 			path: props.contextNode.fullPath,
 		},
 	})
+	emit('close')
 }
 
 const deleteNode = () => {
@@ -151,5 +188,6 @@ const deleteNode = () => {
 			node: { ...props.contextNode },
 		},
 	})
+	emit('close')
 }
 </script>

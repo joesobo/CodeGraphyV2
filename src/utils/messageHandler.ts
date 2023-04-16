@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 
 import { copyPathToClipboard } from './copyPath'
 import { createFile } from './createFile'
+import { createFolder } from './createFolder'
 import { deleteNode } from './deleteNode'
 import { favoriteFile } from './favoriteFile'
 import { getGraphData, refetchGraphData } from './getGraphData'
@@ -99,6 +100,14 @@ const receiveMessages = async (webview: vscode.Webview) => {
 		}
 		case 'createFile': {
 			await createFile(message.text.nodeConnection, message.text.newFileName)
+			await refetchGraphData(webview)
+			return
+		}
+		case 'createFolder': {
+			await createFolder(
+				message.text.nodeConnection,
+				message.text.newFolderName,
+			)
 			await refetchGraphData(webview)
 			return
 		}
