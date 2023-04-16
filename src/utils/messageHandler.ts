@@ -6,6 +6,7 @@ import { createFolder } from './createFolder'
 import { deleteNode } from './deleteNode'
 import { favoriteFile } from './favoriteFile'
 import { getGraphData, refetchGraphData } from './getGraphData'
+import { renameNode } from './renameNode'
 import {
 	Settings,
 	getWorkspaceSettings,
@@ -108,6 +109,11 @@ const receiveMessages = async (webview: vscode.Webview) => {
 				message.text.nodeConnection,
 				message.text.newFolderName,
 			)
+			await refetchGraphData(webview)
+			return
+		}
+		case 'renameNode': {
+			await renameNode(message.text.node, message.text.newNodeName)
 			await refetchGraphData(webview)
 			return
 		}

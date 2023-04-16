@@ -6,11 +6,11 @@ import fs from 'fs'
 import path from 'path'
 
 export const createFile = async (nodeConnection: Node, newFileName: string) => {
-	const fileConnectionDir =
+	const connectionDir =
     nodeConnection.type === 'Directory'
     	? nodeConnection.fullPath
     	: path.dirname(nodeConnection.fullPath)
-	const newFilePath = path.join(fileConnectionDir, newFileName)
+	const newFilePath = path.join(connectionDir, newFileName)
 	const fileContent = `// CodeGraphy connect: './${nodeConnection.name}'`
 
 	// Only create the file if it doesn't exist
@@ -21,7 +21,7 @@ export const createFile = async (nodeConnection: Node, newFileName: string) => {
 		await vscode.window.showTextDocument(document)
 	} else {
 		vscode.window.showErrorMessage(
-			`File ${newFileName} already exists in ${fileConnectionDir}`,
+			`File ${newFileName} already exists in ${connectionDir}`,
 		)
 	}
 }

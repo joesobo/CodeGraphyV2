@@ -26,6 +26,16 @@
       <button type="submit" @click="addFolder">Add Folder</button>
     </form>
 
+    <!-- Rename Node -->
+    <form v-if="renamingNode" class="flex">
+      <input
+        v-model="newNodeName"
+        type="text"
+        class="mr-2 border border-border text-white"
+      />
+      <button type="submit" @click="renameNode">Rename Node</button>
+    </form>
+
     <!-- Main Content -->
     <div v-else>
       <p class="mb-2 text-lg">{{ contextNode.name }}</p>
@@ -58,7 +68,11 @@
           <StarIcon width="1.25rem" height="1.25rem" />
         </IconButton>
         <IconButton padRight padTop popperContent="Rename">
-          <RenameIcon width="1.25rem" height="1.25rem" />
+          <RenameIcon
+            width="1.25rem"
+            height="1.25rem"
+            @click="startRenamingNode"
+          />
         </IconButton>
         <IconButton padRight padTop popperContent="Copy Path" @click="copyPath">
           <CopyIcon width="1.25rem" height="1.25rem" />
@@ -101,6 +115,9 @@ const newFileName = ref('')
 const creatingFolder = ref(false)
 const newFolderName = ref('')
 
+const renamingNode = ref(false)
+const newNodeName = ref('')
+
 let handleKeyDown: (event: KeyboardEvent) => void
 
 onMounted(() => {
@@ -125,6 +142,10 @@ const startCreatingFile = () => {
 
 const startCreatingFolder = () => {
 	creatingFolder.value = true
+}
+
+const startRenamingNode = () => {
+	renamingNode.value = true
 }
 
 const addFile = () => {
@@ -156,6 +177,22 @@ const addFolder = () => {
 
 	creatingFolder.value = false
 	newFolderName.value = ''
+	emit('close')
+}
+
+const renameNode = () => {
+	vscode.postMessage({
+		command: 'renameNode',
+		text: {
+			node: {
+				...props.contextNode,
+			},
+			newNodeName: newNodeName.value,
+		},
+	})
+
+	renamingNode.value = false
+	newNodeName.value = ''
 	emit('close')
 }
 
