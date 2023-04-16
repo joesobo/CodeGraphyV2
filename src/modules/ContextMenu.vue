@@ -46,7 +46,7 @@
         <IconButton padRight padTop popperContent="Copy Path">
           <CopyIcon width="1.25rem" height="1.25rem" />
         </IconButton>
-        <IconButton padTop popperContent="Delete" @click="deleteFile">
+        <IconButton v-if="canDelete()" padTop popperContent="Delete" @click="deleteFile">
           <DeleteIcon width="1.25rem" height="1.25rem" />
         </IconButton>
       </div>
@@ -69,14 +69,17 @@ import RenameIcon from '~icons/mdi/rename'
 import StarIcon from '~icons/mdi/star'
 
 const props = defineProps<{
-  x: number
+	x: number
   y: number
   contextNode: Node
 }>()
 
 const emit = defineEmits<{
-  (event: 'close'): void
+	(event: 'close'): void
 }>()
+
+const creatingFile = ref(false)
+const newFileName = ref('')
 
 let handleKeyDown: (event: KeyboardEvent) => void
 
@@ -93,11 +96,12 @@ onUnmounted(() => {
 	window.removeEventListener('keydown', handleKeyDown)
 })
 
-const creatingFile = ref(false)
-const newFileName = ref('')
-
 const canCreateDir = () => {
 	return props.contextNode.type === 'Directory'
+}
+
+const canDelete = () => {
+	return props.contextNode.type !== 'Package'
 }
 
 const startCreatingFile = () => {
