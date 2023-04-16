@@ -96,11 +96,7 @@ const receiveMessages = async (webview: vscode.Webview) => {
 			return
 		}
 		case 'createFile': {
-			await createFile(
-				message.text.fileConnectionName,
-				message.text.fileConnectionPath,
-				message.text.newFileName,
-			)
+			await createFile(message.text.nodeConnection, message.text.newFileName)
 			await refetchGraphData(webview)
 			return
 		}

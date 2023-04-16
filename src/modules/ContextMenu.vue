@@ -22,6 +22,7 @@
 
       <div class="flex justify-between space-x-2">
         <IconButton
+					v-if="canCreateFile"
           padRight
           padTop
           popperContent="Add File"
@@ -30,7 +31,7 @@
           <FileIcon width="1.25rem" height="1.25rem" />
         </IconButton>
         <IconButton
-          v-if="canCreateDir()"
+          v-if="canCreateDir"
           padRight
           padTop
           popperContent="Add Folder"
@@ -46,7 +47,12 @@
         <IconButton padRight padTop popperContent="Copy Path">
           <CopyIcon width="1.25rem" height="1.25rem" />
         </IconButton>
-        <IconButton v-if="canDelete()" padTop popperContent="Delete" @click="deleteFile">
+        <IconButton
+          v-if="canDelete"
+          padTop
+          popperContent="Delete"
+          @click="deleteFile"
+        >
           <DeleteIcon width="1.25rem" height="1.25rem" />
         </IconButton>
       </div>
@@ -55,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 
 import type { Node } from '../utils/types'
 
@@ -69,13 +75,13 @@ import RenameIcon from '~icons/mdi/rename'
 import StarIcon from '~icons/mdi/star'
 
 const props = defineProps<{
-	x: number
+  x: number
   y: number
   contextNode: Node
 }>()
 
 const emit = defineEmits<{
-	(event: 'close'): void
+  (event: 'close'): void
 }>()
 
 const creatingFile = ref(false)
@@ -96,24 +102,24 @@ onUnmounted(() => {
 	window.removeEventListener('keydown', handleKeyDown)
 })
 
-const canCreateDir = () => {
-	return props.contextNode.type === 'Directory'
-}
+const canCreateFile = computed(() => props.contextNode.type !== 'Package')
 
-const canDelete = () => {
-	return props.contextNode.type !== 'Package'
-}
+const canCreateDir = computed(() => props.contextNode.type === 'Directory')
+
+const canDelete = computed(() => props.contextNode.type !== 'Package')
 
 const startCreatingFile = () => {
 	creatingFile.value = true
 }
 
 const addFile = () => {
+	console.log('TEST', props.contextNode)
 	vscode.postMessage({
 		command: 'createFile',
 		text: {
-			fileConnectionPath: props.contextNode.fullPath,
-			fileConnectionName: props.contextNode.name,
+			nodeConnection: {
+				...props.contextNode,
+			},
 			newFileName: newFileName.value,
 		},
 	})
