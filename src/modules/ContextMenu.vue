@@ -22,7 +22,6 @@
 
       <div class="flex justify-between space-x-2">
         <IconButton
-					v-if="canCreateFile"
           padRight
           padTop
           popperContent="Add File"
@@ -44,14 +43,13 @@
         <IconButton padRight padTop popperContent="Rename">
           <RenameIcon width="1.25rem" height="1.25rem" />
         </IconButton>
-        <IconButton padRight padTop popperContent="Copy Path">
+        <IconButton padRight padTop popperContent="Copy Path" @click="copyPath">
           <CopyIcon width="1.25rem" height="1.25rem" />
         </IconButton>
         <IconButton
-          v-if="canDelete"
           padTop
           popperContent="Delete"
-          @click="deleteFile"
+          @click="deleteNode"
         >
           <DeleteIcon width="1.25rem" height="1.25rem" />
         </IconButton>
@@ -102,18 +100,13 @@ onUnmounted(() => {
 	window.removeEventListener('keydown', handleKeyDown)
 })
 
-const canCreateFile = computed(() => props.contextNode.type !== 'Package')
-
 const canCreateDir = computed(() => props.contextNode.type === 'Directory')
-
-const canDelete = computed(() => props.contextNode.type !== 'Package')
 
 const startCreatingFile = () => {
 	creatingFile.value = true
 }
 
 const addFile = () => {
-	console.log('TEST', props.contextNode)
 	vscode.postMessage({
 		command: 'createFile',
 		text: {
@@ -128,11 +121,20 @@ const addFile = () => {
 	newFileName.value = ''
 }
 
-const deleteFile = () => {
+const copyPath = () => {
 	vscode.postMessage({
-		command: 'deleteFile',
+		command: 'copyPath',
 		text: {
-			file: props.contextNode.fullPath,
+			path: props.contextNode.fullPath,
+		},
+	})
+}
+
+const deleteNode = () => {
+	vscode.postMessage({
+		command: 'deleteNode',
+		text: {
+			node: { ...props.contextNode },
 		},
 	})
 }

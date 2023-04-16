@@ -429,6 +429,8 @@ const click = (event: MouseEvent, d: Node) => {
 }
 
 const handleContextMenu = (event: MouseEvent, d: Node) => {
+	if (d.type === 'Package') return
+
 	event.preventDefault()
 	const node: Node = {
 		id: d.id,
