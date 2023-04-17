@@ -3,7 +3,7 @@ import * as vscode from 'vscode'
 import type { Node } from './types'
 
 export const favoriteFile = async (node: Node) => {
-	const configuration = vscode.workspace.getConfiguration('codegraphy')
+	const configuration = vscode.workspace.getConfiguration().codegraphy
 	const favorites: string[] = configuration.favorites
 
 	const isFavorite = favorites.includes(node.fullPath)
