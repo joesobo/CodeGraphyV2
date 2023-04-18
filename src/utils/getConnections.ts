@@ -29,7 +29,7 @@ const fetchInteractionConnections = (unprocessedNodes: UnprocessedNode[]) => {
 		const fileContents = fs.readFileSync(file.name, 'utf-8')
 
 		const importRegex =
-      /(?:import\s+(?:\*+\s+as\s+[\w*]+|(?:(?:[\w*]+\s*,\s*)?\{[^{}]*\}|[\w*]+))\s*from\s*['"]([^'"]+)['"]|require\s*\(\s*['"]([^'"]+)['"]\s*\)|.*CodeGraphy\s+connect:\s+(['"])([^'"]+)\3)/g
+      /(?:import\s+(?:\*+\s+as\s+[\w*]+|(?:type\s+(?:(?:[\w*]+\s*,\s*)?\{[^{}]*\})+|(?:(?:[\w*]+\s*,\s*)?\{[^{}]*\}|[\w*]+)))\s*from\s*['"]([^'"]+)['"]|require\s*\(\s*['"]([^'"]+)['"]\s*\)|.*CodeGraphy\s+connect:\s+(['"])([^'"]+)\3)/g
 
 		let match
 		while ((match = importRegex.exec(fileContents)) !== null) {
