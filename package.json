@@ -59,7 +59,7 @@
         {
           "id": "codegraphy-view",
           "title": "Code Graphy",
-          "icon": "src/assets/img/graph-dark.svg"
+          "icon": "img/graph-dark.svg"
         }
       ]
     },
