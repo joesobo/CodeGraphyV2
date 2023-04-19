@@ -17,6 +17,10 @@
     "Visualization",
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joesobo/CodeGraphyV2.git"
+  },
   "galleryBanner": {
     "color": "#023859",
     "theme": "dark"
