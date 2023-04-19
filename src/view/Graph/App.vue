@@ -330,7 +330,7 @@
             <PickColors
               v-model:value="selectedNodeColor"
               class="cursor-pointer"
-              @change="updateNodeSettings"
+              @change="updateGraph"
             />
           </div>
 
@@ -341,7 +341,7 @@
             <PickColors
               v-model:value="favoriteNodeColor"
               class="cursor-pointer"
-              @change="updateNodeSettings"
+              @change="updateGraph"
             />
           </div>
 
@@ -350,7 +350,7 @@
             <PickColors
               v-model:value="outlineColor"
               class="cursor-pointer"
-              @change="updateNodeSettings"
+              @change="updateGraph"
             />
           </div>
 

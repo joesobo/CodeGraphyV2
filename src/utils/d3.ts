@@ -374,7 +374,7 @@ export const updateD3Graph = (
 ) => {
 	if (nodes.length === 0) return
 
-	const svg = d3.select('svg')
+	const svg = d3.select('#graph')
 	const circles = svg.selectAll<SVGCircleElement, Node>('circle')
 
 	circles
