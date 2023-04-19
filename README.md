@@ -12,15 +12,13 @@
 
 > CodeGraphy **enhances** files connections inside VSCode and allows for **birds eye views** of each repository. It helps you to **visualize code hierarchy** at a glance, **seamlessly navigate and explore** your files, **gain valuable insights** via a force based node graph, and more!
 
-CodeGraphy is an [open-source](https://github.com/joesobo/CodeGraphyV2 'Open CodeGraphyV2 on GitHub') extension for [Visual Studio Code](https://code.visualstudio.com).
+CodeGraphy is an [open-source](https://github.com/joesobo/CodeGraphyV2 'Open CodeGraphy on GitHub') extension for [Visual Studio Code](https://code.visualstudio.com).
 
 Simply this extension helps you **better understand file connections**. With its force-based graph you can get a completely different perspective of the architecture of your codebase and make quick informed decisions about the entire repository.
 
-## Install CodeGraphyV2
+## Install CodeGraphy
 
-Install old CodeGraphy for [VSCode](https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy)
-
-CodeGraphyV2 is coming soon...
+Install CodeGraphy for [VSCode](https://marketplace.visualstudio.com/items?itemName=codegraphy.codegraphy)
 
 ## Features
 
@@ -33,7 +31,7 @@ CodeGraphyV2 is coming soon...
 - File blacklist
 - and more!
 
-## Upcoming in V2
+## New Features Added in V2
 
 ![Sliding Gif](src/assets/img/slide.gif)
 

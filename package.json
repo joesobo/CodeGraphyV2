@@ -1,8 +1,8 @@
 {
-  "name": "CodeGraphyV2",
-  "displayName": "CodeGraphyV2",
+  "name": "codegraphy",
+  "displayName": "CodeGraphy",
   "description": "Visualize your codebase and its connections as a physics-based graph",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -26,7 +26,7 @@
       "activitybar": [
         {
           "id": "codegraphy-view",
-          "title": "Code Graphy V2",
+          "title": "Code Graphy",
           "icon": "src/assets/img/graph-dark.svg"
         }
       ]
@@ -36,7 +36,7 @@
         {
           "id": "codegraphy-view-graph",
           "name": "Graph",
-          "contextualTitle": "CodeGraphy V2 Graph",
+          "contextualTitle": "CodeGraphy Graph",
           "type": "webview"
         },
         {
@@ -48,7 +48,7 @@
       ]
     },
     "configuration": {
-      "title": "CodeGraphy V2 Settings",
+      "title": "CodeGraphy Settings",
       "properties": {
         "codegraphy.blacklist": {
           "type": "array",
