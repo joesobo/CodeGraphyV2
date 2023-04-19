@@ -37,7 +37,7 @@
     "js",
     "ts"
   ],
-  "icon": "src/assets/img/graph-light.png",
+  "icon": "img/graph-light.png",
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
