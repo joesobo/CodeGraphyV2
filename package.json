@@ -2,7 +2,7 @@
   "name": "codegraphy",
   "displayName": "CodeGraphy",
   "description": "Visualize your codebase and its connections as a physics-based graph",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "engines": {
     "vscode": "^1.74.0"
   },
