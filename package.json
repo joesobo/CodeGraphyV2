@@ -6,9 +6,34 @@
   "engines": {
     "vscode": "^1.74.0"
   },
+  "license": "SEE LICENSE IN LICENSE",
+  "publisher": "codegraphy",
+  "author": {
+    "name": "Joe Soboleski",
+    "email": "soboleskijoe@gmail.com"
+  },
+  "homepage": "https://github.com/joesobo/CodeGraphyV2",
   "categories": [
+    "Visualization",
     "Other"
   ],
+  "galleryBanner": {
+    "color": "#023859",
+    "theme": "dark"
+  },
+  "keywords": [
+    "code",
+    "graph",
+    "codegraphy",
+    "codegraph",
+    "graphy",
+    "connection",
+    "physics",
+    "node",
+    "js",
+    "ts"
+  ],
+  "icon": "src/assets/img/graph-light.png",
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -21,6 +46,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui"
   },
+  "activationEvents": [
+    "onView:codegraphy-view"
+  ],
   "contributes": {
     "viewsContainers": {
       "activitybar": [
