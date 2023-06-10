@@ -67,9 +67,18 @@ describe('getConnections', () => {
 
 	it('should return the connections Interaction', () => {
 		const unprocessedNodes: UnprocessedNode[] = [
-			{ data: { name: path.join('project', 'file1.ts'), lines: 1 }, type: 'File' },
-			{ data: { name: path.join('project', 'file2.ts'), lines: 1 }, type: 'File' },
-			{ data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 }, type: 'File' },
+			{
+				data: { name: path.join('project', 'file1.ts'), lines: 1 },
+				type: 'File',
+			},
+			{
+				data: { name: path.join('project', 'file2.ts'), lines: 1 },
+				type: 'File',
+			},
+			{
+				data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 },
+				type: 'File',
+			},
 		]
 
 		const result = getConnections(unprocessedNodes, 'Interaction')
@@ -85,9 +94,18 @@ describe('getConnections', () => {
 
 	it('should return the connections Directory', () => {
 		const unprocessedNodes: UnprocessedNode[] = [
-			{ data: { name: path.join('project', 'file1.ts'), lines: 1 }, type: 'File' },
-			{ data: { name: path.join('project', 'file2.ts'), lines: 1 }, type: 'File' },
-			{ data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 }, type: 'File' },
+			{
+				data: { name: path.join('project', 'file1.ts'), lines: 1 },
+				type: 'File',
+			},
+			{
+				data: { name: path.join('project', 'file2.ts'), lines: 1 },
+				type: 'File',
+			},
+			{
+				data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 },
+				type: 'File',
+			},
 			{ data: { name: path.join('project') }, type: 'Directory' },
 			{ data: { name: path.join('project', 'subdir') }, type: 'Directory' },
 		]
@@ -129,10 +147,22 @@ describe('getConnections Interaction node_modules', () => {
 
 	it('should return the connections', () => {
 		const unprocessedNodes: UnprocessedNode[] = [
-			{ data: { name: path.join('project', 'file1.ts'), lines: 1 }, type: 'File' },
-			{ data: { name: path.join('project', 'file2.ts'), lines: 1 }, type: 'File' },
-			{ data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 }, type: 'File' },
-			{ data: { name: path.join('project', 'node_modules', 'vue') }, type: 'Package' },
+			{
+				data: { name: path.join('project', 'file1.ts'), lines: 1 },
+				type: 'File',
+			},
+			{
+				data: { name: path.join('project', 'file2.ts'), lines: 1 },
+				type: 'File',
+			},
+			{
+				data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 },
+				type: 'File',
+			},
+			{
+				data: { name: path.join('project', 'node_modules', 'vue') },
+				type: 'Package',
+			},
 		]
 
 		const result = getConnections(unprocessedNodes, 'Interaction')

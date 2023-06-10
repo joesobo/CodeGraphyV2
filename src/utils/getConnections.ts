@@ -135,7 +135,10 @@ const findConnectionIndex = (
 
 	unprocessedNodes.forEach((unprocessedNode, index) => {
 		// Remove extensions to find better matches
-		const checkPath = unprocessedNode.data.name.split('.')[0]
+		let checkPath = unprocessedNode.data.name.split('.')[0]
+		if (checkPath.startsWith('\\') || checkPath.startsWith('/'))
+			checkPath = checkPath.slice(1)
+
 		const importPath = fullImportPath.split('.')[0]
 
 		if (checkPath === importPath) {

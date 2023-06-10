@@ -4,7 +4,6 @@ import type { Connection, Node } from './types'
 
 import path from 'path'
 
-
 import { assignNodeDepth } from './assignNodeDepth'
 
 vi.mock('vscode', () => {

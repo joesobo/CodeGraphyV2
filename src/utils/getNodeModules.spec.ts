@@ -77,7 +77,9 @@ describe('getNodeModules', () => {
 			showNodeModules: true,
 		})
 
-		const expectedPackages: Package[] = [{ name: path.join('project', 'node_modules', 'vue') }]
+		const expectedPackages: Package[] = [
+			{ name: path.join('project', 'node_modules', 'vue') },
+		]
 
 		expect(result).toEqual(expectedPackages)
 	})
@@ -119,7 +121,9 @@ describe('getNodeModules complex', () => {
 			showNodeModules: true,
 		})
 
-		const expectedPackages: Package[] = [{ name: path.join('project', 'node_modules', 'vue') }]
+		const expectedPackages: Package[] = [
+			{ name: path.join('project', 'node_modules', 'vue') },
+		]
 
 		expect(result).toEqual(expectedPackages)
 	})
