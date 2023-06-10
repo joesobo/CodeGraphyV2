@@ -1,8 +1,10 @@
 import { vi } from 'vitest'
+import * as vscode from 'vscode'
 
 import type { Node } from './types'
 
 import { favoriteFile, isFavorite } from './favoriteFile'
+
 
 let favorites: string[] = []
 
