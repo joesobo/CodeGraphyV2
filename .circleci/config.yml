@@ -12,14 +12,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+            - yarn-packages-{{ checksum "yarn.lock" }}
 
       - run:
           name: 'Install dependencies'
-          command: pnpm install
+          command: yarn install
 
       - save_cache:
-          key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+          key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
 
@@ -40,7 +40,7 @@ jobs:
 
       - run:
           name: 'Build packages'
-          command: pnpm compile
+          command: yarn compile
       - persist_to_workspace:
           root: .
           paths:
@@ -58,7 +58,7 @@ jobs:
 
       - run:
           name: 'Verify code quality and formatting'
-          command: pnpm lint
+          command: yarn lint
 
   test:
     docker:
@@ -72,7 +72,7 @@ jobs:
 
       - run:
           name: 'Run unit tests'
-          command: pnpm test
+          command: yarn test
 
   typecheck:
     docker:
@@ -86,7 +86,7 @@ jobs:
 
       - run:
           name: 'Run typechecks'
-          command: pnpm typecheck
+          command: yarn typecheck
 
   prettier:
     docker:
@@ -100,7 +100,7 @@ jobs:
 
       - run:
           name: 'Run prettier'
-          command: pnpm prettier --check .
+          command: yarn prettier --check .
 
 workflows:
   test-and-build:
