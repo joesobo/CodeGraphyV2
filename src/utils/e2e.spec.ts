@@ -3,6 +3,8 @@ import { vi } from 'vitest'
 
 import type { Connection, Node, UnprocessedNode } from './types'
 
+import path from 'path'
+
 import { assignNodeDepth } from './assignNodeDepth'
 import { collapseNodes } from './collapseNodes'
 import { filterCollapsed } from './filterCollapsed'
@@ -22,7 +24,7 @@ vi.mock('vscode', () => {
 		workspaceFolders: [
 			{
 				uri: {
-					path: '/project',
+					path: 'project',
 				},
 			},
 		],
@@ -42,7 +44,7 @@ vi.mock('vscode', () => {
 		showErrorMessage: vi.fn(),
 		activeTextEditor: {
 			document: {
-				fileName: '/project/file1.ts',
+				fileName: path.join('project', 'file1.ts'),
 			},
 		},
 	}
@@ -66,14 +68,14 @@ describe('getNodes', () => {
 	beforeEach(() => {
 		// Mock file system
 		mockFs({
-			'/project': {
-				'file1.ts': 'import file2 from "./file2"',
-				'file2.ts': 'import file3 from "./subdir/file3"',
+			[path.join('project')]: {
+				[path.join('file1.ts')]: 'import file2 from "./file2"',
+				[path.join('file2.ts')]: 'import file3 from "./subdir/file3"',
 			},
-			'/project/subdir': {
-				'file3.ts': 'import { test } from "vue"',
+			[path.join('project', 'subdir')]: {
+				[path.join('file3.ts')]: 'import { test } from "vue"',
 			},
-			'/project/node_modules': {
+			[path.join('project', 'node_modules')]: {
 				vue: {},
 			},
 		})
@@ -87,7 +89,7 @@ describe('getNodes', () => {
 	it('should return the proper nodes and connections', () => {
 		const mode: 'Interaction' | 'Directory' = 'Interaction'
 		const nodeSize: 'Lines' | 'Connections' = 'Lines'
-		const currentOpenFile = '/project/file1.ts'
+		const currentOpenFile = path.join('project', 'file1.ts')
 		const collapseFullPaths: string[] = []
 		const nodeDepth = 0
 		const showNodeModules = true
@@ -145,7 +147,7 @@ describe('getNodes', () => {
 			{
 				id: 0,
 				name: 'file1.ts',
-				fullPath: '/project/file1.ts',
+				fullPath: path.join('project', 'file1.ts'),
 				radius: 25,
 				depth: 0,
 				favorite: false,
@@ -157,7 +159,7 @@ describe('getNodes', () => {
 			{
 				id: 1,
 				name: 'file2.ts',
-				fullPath: '/project/file2.ts',
+				fullPath: path.join('project', 'file2.ts'),
 				radius: 25,
 				depth: 1,
 				favorite: false,
@@ -169,7 +171,7 @@ describe('getNodes', () => {
 			{
 				id: 2,
 				name: 'file3.ts',
-				fullPath: '/project/subdir/file3.ts',
+				fullPath: path.join('project', 'subdir', 'file3.ts'),
 				radius: 25,
 				depth: 2,
 				favorite: false,
@@ -181,7 +183,7 @@ describe('getNodes', () => {
 			{
 				id: 3,
 				name: 'vue',
-				fullPath: '/project/node_modules/vue',
+				fullPath: path.join('project', 'node_modules', 'vue'),
 				radius: 10,
 				depth: 3,
 				collapsed: false,

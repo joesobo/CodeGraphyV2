@@ -1,6 +1,7 @@
 import type { Connection, UnprocessedNode } from './types'
 
 import fs from 'fs'
+import path from 'path'
 
 import { findNearestNodeModules } from './getNodeModules'
 
@@ -66,9 +67,7 @@ const fetchDirectoryConnections = (unprocessedNodes: UnprocessedNode[]) => {
 	// Find connections between files and directories
 	unprocessedNodes.forEach((node, nodeIndex) => {
 		if (node.type === 'File') {
-			const filePathArray = node.data.name.split('/')
-			filePathArray.pop()
-			const fileDirectory = filePathArray.join('/')
+			const fileDirectory = path.dirname(node.data.name)
 
 			unprocessedNodes.forEach((testNode, testIndex) => {
 				if (
@@ -84,9 +83,7 @@ const fetchDirectoryConnections = (unprocessedNodes: UnprocessedNode[]) => {
 			})
 		} else if (node.type === 'Directory') {
 			// look for a parent dir
-			const dirPathArray = node.data.name.split('/')
-			dirPathArray.pop()
-			const searchParentDir = dirPathArray.join('/')
+			const searchParentDir = path.dirname(node.data.name)
 
 			unprocessedNodes.forEach((testNode, testIndex) => {
 				if (
@@ -107,7 +104,7 @@ const fetchDirectoryConnections = (unprocessedNodes: UnprocessedNode[]) => {
 }
 
 const getFullPath = (filePath: string, importPath: string) => {
-	const directory = filePath.substring(1).split('/')
+	const directory = filePath.split(path.sep)
 	const importPathArr = importPath.split('/')
 
 	if (importPath.startsWith('.')) {
@@ -122,10 +119,11 @@ const getFullPath = (filePath: string, importPath: string) => {
 				directory.push(element)
 			}
 		})
-		return `/${directory.join('/')}`
+
+		return path.join(...directory)
 	} else {
 		directory.pop()
-		return findNearestNodeModules(`/${directory.join('/')}` ?? '', importPath)
+		return findNearestNodeModules(path.join(...directory) ?? '', importPath)
 	}
 }
 

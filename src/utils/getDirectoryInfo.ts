@@ -8,13 +8,14 @@ import path from 'path'
 import { containsBlacklist } from './blacklist'
 
 export const getDirectoryInfo = (mode: 'Interaction' | 'Directory') => {
-	const rootDirectory = vscode.workspace.workspaceFolders?.[0]?.uri?.path ?? ''
+	let rootDirectory = vscode.workspace.workspaceFolders?.[0]?.uri?.path ? path.normalize(vscode.workspace.workspaceFolders?.[0]?.uri?.path) : ''
+	if (rootDirectory.startsWith('\\')) rootDirectory = rootDirectory.slice(1)
 
 	const files: File[] = []
 	const dirs: Directory[] = []
 	const touchedDirs: string[] = [rootDirectory]
 
-	if (mode === 'Directory') {
+	if (mode === 'Directory' && rootDirectory !== '') {
 		dirs.push({ name: rootDirectory })
 	}
 

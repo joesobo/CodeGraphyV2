@@ -3,6 +3,8 @@ import { vi } from 'vitest'
 
 import type { Directory, File } from './types'
 
+import path from 'path'
+
 import { getDirectoryInfo } from './getDirectoryInfo'
 
 vi.mock('vscode', () => {
@@ -10,7 +12,7 @@ vi.mock('vscode', () => {
 		workspaceFolders: [
 			{
 				uri: {
-					path: '/project',
+					path: 'project',
 				},
 			},
 		],
@@ -48,11 +50,11 @@ describe('getDirectoryInfo', () => {
 	beforeEach(() => {
 		// Mock file system
 		mockFs({
-			'/project': {
+			[path.join('project')]: {
 				'file1.ts': 'import file2 from "./file2"',
 				'file2.ts': 'import file3 from "./subdir/file3"',
 			},
-			'/project/subdir': {
+			[path.join('project', 'subdir')]: {
 				'file3.ts': 'import file1 from "../file1"',
 			},
 		})
@@ -67,9 +69,9 @@ describe('getDirectoryInfo', () => {
 		const result = getDirectoryInfo('Interaction')
 
 		const expectedFiles: File[] = [
-			{ name: '/project/file1.ts', lines: 1 },
-			{ name: '/project/file2.ts', lines: 1 },
-			{ name: '/project/subdir/file3.ts', lines: 1 },
+			{ name: path.join('project', 'file1.ts'), lines: 1 },
+			{ name: path.join('project', 'file2.ts'), lines: 1 },
+			{ name: path.join('project', 'subdir', 'file3.ts'), lines: 1 },
 		]
 
 		const expectedDirs: Directory[] = []
@@ -82,14 +84,14 @@ describe('getDirectoryInfo', () => {
 		const result = getDirectoryInfo('Directory')
 
 		const expectedFiles: File[] = [
-			{ name: '/project/file1.ts', lines: 1 },
-			{ name: '/project/file2.ts', lines: 1 },
-			{ name: '/project/subdir/file3.ts', lines: 1 },
+			{ name: path.join('project', 'file1.ts'), lines: 1 },
+			{ name: path.join('project', 'file2.ts'), lines: 1 },
+			{ name: path.join('project', 'subdir', 'file3.ts'), lines: 1 },
 		]
 
 		const expectedDirs: Directory[] = [
-			{ name: '/project' },
-			{ name: '/project/subdir' },
+			{ name: path.join('project') },
+			{ name: path.join('project', 'subdir') },
 		]
 
 		expect(result.files).toEqual(expectedFiles)

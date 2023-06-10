@@ -2,6 +2,9 @@ import { vi } from 'vitest'
 
 import type { Connection, Node } from './types'
 
+import path from 'path'
+
+
 import { assignNodeDepth } from './assignNodeDepth'
 
 vi.mock('vscode', () => {
@@ -9,7 +12,7 @@ vi.mock('vscode', () => {
 		workspaceFolders: [
 			{
 				uri: {
-					path: '/project',
+					path: path.join('/', 'project'),
 				},
 			},
 		],
@@ -28,7 +31,7 @@ vi.mock('vscode', () => {
 		showErrorMessage: vi.fn(),
 		activeTextEditor: {
 			document: {
-				fileName: '/project/file1.ts',
+				fileName: path.join('/', 'project', 'file1.ts'),
 			},
 		},
 	}
@@ -54,7 +57,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 0,
 				name: 'file1.ts',
-				fullPath: '/project/file1.ts',
+				fullPath: path.join('/', 'project', 'file1.ts'),
 				radius: 25,
 				depth: -1,
 				collapsed: false,
@@ -64,7 +67,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 1,
 				name: 'file2.ts',
-				fullPath: '/project/file2.ts',
+				fullPath: path.join('/', 'project', 'file2.ts'),
 				radius: 25,
 				depth: -1,
 				collapsed: false,
@@ -74,7 +77,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 2,
 				name: 'file3.ts',
-				fullPath: '/project/subdir/file3.ts',
+				fullPath: path.join('/', 'project', 'subdir', 'file3.ts'),
 				radius: 25,
 				depth: -1,
 				collapsed: false,
@@ -84,7 +87,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 3,
 				name: 'vue',
-				fullPath: '/project/node_modules/vue',
+				fullPath: path.join('/', 'project', 'node_modules', 'vue'),
 				radius: 10,
 				depth: -1,
 				collapsed: false,
@@ -105,7 +108,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 0,
 				name: 'file1.ts',
-				fullPath: '/project/file1.ts',
+				fullPath: path.join('/', 'project', 'file1.ts'),
 				radius: 25,
 				depth: 0,
 				collapsed: false,
@@ -115,7 +118,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 1,
 				name: 'file2.ts',
-				fullPath: '/project/file2.ts',
+				fullPath: path.join('/', 'project', 'file2.ts'),
 				radius: 25,
 				depth: 1,
 				collapsed: false,
@@ -125,7 +128,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 2,
 				name: 'file3.ts',
-				fullPath: '/project/subdir/file3.ts',
+				fullPath: path.join('/', 'project', 'subdir', 'file3.ts'),
 				radius: 25,
 				depth: 2,
 				collapsed: false,
@@ -135,7 +138,7 @@ describe('assignNodeDepth', () => {
 			{
 				id: 3,
 				name: 'vue',
-				fullPath: '/project/node_modules/vue',
+				fullPath: path.join('/', 'project', 'node_modules', 'vue'),
 				radius: 10,
 				depth: 3,
 				collapsed: false,

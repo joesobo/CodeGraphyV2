@@ -5,6 +5,7 @@ import * as vscode from 'vscode'
 import type { Node } from './types'
 
 import fs from 'fs'
+import path from 'path'
 
 import { createFolder } from './createFolder'
 
@@ -13,7 +14,7 @@ vi.mock('vscode', () => {
 		workspaceFolders: [
 			{
 				uri: {
-					path: '/project',
+					path: 'project',
 				},
 			},
 		],
@@ -33,7 +34,7 @@ vi.mock('vscode', () => {
 		showErrorMessage: vi.fn(),
 		activeTextEditor: {
 			document: {
-				fileName: '/project/file1.ts',
+				fileName: 'project/file1.ts',
 			},
 		},
 	}
@@ -56,14 +57,14 @@ vi.mock('vscode', () => {
 describe('createFolder', () => {
 	beforeEach(() => {
 		mockFs({
-			'/project': {
+			[path.join('project')]: {
 				'file1.ts': 'import file2 from "./file2"',
 				'file2.ts': 'import file3 from "./subdir/file3"',
 			},
-			'/project/subdir': {
+			[path.join('project', 'subdir')]: {
 				'file3.ts': 'import { test } from "vue"',
 			},
-			'/project/node_modules': {
+			[path.join('project', 'node_modules')]: {
 				vue: {},
 			},
 		})
@@ -78,7 +79,7 @@ describe('createFolder', () => {
 		const node: Node = {
 			id: 0,
 			name: 'subdir',
-			fullPath: '/project/subdir',
+			fullPath: path.join('project', 'subdir'),
 			radius: 10,
 			depth: 2,
 			favorite: false,
@@ -89,7 +90,7 @@ describe('createFolder', () => {
 		}
 		const newFolderName = 'new-folder'
 
-		const newFolderPath = '/project/subdir/new-folder'
+		const newFolderPath = path.join('project', 'subdir', 'new-folder')
 
 		await createFolder(node, newFolderName)
 
@@ -101,7 +102,7 @@ describe('createFolder', () => {
 		const node: Node = {
 			id: 0,
 			name: 'project',
-			fullPath: '/project',
+			fullPath: path.join('project'),
 			radius: 10,
 			depth: 1,
 			favorite: false,
@@ -111,7 +112,7 @@ describe('createFolder', () => {
 			lines: 0,
 		}
 		const newFolderName = 'subdir'
-		const newFolderPath = '/project/subdir'
+		const newFolderPath = path.join('project', 'subdir')
 
 		await createFolder(node, newFolderName)
 

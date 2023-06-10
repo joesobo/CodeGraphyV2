@@ -3,6 +3,8 @@ import { vi } from 'vitest'
 
 import type { Connection, UnprocessedNode } from './types'
 
+import path from 'path'
+
 import { getConnections } from './getConnections'
 
 vi.mock('vscode', () => {
@@ -10,7 +12,7 @@ vi.mock('vscode', () => {
 		workspaceFolders: [
 			{
 				uri: {
-					path: '/project',
+					path: 'project',
 				},
 			},
 		],
@@ -48,12 +50,12 @@ describe('getConnections', () => {
 	beforeEach(() => {
 		// Mock file system
 		mockFs({
-			'/project': {
-				'file1.ts': 'import file2 from "./file2"',
-				'file2.ts': 'import file3 from "./subdir/file3"',
+			[path.join('project')]: {
+				[path.join('file1.ts')]: 'import file2 from "./file2"',
+				[path.join('file2.ts')]: 'import file3 from "./subdir/file3"',
 			},
-			'/project/subdir': {
-				'file3.ts': 'import file1 from "../file1"',
+			[path.join('project', 'subdir')]: {
+				[path.join('file3.ts')]: 'import file1 from "../file1"',
 			},
 		})
 	})
@@ -65,9 +67,9 @@ describe('getConnections', () => {
 
 	it('should return the connections Interaction', () => {
 		const unprocessedNodes: UnprocessedNode[] = [
-			{ data: { name: '/project/file1.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project/file2.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project/subdir/file3.ts', lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'file1.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'file2.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 }, type: 'File' },
 		]
 
 		const result = getConnections(unprocessedNodes, 'Interaction')
@@ -83,11 +85,11 @@ describe('getConnections', () => {
 
 	it('should return the connections Directory', () => {
 		const unprocessedNodes: UnprocessedNode[] = [
-			{ data: { name: '/project/file1.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project/file2.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project/subdir/file3.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project' }, type: 'Directory' },
-			{ data: { name: '/project/subdir' }, type: 'Directory' },
+			{ data: { name: path.join('project', 'file1.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'file2.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project') }, type: 'Directory' },
+			{ data: { name: path.join('project', 'subdir') }, type: 'Directory' },
 		]
 
 		const result = getConnections(unprocessedNodes, 'Directory')
@@ -107,15 +109,15 @@ describe('getConnections Interaction node_modules', () => {
 	beforeEach(() => {
 		// Mock file system
 		mockFs({
-			'/project': {
-				'file1.ts': 'import file2 from "./file2"',
-				'file2.ts': 'import file3 from "./subdir/file3"',
+			[path.join('project')]: {
+				[path.join('file1.ts')]: 'import file2 from "./file2"',
+				[path.join('file2.ts')]: 'import file3 from "./subdir/file3"',
 			},
-			'/project/node_modules': {
+			[path.join('project', 'node_modules')]: {
 				vue: {},
 			},
-			'/project/subdir': {
-				'file3.ts': 'import test from "vue"',
+			[path.join('project', 'subdir')]: {
+				[path.join('file3.ts')]: 'import test from "vue"',
 			},
 		})
 	})
@@ -127,10 +129,10 @@ describe('getConnections Interaction node_modules', () => {
 
 	it('should return the connections', () => {
 		const unprocessedNodes: UnprocessedNode[] = [
-			{ data: { name: '/project/file1.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project/file2.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project/subdir/file3.ts', lines: 1 }, type: 'File' },
-			{ data: { name: '/project/node_modules/vue' }, type: 'Package' },
+			{ data: { name: path.join('project', 'file1.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'file2.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'subdir', 'file3.ts'), lines: 1 }, type: 'File' },
+			{ data: { name: path.join('project', 'node_modules', 'vue') }, type: 'Package' },
 		]
 
 		const result = getConnections(unprocessedNodes, 'Interaction')

@@ -1,3 +1,5 @@
+import * as vscode from 'vscode'
+
 import type { File, Package } from './types'
 
 import fs from 'fs'
@@ -18,7 +20,7 @@ export const getNodeModules = ({
 	const packages: Package[] = []
 
 	files.forEach((file) => {
-		const fileDirectory = file.name.split('/').slice(0, -1).join('/')
+		const fileDirectory = path.dirname(file.name)
 		const fileContents = fs.readFileSync(file.name, 'utf-8')
 		const lines = fileContents.split(/\r?\n/)
 
@@ -83,7 +85,10 @@ export const findNearestNodeModules = (
 	let result = ''
 	let found = false
 
-	while (directory !== '' && !found) {
+	let rootDirectory = vscode.workspace.workspaceFolders?.[0]?.uri?.path ? path.normalize(vscode.workspace.workspaceFolders?.[0]?.uri?.path) : ''
+	if (rootDirectory.startsWith('\\')) rootDirectory = rootDirectory.slice(1)
+
+	while (directory !== '' && !found && directory.startsWith(rootDirectory)) {
 		const files = fs.readdirSync(directory)
 
 		files.forEach((file) => {
@@ -101,7 +106,7 @@ export const findNearestNodeModules = (
 			}
 		})
 
-		directory = directory.split('/').slice(0, -1).join('/')
+		directory = path.dirname(directory)
 	}
 
 	return result

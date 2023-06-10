@@ -1,21 +1,59 @@
 import mockFs from 'mock-fs'
+import { vi } from 'vitest'
 
 import type { File, Package } from './types'
 
+import path from 'path'
+
 import { getNodeModules } from './getNodeModules'
+
+vi.mock('vscode', () => {
+	const workspace = {
+		workspaceFolders: [
+			{
+				uri: {
+					path: 'project',
+				},
+			},
+		],
+		getConfiguration: vi.fn().mockImplementation(() => {
+			return {
+				codegraphy: {
+					blacklist: [],
+					favorites: [],
+				},
+			}
+		}),
+		onDidChangeConfiguration: vi.fn(),
+	}
+
+	return {
+		workspace,
+		window,
+		Uri: {
+			parse: vi.fn(),
+		},
+		Range: vi.fn(),
+		Position: vi.fn(),
+		commands: {
+			executeCommand: vi.fn(),
+		},
+		WorkspaceEdit: vi.fn(),
+	}
+})
 
 describe('getNodeModules', () => {
 	beforeEach(() => {
 		// Mock file system
 		mockFs({
-			'/project': {
+			[path.join('project')]: {
 				'file1.ts': 'import file2 from "./file2"',
 				'file2.ts': 'import file3 from "./subdir/file3"',
 			},
-			'/project/subdir': {
+			[path.join('project', 'subdir')]: {
 				'file3.ts': 'import { test } from "vue"',
 			},
-			'/project/node_modules': {
+			[path.join('project', 'node_modules')]: {
 				vue: {},
 			},
 		})
@@ -28,9 +66,9 @@ describe('getNodeModules', () => {
 
 	it('should return the files and directories', () => {
 		const files: File[] = [
-			{ name: '/project/file1.ts', lines: 1 },
-			{ name: '/project/file2.ts', lines: 1 },
-			{ name: '/project/subdir/file3.ts', lines: 1 },
+			{ name: path.join('project', 'file1.ts'), lines: 1 },
+			{ name: path.join('project', 'file2.ts'), lines: 1 },
+			{ name: path.join('project', 'subdir', 'file3.ts'), lines: 1 },
 		]
 
 		const result = getNodeModules({
@@ -39,7 +77,7 @@ describe('getNodeModules', () => {
 			showNodeModules: true,
 		})
 
-		const expectedPackages: Package[] = [{ name: '/project/node_modules/vue' }]
+		const expectedPackages: Package[] = [{ name: path.join('project', 'node_modules', 'vue') }]
 
 		expect(result).toEqual(expectedPackages)
 	})
@@ -49,15 +87,15 @@ describe('getNodeModules complex', () => {
 	beforeEach(() => {
 		// Mock file system
 		mockFs({
-			'/project': {
+			[path.join('project')]: {
 				'file1.ts': 'import file2 from "./file2"',
 				'file2.ts': 'import file3 from "./subdir/file3"',
 			},
-			'/project/subdir': {
+			[path.join('project', 'subdir')]: {
 				'file3.ts': 'import { test } from "vue"',
 				'file4.ts': 'import { test } from "vue"',
 			},
-			'/project/node_modules': {
+			[path.join('project', 'node_modules')]: {
 				vue: {},
 			},
 		})
@@ -70,9 +108,9 @@ describe('getNodeModules complex', () => {
 
 	it('should return the files and directories', () => {
 		const files: File[] = [
-			{ name: '/project/file1.ts', lines: 1 },
-			{ name: '/project/file2.ts', lines: 1 },
-			{ name: '/project/subdir/file3.ts', lines: 1 },
+			{ name: path.join('project', 'file1.ts'), lines: 1 },
+			{ name: path.join('project', 'file2.ts'), lines: 1 },
+			{ name: path.join('project', 'subdir', 'file3.ts'), lines: 1 },
 		]
 
 		const result = getNodeModules({
@@ -81,7 +119,7 @@ describe('getNodeModules complex', () => {
 			showNodeModules: true,
 		})
 
-		const expectedPackages: Package[] = [{ name: '/project/node_modules/vue' }]
+		const expectedPackages: Package[] = [{ name: path.join('project', 'node_modules', 'vue') }]
 
 		expect(result).toEqual(expectedPackages)
 	})

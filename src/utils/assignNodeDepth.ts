@@ -1,11 +1,13 @@
 import * as vscode from 'vscode'
 
+import path from 'path'
+
 import { Connection, Node } from './types'
 
 export const assignNodeDepth = (nodes: Node[], connections: Connection[]) => {
 	const queue: Node[] = []
 	const visited: Node[] = []
-	const currentFile = vscode.window.activeTextEditor?.document.fileName || null
+	const currentFile = vscode.window.activeTextEditor?.document.fileName ? path.normalize(vscode.window.activeTextEditor.document.fileName) : null
 
 	const currentNode = nodes.find((node) => node.fullPath === currentFile)
 
